@@ -20,15 +20,13 @@ sig.outl[outlier.seq]<-sig.outl[outlier.seq] + 5*sig.outl[outlier.seq]
 
 ser<-sig.outl + 0.5*exp(4*(1:N)/N)*rcnorm(N)
 
-pdf("C:/Users/mrpsi/Downloads/ssa_complex_report/ser_1_Re.pdf", paper = "special", width = 6, height = 4) 
+
 plot(Re(ser), col='black', type='l')
 legend('topleft', c( "series"), col=c("black"), lty=1, cex=0.8, lw=c(2))
-dev.off()
 
-pdf("C:/Users/mrpsi/Downloads/ssa_complex_report/ser_1_Im.pdf", paper = "special", width = 6, height = 4) 
 plot(Im(ser), col='black', type='l')
 legend('topleft', c( "series"), col=c("black"), lty=1, cex=0.8, lw=c(2))
-dev.off()
+
 
 X<-hankel(ser, L=120)
 
@@ -51,7 +49,6 @@ Pr3<-hankL2(Pr)
 s <- ssa(ser, kind = "cssa")
 r <- reconstruct(s, groups = list(Trend = 1:rnk))
 
-pdf("C:/Users/mrpsi/Downloads/ssa_complex_report/analys_3_Re.pdf", paper = "special", width = 6, height = 4) 
 plot(Re(ser),col='black',type='l')
 lines( Re(sig), type='l', col='yellow', lw=2)
 lines( Re(r$Trend),type='l',col='blue',lw=2)
@@ -59,18 +56,9 @@ lines( Re(Pr0),type='l',col='red',lw=2)
 lines( Re(Pr.L1), type='l', col='green', lw=2)
 legend('topleft', c("series", "target", "cssa", "l2-weighted", "l1"),
        col=c("black", "yellow", "blue", "red", "green"), lty=1, cex=0.8, lw=c(2, 2, 2, 2, 2))
-dev.off()
-
-pdf("C:/Users/mrpsi/Downloads/bad_Im.pdf", paper = "special", width = 6, height = 4) 
-plot(Im(ser),col='black',type='l', xaxt='n', yaxt='n', ann=FALSE)
-lines( Im(sig), type='l', col='blue', lw=2)
-lines( Im(Pr0),type='l',col='red',lw=2)
-legend('topleft', c("signal", "l2-weighted"),
-       col=c("blue", "red"), lty=1, cex=0.8, lw=c(2, 2))
-dev.off()
 
 
-pdf("C:/Users/mrpsi/Downloads/ssa_complex_report/analys_3_Im.pdf", paper = "special", width = 6, height = 4) 
+
 plot(Im(ser),col='black',type='l')
 lines( Im(sig), type='l', col='yellow', lw=2)
 lines( Im(r$Trend),type='l',col='blue',lw=2)
@@ -78,8 +66,24 @@ lines( Im(Pr0),type='l',col='red',lw=2)
 lines( Im(Pr.L1), type='l', col='green', lw=2)
 legend('topleft', c("series", "target", "cssa", "l2-weight", "l1"),
        col=c("black", "yellow", "blue", "red", "green"), lty=1, cex=0.8, lw=c(2, 2, 2, 2, 2))
-dev.off()
 
+print("CSSA RMSE:")
+print(sqrt(mean((Re(sig) - Re(r$Trend))^2) + mean((Im(sig) - Im(r$Trend))^2)))
+print("L1 RMSE:")
+print(sqrt(mean((Re(sig) - Re(Pr.L1))^2) + mean((Im(sig) - Im(Pr.L1))^2)))
+print("w-L2 RMSE:")
+print(sqrt(mean((Re(sig) - Re(Pr0))^2) + mean((Im(sig) - Im(Pr0))^2)))
+print("w-L2 loess RMSE:")
+print(sqrt(mean((Re(sig) - Re(Pr1))^2) + mean((Im(sig) - Im(Pr1))^2)))
+print("w-L2 median RMSE:")
+print(sqrt(mean((Re(sig) - Re(Pr2))^2) + mean((Im(sig) - Im(Pr2))^2)))
+print("w-L2 lowess RMSE:")
+print(sqrt(mean((Re(sig) - Re(Pr3))^2) + mean((Im(sig) - Im(Pr3))^2)))
+
+
+###############################################################
+# Вычисление RMSE и p-value, слишком долго, лучше не запускать #
+###############################################################
 a1 <- vector()
 a2 <- vector()
 a3 <- vector()
@@ -382,104 +386,4 @@ imf3 <- c(imf3, sqrt(mean((Im(sig) - Im(Pr0))^2)))
 imf4 <- c(imf4, sqrt(mean((Im(sig) - Im(Pr1))^2)))
 imf5 <- c(imf5, sqrt(mean((Im(sig) - Im(Pr2))^2)))
 imf6 <- c(imf6, sqrt(mean((Im(sig) - Im(Pr3))^2)))
-}
-
-N <- 100
-
-sig <- sin(2*pi*(1:N)/30)
-rnk<-1
-sig.outl<-sig
-outlier.seq<-sample(1:(N),N*0.01)
-sig.outl[37]<-sig.outl[37] + 10*sig.outl[37] 
-
-ser<-sig.outl + rnorm(N)
-
-
-s <- ssa(ser, kind = "1d-ssa")
-r <- reconstruct(s, groups = list(Trend = 1:2))
-
-pdf("C:/Users/mrpsi/Downloads/ssa_complex_report/outlier_example.pdf", paper = "special", width = 6, height = 4) 
-plot( ser,col='black',type='l')
-lines( sig, type='l', col='yellow', lw=2)
-lines( r$Trend,type='l',col='blue',lw=2)
-legend('topleft', c("series", "target", "ssa"),
-       col=c("black", "yellow", "blue"), lty=1, cex=0.8, lw=c(2, 2, 2))
-dev.off()
-
-g1 <- vector()
-g2 <- vector()
-g3 <- vector()
-g4 <- vector()
-g5 <- vector()
-g6 <- vector()
-
-reg1 <- vector()
-reg2 <- vector()
-reg3 <- vector()
-reg4 <- vector()
-reg5 <- vector()
-reg6 <- vector()
-
-img1 <- vector()
-img2 <- vector()
-img3 <- vector()
-img4 <- vector()
-img5 <- vector()
-img6 <- vector()
-
-
-for (i in 1:30) {
-  set.seed(1)
-  sig <- exp(4*(1:N)/N)*exp(2i*pi*(1:N)/30)
-  rnk<-1
-  sig.outl<-sig
-  outlier.seq<-sample(1:(N),N*0.05)
-  for (j in outlier.seq)
-    sig.outl[j]<-sig.outl[j] + sqrt(25 * Re(sig.outl[j])^2 + Im(sig.outl[j])^2)/ abs(sig.outl[j]) * sig.outl[j] 
-  
-  ser<-sig.outl + 0.5*exp(4*(1:N)/N)*rcnorm(N)
-  
-  
-  X<-hankel(ser, L=120)
-  
-  Pr<-IRLS_complex(X, rnk)
-  Pr0<-hankL2(Pr)
-  
-  Pr<-l1_complex(X, rnk) #l1pca
-  Pr.L1<-hankL1(Pr)
-  
-  Pr<-CIRLS_mod(X,rnk,'loess') #CIRLS modification (trend extraction with loess)
-  Pr1<-hankL2(Pr)
-  
-  Pr<-CIRLS_mod(X,rnk,'median') #CIRLS modification (trend extraction with median)
-  Pr2<-hankL2(Pr)
-  
-  Pr<-CIRLS_mod(X,rnk,'lowess') #CIRLS modification (trend extraction with lowess)
-  Pr3<-hankL2(Pr)
-  
-  
-  s <- ssa(ser, kind = "cssa")
-  r <- reconstruct(s, groups = list(Trend = 1))
-  
-  
-  g1 <- c(g1, sqrt(mean((Re(sig) - Re(r$Trend))^2) + mean((Im(sig) - Im(r$Trend))^2)))
-  g2 <- c(g2, sqrt(mean((Re(sig) - Re(Pr.L1))^2) + mean((Im(sig) - Im(Pr.L1))^2)))
-  g3 <- c(g3, sqrt(mean((Re(sig) - Re(Pr0))^2) + mean((Im(sig) - Im(Pr0))^2)))
-  g4 <- c(g4, sqrt(mean((Re(sig) - Re(Pr1))^2) + mean((Im(sig) - Im(Pr1))^2)))
-  g5 <- c(g5, sqrt(mean((Re(sig) - Re(Pr2))^2) + mean((Im(sig) - Im(Pr2))^2)))
-  g6 <- c(g6, sqrt(mean((Re(sig) - Re(Pr3))^2) + mean((Im(sig) - Im(Pr3))^2)))
-  
-  reg1 <- c(reg1, sqrt(mean((Re(sig) - Re(r$Trend))^2)))
-  reg2 <- c(reg2, sqrt(mean((Re(sig) - Re(Pr.L1))^2)))
-  reg3 <- c(reg3, sqrt(mean((Re(sig) - Re(Pr0))^2)))
-  reg4 <- c(reg4, sqrt(mean((Re(sig) - Re(Pr1))^2)))
-  reg5 <- c(reg5, sqrt(mean((Re(sig) - Re(Pr2))^2)))
-  reg6 <- c(reg6, sqrt(mean((Re(sig) - Re(Pr3))^2)))
-  
-  img1 <- c(img1, sqrt(mean((Im(sig) - Im(r$Trend))^2)))
-  img2 <- c(img2, sqrt(mean((Im(sig) - Im(Pr.L1))^2)))
-  img3 <- c(img3, sqrt(mean((Im(sig) - Im(Pr0))^2)))
-  img4 <- c(img4, sqrt(mean((Im(sig) - Im(Pr1))^2)))
-  img5 <- c(img5, sqrt(mean((Im(sig) - Im(Pr2))^2)))
-  img6 <- c(img6, sqrt(mean((Im(sig) - Im(Pr3))^2)))
 }
