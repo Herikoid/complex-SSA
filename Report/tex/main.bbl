@@ -1,0 +1,81 @@
+\begin{thebibliography}{1}
+\def\selectlanguageifdefined#1{
+\expandafter\ifx\csname date#1\endcsname\relax
+\else\selectlanguage{#1}\fi}
+\providecommand*{\href}[2]{{\small #2}}
+\providecommand*{\url}[1]{{\small #1}}
+\providecommand*{\BibUrl}[1]{\url{#1}}
+\providecommand{\BibAnnote}[1]{}
+\providecommand*{\BibEmph}[1]{#1}
+\ProvideTextCommandDefault{\cyrdash}{\iflanguage{russian}{\hbox
+  to.8em{--\hss--}}{\textemdash}}
+\providecommand*{\BibDash}{\ifdim\lastskip>0pt\unskip\nobreak\hskip.2em plus
+  0.1em\fi
+\cyrdash\hskip.2em plus 0.1em\ignorespaces}
+\renewcommand{\newblock}{\ignorespaces}
+
+\bibitem{Tretyakova20}
+\selectlanguageifdefined{russian}
+Третьякова~А.~Л. Робастные варианты метода
+  анализа сингулярного спектра~:
+  {^^d0^^ba^^d0^^b2^^d0^^b0^^d0^^bb^^d0^^b8^^d1^^84^^d0^^b8^^d0^^ba^^d0^^b0^^d1^^86^^d0^^b8^^d0^^be^^d0^^bd^^d0^^bd^^d0^^b0^^d1^^8f
+  ^^d1^^80^^d0^^b0^^d0^^b1^^d0^^be^^d1^^82^^d0^^b0
+  ^^d0^^bc^^d0^^b0^^d0^^b3^^d0^^b8^^d1^^81^^d1^^82^^d1^^80^^d0^^b0}~; науч.
+  рук. к. ф.-м. н., доцент Н. Э. Голяндина. \BibDash
+\newblock 2020.
+
+\bibitem{Golyandina04}
+\selectlanguageifdefined{russian}
+Голяндина~Н.~Э. Метод <<Гусеница>>-SSA: анализ
+  временных рядов: Учеб. пособие. \BibDash
+\newblock Санкт-Петербург~: ВММ, 2004.
+
+\bibitem{KeKanade}
+\selectlanguageifdefined{english}
+Ke~Qifa, Kanade~Takeo. Robust {L}1 Norm Factorization in the Presence of
+  Outliers and Missing Data by Alternative Convex Programming~// Proceedings of
+  IEEE Conference on Computer Vision and Pattern Recognition (CVPR 2005).
+  \BibDash
+\newblock 2005. \BibDash June.
+
+\bibitem{IRLS}
+\selectlanguageifdefined{english}
+Solving Weighted Least Squares (WLS) problems on ARM-based architectures~/
+  Belloch~Jose~A., Bank~Balázs, Igual~Francisco~D., Quintana-Ortí~Enrique~S.,
+  and Vidal~Antonio~M.~//
+  \href{https://doi.org/10.1007/s11227-016-1910-9}{\BibEmph{The Journal of
+  Supercomputing}}. \BibDash
+\newblock 2017. \BibDash 01. \BibDash
+\newblock Vol.~71. \BibDash
+\newblock P.~530--542.
+
+\bibitem{Chen}
+\selectlanguageifdefined{english}
+Chen~Ke, Sacchi~Mauricio. Robust reduced-rank filtering for erratic seismic
+  noise attenuation~//
+  \href{https://doi.org/10.1190/geo2014-0116.1}{\BibEmph{GEOPHYSICS}}. \BibDash
+\newblock 2015. \BibDash 01. \BibDash
+\newblock Vol.~80. \BibDash
+\newblock P.~V1--V11.
+
+\bibitem{Golkorozhi18}
+\selectlanguageifdefined{english}
+Nina~Golyandina, Anton~Korobeynikov, Anatoly~Zhigljavsky. Singular Spectrum
+  Analysis with R. \BibDash
+\newblock Springer, 2018.
+
+\bibitem{BrooksJot2012}
+\selectlanguageifdefined{english}
+Brooks~J.~Paul, Jot~Sapan. pcaL1: An Implementation in R of Three Methods for
+  L1-Norm Principal Component Analysis. \BibDash
+\newblock 2012. \BibDash
+\newblock unpublished.
+
+\bibitem{l1pca}
+\selectlanguageifdefined{english}
+Tsagkarakis~N., Markopoulos~P. P.and~Sklivanitis~G., Pados~D.~A. L1-Norm
+  Principal-Component Analysis of Complex Data~// \BibEmph{IEEE Transactions on
+  Signal Processing}. \BibDash
+\newblock 2018. \BibDash 06.
+
+\end{thebibliography}
