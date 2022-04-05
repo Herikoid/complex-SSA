@@ -1,5 +1,21 @@
 library(BBmisc)
 library(spatstat)
+library(QZ, quiet = TRUE)
+
+
+weighted_median <- function(x, w) {
+  S_2 <- sum(w) / 2
+  temp <- data.frame(x_abs = abs(x), w = w, x = x)
+  temp <- temp[order(temp$x_abs),]
+  k <- 1
+  s <- temp$w[k]
+  while(s < S_2) {
+    k <- k + 1
+    s <- s + temp$w[k]
+  }
+  
+  return(temp$x[k])
+}
 
 l1_complex<-function(M, k, eps=1e-5, maxiter=10){
   m<-nrow(M)

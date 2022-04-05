@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 \def\selectlanguageifdefined#1{
 \expandafter\ifx\csname date#1\endcsname\relax
 \else\selectlanguage{#1}\fi}
@@ -16,33 +16,38 @@
 
 \bibitem{Tretyakova20}
 \selectlanguageifdefined{russian}
-Третьякова~А.~Л. Робастные варианты метода
+А.~Л.~Третьякова. Робастные варианты метода
   анализа сингулярного спектра~:
-  {^^d0^^ba^^d0^^b2^^d0^^b0^^d0^^bb^^d0^^b8^^d1^^84^^d0^^b8^^d0^^ba^^d0^^b0^^d1^^86^^d0^^b8^^d0^^be^^d0^^bd^^d0^^bd^^d0^^b0^^d1^^8f
-  ^^d1^^80^^d0^^b0^^d0^^b1^^d0^^be^^d1^^82^^d0^^b0
-  ^^d0^^bc^^d0^^b0^^d0^^b3^^d0^^b8^^d1^^81^^d1^^82^^d1^^80^^d0^^b0}~; науч.
-  рук. к. ф.-м. н., доцент Н. Э. Голяндина. \BibDash
-\newblock 2020.
+  магистерская работа~; Санкт-Петербургский
+  Государственный Университет. \BibDash
+\newblock Санкт-Петербург, 2020.
 
-\bibitem{Golyandina04}
+\bibitem{Nekr2008}
+\selectlanguageifdefined{english}
+V.V.~Nekrutkin. Perturbations in SSA. \BibDash
+\newblock 2008. \BibDash
+\newblock Manuscript.
+
+\bibitem{Vlas2008}
 \selectlanguageifdefined{russian}
-Голяндина~Н.~Э. Метод <<Гусеница>>-SSA: анализ
-  временных рядов: Учеб. пособие. \BibDash
-\newblock Санкт-Петербург~: ВММ, 2004.
+E.~M.~Власьева. Исследование ошибок
+  восстановления в методе <<{Г}усеница>> с
+  помощью теории возмущений~: дипломная
+  работа~; Санкт-Петербургский
+  Государственный Университет. \BibDash
+\newblock Санкт-Петербург, 2008.
 
 \bibitem{KeKanade}
 \selectlanguageifdefined{english}
-Ke~Qifa, Kanade~Takeo. Robust {L}1 Norm Factorization in the Presence of
-  Outliers and Missing Data by Alternative Convex Programming~// Proceedings of
-  IEEE Conference on Computer Vision and Pattern Recognition (CVPR 2005).
-  \BibDash
+K.~Qifa, K.~Takeo. Robust {L}1 Norm Factorization in the Presence of Outliers
+  and Missing Data by Alternative Convex Programming~// Proceedings of IEEE
+  Conference on Computer Vision and Pattern Recognition (CVPR 2005). \BibDash
 \newblock 2005. \BibDash June.
 
 \bibitem{IRLS}
 \selectlanguageifdefined{english}
 Solving Weighted Least Squares (WLS) problems on ARM-based architectures~/
-  Belloch~Jose~A., Bank~Balázs, Igual~Francisco~D., Quintana-Ortí~Enrique~S.,
-  and Vidal~Antonio~M.~//
+  J.~A.~Belloch, B.~Bank, F.~D.~Igual, E.~S.~Quintana-Ortí, and A.~M.~Vidal~//
   \href{https://doi.org/10.1007/s11227-016-1910-9}{\BibEmph{The Journal of
   Supercomputing}}. \BibDash
 \newblock 2017. \BibDash 01. \BibDash
@@ -51,31 +56,43 @@ Solving Weighted Least Squares (WLS) problems on ARM-based architectures~/
 
 \bibitem{Chen}
 \selectlanguageifdefined{english}
-Chen~Ke, Sacchi~Mauricio. Robust reduced-rank filtering for erratic seismic
-  noise attenuation~//
+K.~Chen, M.~Sacchi. Robust reduced-rank filtering for erratic seismic noise
+  attenuation~//
   \href{https://doi.org/10.1190/geo2014-0116.1}{\BibEmph{GEOPHYSICS}}. \BibDash
 \newblock 2015. \BibDash 01. \BibDash
 \newblock Vol.~80. \BibDash
 \newblock P.~V1--V11.
 
+\bibitem{Golyandina.etal2018}
+\selectlanguageifdefined{english}
+N.~Golyandina, A.~Korobeynikov, A.~Zhigljavsky. Singular spectrum analysis with
+  {R}. \BibDash
+\newblock Springer-Verlag Berlin Heidelberg, 2018.
+
 \bibitem{Golkorozhi18}
 \selectlanguageifdefined{english}
-Nina~Golyandina, Anton~Korobeynikov, Anatoly~Zhigljavsky. Singular Spectrum
-  Analysis with R. \BibDash
+N.~Golyandina, A.~Korobeynikov, A.~Zhigljavsky. Singular Spectrum Analysis with
+  R. \BibDash
 \newblock Springer, 2018.
+
+\bibitem{Golyandina04}
+\selectlanguageifdefined{russian}
+Н.~Э.~Голяндина. Метод <<Гусеница>>-SSA: анализ
+  временных рядов: Учеб. пособие. \BibDash
+\newblock Санкт-Петербург~: ВММ, 2004.
 
 \bibitem{BrooksJot2012}
 \selectlanguageifdefined{english}
-Brooks~J.~Paul, Jot~Sapan. pcaL1: An Implementation in R of Three Methods for
+J.~P.~Brooks, S.~Jot. pcaL1: An Implementation in R of Three Methods for
   L1-Norm Principal Component Analysis. \BibDash
 \newblock 2012. \BibDash
 \newblock unpublished.
 
 \bibitem{l1pca}
 \selectlanguageifdefined{english}
-Tsagkarakis~N., Markopoulos~P. P.and~Sklivanitis~G., Pados~D.~A. L1-Norm
-  Principal-Component Analysis of Complex Data~// \BibEmph{IEEE Transactions on
-  Signal Processing}. \BibDash
+L1-Norm Principal-Component Analysis of Complex Data~/ N.~Tsagkarakis,
+  P.~P.~Markopoulos, G.~Sklivanitis, and D.~A.~Pados~// \BibEmph{IEEE
+  Transactions on Signal Processing}. \BibDash
 \newblock 2018. \BibDash 06.
 
 \end{thebibliography}

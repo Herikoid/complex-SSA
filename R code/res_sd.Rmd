@@ -1,0 +1,191 @@
+---
+title: 'er'
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+Библиотеки и диагональное усреднение
+```{r, warning=FALSE, message=FALSE}
+library(QZ, quiet = TRUE)
+library(matrixcalc)
+library(cmvnorm)
+library(Rssa)
+
+hankL2 <- function(A) {
+  N <- nrow(A) + ncol(A) - 1
+  F <- rep(0, N)
+  L.1<-min(nrow(A), ncol(A))
+  K.1<-max(nrow(A), ncol(A))
+  for(k in 1:N) {
+    v <- A[c(row(A) + col(A) - k == 1)]
+    F[k] <- mean(v)
+  }
+  return (F)
+}
+```
+
+Вектор из выборочных дисперсий для каждой из точек ряда
+```{r}
+disp <- function(M) {
+  M = matrix(M, nrow = repeats, ncol = N, byrow = TRUE)
+  sapply(1:N, function(i) mean(abs(M[,i] - mean(M[,i]))^2))
+}
+```
+
+Параметры ряда и число повторов
+```{r}
+set.seed(1)
+repeats <- 1e2
+
+N <- 200
+L <- floor((N + 1) / 2)
+
+sig <- complex(real = 1, imaginary = 1)
+
+noise <- function(N) {
+  #complex(real = rnorm(N), imaginary = rnorm(N))
+  #rcnorm(N)
+  complex(real = rnorm(N, sd = 1), imaginary = rnorm(N, sd = 2))
+}
+```
+
+
+
+```{r}
+set.seed(1)
+gen_ssa <- function(ser){
+  s <- ssa(ser, kind = "cssa")
+  rec <- reconstruct(s, groups = 1)
+  res <- rec$F1-sig
+}
+
+x.ssa <- sapply(1:repeats, function(x) gen_ssa(sig + noise(N)))
+disp.ssa <- disp(x.ssa)
+```
+
+Моделируем реальные ошибки восстановления
+```{r}
+set.seed(1)
+
+gen_x <- function(ser, L) {
+  M <- hankel(ser, L)
+  initial <- svd(M, nu = 1, nv = 1)
+  U <- initial$u
+  U <- as.matrix(U, nrow = nrow(U), ncol = 1)
+  Lambda <- initial$d
+  V <- initial$v
+  V <- as.matrix(V, nrow = nrow(), ncol = 1)
+  U <- U %*% diag(Lambda, nrow = 1, ncol = 1)
+  
+  return(hankL2(U%*%H(V)))
+}
+
+x.ser <- sapply(1:repeats, function(x) sig - gen_x(sig + noise(N), L))
+#Mod(x.ser[1,])^2
+disp.ser <- disp(x.ser)
+```
+
+Моделируем теоретические ошибки восстановления
+```{r}
+set.seed(1)
+
+H_1_1 <- function(E, U, V) {
+  as.vector((-1) * H(U) %*% E %*% V) * U %*% H(V) + U %*% H(U) %*% E + E %*% V %*% H(V)
+}
+
+U_1 <- as.matrix(rep(1 + 0i, L), nrow = L)
+U_1 <- U_1 / sqrt(sum(U_1^2))
+V_1 <- as.matrix(rep(1 + 0i, N - L + 1), nrow = N - L + 1)
+V_1 <- V_1 / sqrt(sum(V_1^2))
+
+#f_1 <- vector()
+#for (i in 1:repeats) {
+#  f_1 <- c(f_1, hankL2(H_1_1(hankel(noise(N), L), U_1, V_1)))
+#}
+f_1 <- sapply(1:repeats, function(x) hankL2(H_1_1(hankel(noise(N), L), U_1, V_1)))
+#Mod(f_1[1,])^2
+disp.f_1 <- disp(f_1)
+```
+
+Смотрим на дисперсии первых членов
+```{r}
+disp.ser[98:102]
+disp.ssa[98:102]
+disp.f_1[98:102]
+```
+
+Ошибки вещественной и мнимой частей
+```{r}
+disp.ser_re <- disp(Re(x.ser))
+disp.ser_im <- disp(Im(x.ser))
+
+disp.ssa_re <- disp(Re(x.ssa))
+disp.ssa_im <- disp(Im(x.ssa))
+
+disp.f_1_re <- disp(Re(f_1))
+disp.f_1_im <- disp(Im(f_1))
+```
+
+Для ser
+```{r}
+disp.ser_re[98:102]
+disp.ser_im[98:102]
+```
+
+Для ssa
+```{r}
+print(disp.ssa_re[98:102])
+print(disp.ssa_im[98:102])
+```
+
+Для теор
+```{r}
+print(disp.f_1_re[98:102])
+print(disp.f_1_im[98:102])
+```
+
+Доверительный интервал
+```{r}
+conf_int <- function(x, y, gamma = 0.9) {
+  c_gamma = qnorm((1 + gamma) / 2)
+  
+   X <-  matrix(x, nrow = repeats, ncol = N, byrow = TRUE)
+  X <- sapply(1:N, function(i) (abs(X[,i] - mean(X[,i]))^2))
+   Y <-  matrix(y, nrow = repeats, ncol = N, byrow = TRUE)
+  Y <- sapply(1:N, function(i) (abs(Y[,i] - mean(Y[,i]))^2))
+  
+  X <-  matrix(X, nrow = repeats, ncol = N)
+  Y <-  matrix(Y, nrow = repeats, ncol = N)
+  
+  ddx <-  sapply(1:N, function(i) mean(abs(X[,i] - mean(X[,i]))^2))
+  ddy <-  sapply(1:N, function(i) mean(abs(Y[,i] - mean(Y[,i]))^2))
+  
+  
+  left <- sapply(1:N, function(i) mean(X[,i]) - mean(Y[,i]) - c_gamma * sqrt(ddx[i] + ddy[i] - sqrt(ddx[i]) * sqrt(ddy[i]) * cor(X[,i], Y[,i])) / sqrt(repeats) )
+  right <- sapply(1:N, function(i) mean(X[,i]) - mean(Y[,i]) + c_gamma * sqrt(ddx[i] + ddy[i] - sqrt(ddx[i]) * sqrt(ddy[i]) * cor(X[,i], Y[,i])) / sqrt(repeats) )
+  return(list("l" = left, "r" = right))
+}
+```
+
+Для ser
+```{r}
+conf_int(Re(x.ser), Im(x.ser))$l[98:102]
+conf_int(Re(x.ser), Im(x.ser))$r[98:102]
+```
+
+
+Для ssa
+```{r}
+conf_int(Re(x.ssa), Im(x.ssa))$l[98:102]
+conf_int(Re(x.ssa), Im(x.ssa))$r[98:102]
+```
+
+Для теор
+```{r}
+conf_int(Re(f_1), Im(f_1))$l[98:102]
+conf_int(Re(f_1), Im(f_1))$r[98:102]
+```
+

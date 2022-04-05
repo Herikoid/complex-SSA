@@ -7,6 +7,16 @@ weights<-function(R,sigma,a,m,n){
   return(W)
 }
 
+calc.ends<-function(vec,L){
+  N<-length(vec)
+  res<-rep(NaN, (L+1))
+  for (i in (1:(L+1))) {
+    slide<-vec[(N-2*L+i):N]
+    res[i]<-median(slide)
+  }
+  return(res)
+}
+
 CIRLS_mod<-function(M, k, trend.ver='loess', alpha=4.046, eps=1e-7, maxITER=10, maxiter=5){
   m<-nrow(M)
   n<-ncol(M)
