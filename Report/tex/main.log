@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.3.31)  5 APR 2022 20:21
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.3.31)  15 APR 2022 03:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1301,62 +1301,65 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 793.
 
-[22] [23] [24]
+[22] [23] [24] [25]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 927.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\leq' on input line 927.
+(hyperref)                removing `math shift' on input line 940.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\leq' on input line 927.
+(hyperref)                removing `\leq' on input line 940.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 927.
-
-[25]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 962.
+(hyperref)                removing `\leq' on input line 940.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 962.
+(hyperref)                removing `math shift' on input line 940.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 975.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\leq' on input line 975.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 975.
 
 [26] [27]
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\CYRG' on input line 994.
+(hyperref)                removing `\CYRG' on input line 1007.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrl' on input line 994.
+(hyperref)                removing `\cyrl' on input line 1007.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyra' on input line 994.
+(hyperref)                removing `\cyra' on input line 1007.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrv' on input line 994.
+(hyperref)                removing `\cyrv' on input line 1007.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyra' on input line 994.
+(hyperref)                removing `\cyra' on input line 1007.
 
 <Re_outl_Re.png, id=412, 628.749pt x 286.06876pt>
 File: Re_outl_Re.png Graphic file (type png)
 <use Re_outl_Re.png>
-Package pdftex.def Info: Re_outl_Re.png  used on input line 1093.
+Package pdftex.def Info: Re_outl_Re.png  used on input line 1106.
 (pdftex.def)             Requested size: 303.48766pt x 138.08405pt.
 <Re_outl_Im.png, id=413, 629.35126pt x 286.671pt>
 File: Re_outl_Im.png Graphic file (type png)
 <use Re_outl_Im.png>
-Package pdftex.def Info: Re_outl_Im.png  used on input line 1101.
+Package pdftex.def Info: Re_outl_Im.png  used on input line 1114.
 (pdftex.def)             Requested size: 303.48766pt x 138.23915pt.
 [28
 
@@ -1364,48 +1367,48 @@ Package pdftex.def Info: Re_outl_Im.png  used on input line 1101.
 <f1.png, id=422, 628.14674pt x 286.671pt>
 File: f1.png Graphic file (type png)
 <use f1.png>
-Package pdftex.def Info: f1.png  used on input line 1147.
+Package pdftex.def Info: f1.png  used on input line 1160.
 (pdftex.def)             Requested size: 303.48766pt x 138.50598pt.
  [29 <./Re_outl_Im.PNG> <./f1.PNG>]
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\CYRZ' on input line 1241.
+(hyperref)                removing `\CYRZ' on input line 1254.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyra' on input line 1241.
+(hyperref)                removing `\cyra' on input line 1254.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrk' on input line 1241.
+(hyperref)                removing `\cyrk' on input line 1254.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrl' on input line 1241.
+(hyperref)                removing `\cyrl' on input line 1254.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyryu' on input line 1241.
+(hyperref)                removing `\cyryu' on input line 1254.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrch' on input line 1241.
+(hyperref)                removing `\cyrch' on input line 1254.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyre' on input line 1241.
+(hyperref)                removing `\cyre' on input line 1254.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrn' on input line 1241.
+(hyperref)                removing `\cyrn' on input line 1254.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyri' on input line 1241.
+(hyperref)                removing `\cyri' on input line 1254.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyre' on input line 1241.
+(hyperref)                removing `\cyre' on input line 1254.
 
 (./main.bbl [30
 
@@ -1475,7 +1478,7 @@ Package hyperref Warning: Glyph not defined in PU encoding,
 (hyperref)                removing `\cyrery' on input line 1.
 
 
-Underfull \hbox (badness 1584) in paragraph at lines 93--97
+Underfull \hbox (badness 1584) in paragraph at lines 87--91
 []\OT1/cmr/m/n/12 L1-Norm Principal-Component Anal-y-sis of Com-plex Data / N. 
 Tsagkarakis,
  []
@@ -1487,13 +1490,13 @@ Tsagkarakis,
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 867744C803C08EFF5E20DABF552A0D82;5978.
+(rerunfilecheck)             Checksum: 556C0F869DCDF6E9C8251F55B907ED47;5965.
  ) 
 Here is how much of TeX's memory you used:
- 26011 strings out of 478276
- 473006 string characters out of 5850489
- 761662 words of memory out of 5000000
- 43547 multiletter control sequences out of 15000+600000
+ 26009 strings out of 478276
+ 472975 string characters out of 5850489
+ 762625 words of memory out of 5000000
+ 43546 multiletter control sequences out of 15000+600000
  502857 words of font info for 116 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  83i,16n,89p,1151b,517s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1527,10 +1530,10 @@ ype1/public/cm-super/sfrm1200.pfb><d:/texlive/2021/texmf-dist/fonts/type1/publi
 c/cm-super/sfrm1728.pfb><d:/texlive/2021/texmf-dist/fonts/type1/public/cm-super
 /sfti1095.pfb><d:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfti1200.
 pfb>
-Output written on main.pdf (31 pages, 751050 bytes).
+Output written on main.pdf (31 pages, 751202 bytes).
 PDF statistics:
- 580 PDF objects out of 1000 (max. 8388607)
- 481 compressed objects within 5 object streams
- 116 named destinations out of 1000 (max. 500000)
+ 579 PDF objects out of 1000 (max. 8388607)
+ 480 compressed objects within 5 object streams
+ 115 named destinations out of 1000 (max. 500000)
  296 words of extra memory for PDF output out of 10000 (max. 10000000)
 

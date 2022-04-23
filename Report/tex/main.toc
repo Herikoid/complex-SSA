@@ -19,8 +19,8 @@
 \contentsline {section}{\numberline {4.2.\hskip 1em}Выброс}{22}{section.4.2}%
 \contentsline {subsection}{\numberline {4.2.1.\hskip 1em}$0 < k < L$}{23}{subsection.4.2.1}%
 \contentsline {subsection}{\numberline {4.2.2.\hskip 1em}$L \leq k \leq K$}{26}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3.\hskip 1em}$K < k < N$}{26}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4.\hskip 1em}Инвариант по RMSE}{26}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.3.\hskip 1em}$K < k \leq N$}{27}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4.\hskip 1em}Инвариант по RMSE}{27}{subsection.4.2.4}%
 \contentsline {chapter}{\chaptername ~5.\hskip 1em Ошибки восстановления для комплексной экспоненты}{28}{chapter.5}%
 \contentsline {section}{\numberline {5.1.\hskip 1em}Вещественные выбросы}{28}{section.5.1}%
 \contentsline {chapter}{\cyrillictext \CYRZ \cyra \cyrk \cyrl \cyryu \cyrch \cyre \cyrn \cyri \cyre }{30}{chapter*.23}%
@@ -32,13 +32,11 @@
 \babel@toc {english}{}\relax 
 \babel@toc {english}{}\relax 
 \babel@toc {english}{}\relax 
-\babel@toc {english}{}\relax 
 \babel@toc {russian}{}\relax 
 \babel@toc {english}{}\relax 
 \babel@toc {english}{}\relax 
 \babel@toc {english}{}\relax 
 \babel@toc {russian}{}\relax 
-\babel@toc {english}{}\relax 
 \babel@toc {english}{}\relax 
 \babel@toc {english}{}\relax 
 \babel@toc {english}{}\relax 

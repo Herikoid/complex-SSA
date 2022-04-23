@@ -332,58 +332,131 @@ imf4 <- vector()
 imf5 <- vector()
 imf6 <- vector()
 
+g1 <- vector()
+g2 <- vector()
+g3 <- vector()
+g4 <- vector()
+g5 <- vector()
+g6 <- vector()
+
+gref1 <- vector()
+gref2 <- vector()
+gref3 <- vector()
+gref4 <- vector()
+gref5 <- vector()
+gref6 <- vector()
+
+gimf1 <- vector()
+gimf2 <- vector()
+gimf3 <- vector()
+gimf4 <- vector()
+gimf5 <- vector()
+gimf6 <- vector()
+
+
+N<-240
+Per<-120
+set.seed(1)
 
 for (i in 1:30) {
-set.seed(1)
-sig <- exp(4*(1:N)/N)*exp(2i*pi*(1:N)/30)
-rnk<-1
-sig.outl<-sig
-outlier.seq<-sample(1:(N),N*0.05)
-sig.outl[outlier.seq]<-sig.outl[outlier.seq] + 5 * Re(sig.outl[outlier.seq]) 
+  sig <- exp(4*(1:N)/N)*exp(2i*pi*(1:N)/30)
+  rnk<-1
+  sig.outl<-sig
+  sig.outl1<-sig
+  sig.outl2<-sig
+  outlier.seq<-sample(1:(N),N*0.05)
+  sig.outl[outlier.seq]<-sig.outl[outlier.seq] + 4 * sig.outl[outlier.seq]
+  
+  abs_sum <- sum(abs(sig.outl[outlier.seq]))
+  sq_sum <- sum(abs(sig.outl[outlier.seq])^2)
+  
+  
+  sig.outl1[outlier.seq] <- sig.outl1[outlier.seq] + sqrt(25 * Re(sig.outl1[outlier.seq])^2 + 24 * Im(sig.outl1[outlier.seq])^2) - Re(sig.outl1[outlier.seq])
+  #sig.outl2[outlier.seq] <- sig.outl2[outlier.seq] + 4 * abs(sig.outl[outlier.seq])
+  
+  noise <- 0.5*exp(4*(1:N)/N)*rcnorm(N)
+  ser<-sig.outl + noise
+  ser1 <- sig.outl1 + noise
+    
 
-ser<-sig.outl + 0.5*exp(4*(1:N)/N)*rcnorm(N)
+  X<-hankel(ser, L=120)
+
+  Pr<-IRLS_complex(X, rnk)
+  Pr0<-hankL2(Pr)
+
+  Pr<-l1_complex(X, rnk) #l1pca
+  Pr.L1<-hankL1(Pr)
+
+  Pr<-CIRLS_mod(X,rnk,'loess') #CIRLS modification (trend extraction with loess)
+  Pr1<-hankL2(Pr)
+
+  #Pr<-CIRLS_mod(X,rnk,'median') #CIRLS modification (trend extraction with median)
+  #Pr2<-hankL2(Pr)
+
+  Pr<-CIRLS_mod(X,rnk,'lowess') #CIRLS modification (trend extraction with lowess)
+  Pr3<-hankL2(Pr)
+
+  X<-hankel(ser1, L=120)
+  
+  Pr<-IRLS_complex(X, rnk)
+  Pr01<-hankL2(Pr)
+  
+  Pr<-l1_complex(X, rnk) #l1pca
+  Pr.L11<-hankL1(Pr)
+  
+  Pr<-CIRLS_mod(X,rnk,'loess') #CIRLS modification (trend extraction with loess)
+  Pr11<-hankL2(Pr)
+  
+  #Pr<-CIRLS_mod(X,rnk,'median') #CIRLS modification (trend extraction with median)
+  #Pr21<-hankL2(Pr)
+  
+  Pr<-CIRLS_mod(X,rnk,'lowess') #CIRLS modification (trend extraction with lowess)
+  Pr31<-hankL2(Pr)
+  
+  s <- ssa(ser, kind = "cssa")
+  r <- reconstruct(s, groups = list(Trend = 1))
 
 
-X<-hankel(ser, L=120)
+  f1 <- c(f1, sqrt(mean((Re(sig) - Re(r$Trend))^2) + mean((Im(sig) - Im(r$Trend))^2)))
+  f2 <- c(f2, sqrt(mean((Re(sig) - Re(Pr.L1))^2) + mean((Im(sig) - Im(Pr.L1))^2)))
+  f3 <- c(f3, sqrt(mean((Re(sig) - Re(Pr0))^2) + mean((Im(sig) - Im(Pr0))^2)))
+  f4 <- c(f4, sqrt(mean((Re(sig) - Re(Pr1))^2) + mean((Im(sig) - Im(Pr1))^2)))
+  #f5 <- c(f5, sqrt(mean((Re(sig) - Re(Pr2))^2) + mean((Im(sig) - Im(Pr2))^2)))
+  f6 <- c(f6, sqrt(mean((Re(sig) - Re(Pr3))^2) + mean((Im(sig) - Im(Pr3))^2)))
 
-Pr<-IRLS_complex(X, rnk)
-Pr0<-hankL2(Pr)
+  ref1 <- c(ref1, sqrt(mean((Re(sig) - Re(r$Trend))^2)))
+  ref2 <- c(ref2, sqrt(mean((Re(sig) - Re(Pr.L1))^2)))
+  ref3 <- c(ref3, sqrt(mean((Re(sig) - Re(Pr0))^2)))
+  ref4 <- c(ref4, sqrt(mean((Re(sig) - Re(Pr1))^2)))
+  #ref5 <- c(ref5, sqrt(mean((Re(sig) - Re(Pr2))^2)))
+  ref6 <- c(ref6, sqrt(mean((Re(sig) - Re(Pr3))^2)))
 
-Pr<-l1_complex(X, rnk) #l1pca
-Pr.L1<-hankL1(Pr)
-
-Pr<-CIRLS_mod(X,rnk,'loess') #CIRLS modification (trend extraction with loess)
-Pr1<-hankL2(Pr)
-
-Pr<-CIRLS_mod(X,rnk,'median') #CIRLS modification (trend extraction with median)
-Pr2<-hankL2(Pr)
-
-Pr<-CIRLS_mod(X,rnk,'lowess') #CIRLS modification (trend extraction with lowess)
-Pr3<-hankL2(Pr)
-
-
-s <- ssa(ser, kind = "cssa")
-r <- reconstruct(s, groups = list(Trend = 1))
-
-
-f1 <- c(f1, sqrt(mean((Re(sig) - Re(r$Trend))^2) + mean((Im(sig) - Im(r$Trend))^2)))
-f2 <- c(f2, sqrt(mean((Re(sig) - Re(Pr.L1))^2) + mean((Im(sig) - Im(Pr.L1))^2)))
-f3 <- c(f3, sqrt(mean((Re(sig) - Re(Pr0))^2) + mean((Im(sig) - Im(Pr0))^2)))
-f4 <- c(f4, sqrt(mean((Re(sig) - Re(Pr1))^2) + mean((Im(sig) - Im(Pr1))^2)))
-f5 <- c(f5, sqrt(mean((Re(sig) - Re(Pr2))^2) + mean((Im(sig) - Im(Pr2))^2)))
-f6 <- c(f6, sqrt(mean((Re(sig) - Re(Pr3))^2) + mean((Im(sig) - Im(Pr3))^2)))
-
-ref1 <- c(ref1, sqrt(mean((Re(sig) - Re(r$Trend))^2)))
-ref2 <- c(ref2, sqrt(mean((Re(sig) - Re(Pr.L1))^2)))
-ref3 <- c(ref3, sqrt(mean((Re(sig) - Re(Pr0))^2)))
-ref4 <- c(ref4, sqrt(mean((Re(sig) - Re(Pr1))^2)))
-ref5 <- c(ref5, sqrt(mean((Re(sig) - Re(Pr2))^2)))
-ref6 <- c(ref6, sqrt(mean((Re(sig) - Re(Pr3))^2)))
-
-imf1 <- c(imf1, sqrt(mean((Im(sig) - Im(r$Trend))^2)))
-imf2 <- c(imf2, sqrt(mean((Im(sig) - Im(Pr.L1))^2)))
-imf3 <- c(imf3, sqrt(mean((Im(sig) - Im(Pr0))^2)))
-imf4 <- c(imf4, sqrt(mean((Im(sig) - Im(Pr1))^2)))
-imf5 <- c(imf5, sqrt(mean((Im(sig) - Im(Pr2))^2)))
-imf6 <- c(imf6, sqrt(mean((Im(sig) - Im(Pr3))^2)))
+  imf1 <- c(imf1, sqrt(mean((Im(sig) - Im(r$Trend))^2)))
+  imf2 <- c(imf2, sqrt(mean((Im(sig) - Im(Pr.L1))^2)))
+  imf3 <- c(imf3, sqrt(mean((Im(sig) - Im(Pr0))^2)))
+  imf4 <- c(imf4, sqrt(mean((Im(sig) - Im(Pr1))^2)))
+  #imf5 <- c(imf5, sqrt(mean((Im(sig) - Im(Pr2))^2)))
+  imf6 <- c(imf6, sqrt(mean((Im(sig) - Im(Pr3))^2)))
+  
+  g1 <- c(g1, sqrt(mean((Re(sig) - Re(r$Trend))^2) + mean((Im(sig) - Im(r$Trend))^2)))
+  g2 <- c(g2, sqrt(mean((Re(sig) - Re(Pr.L11))^2) + mean((Im(sig) - Im(Pr.L11))^2)))
+  g3 <- c(g3, sqrt(mean((Re(sig) - Re(Pr01))^2) + mean((Im(sig) - Im(Pr01))^2)))
+  g4 <- c(g4, sqrt(mean((Re(sig) - Re(Pr11))^2) + mean((Im(sig) - Im(Pr11))^2)))
+  #g5 <- c(g5, sqrt(mean((Re(sig) - Re(Pr21))^2) + mean((Im(sig) - Im(Pr21))^2)))
+  g6 <- c(g6, sqrt(mean((Re(sig) - Re(Pr31))^2) + mean((Im(sig) - Im(Pr31))^2)))
+  
+  gref1 <- c(gref1, sqrt(mean((Re(sig) - Re(r$Trend))^2)))
+  gref2 <- c(gref2, sqrt(mean((Re(sig) - Re(Pr.L11))^2)))
+  gref3 <- c(gref3, sqrt(mean((Re(sig) - Re(Pr01))^2)))
+  gref4 <- c(gref4, sqrt(mean((Re(sig) - Re(Pr11))^2)))
+  #gref5 <- c(gref5, sqrt(mean((Re(sig) - Re(Pr21))^2)))
+  gref6 <- c(gref6, sqrt(mean((Re(sig) - Re(Pr31))^2)))
+  
+  gimf1 <- c(gimf1, sqrt(mean((Im(sig) - Im(r$Trend))^2)))
+  gimf2 <- c(gimf2, sqrt(mean((Im(sig) - Im(Pr.L11))^2)))
+  gimf3 <- c(gimf3, sqrt(mean((Im(sig) - Im(Pr01))^2)))
+  gimf4 <- c(gimf4, sqrt(mean((Im(sig) - Im(Pr11))^2)))
+  #gimf5 <- c(gimf5, sqrt(mean((Im(sig) - Im(Pr21))^2)))
+  gimf6 <- c(gimf6, sqrt(mean((Im(sig) - Im(Pr31))^2)))
+  
 }

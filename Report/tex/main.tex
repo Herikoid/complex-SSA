@@ -685,11 +685,11 @@ $f^{(1)*}_{\Im} = \mathcal{H}(\mathbf{H}^{(1)}(\mathbf{\Im(E)}, \Im(S)))$ пер
 \end{proof}
 
 \begin{notice*}
-	В случае $d = 1$, достаточно требовать совпадающие траекторные пространства вещественной и мнимой части размерности $1$. 
+	В случае $\rk S = 1$, достаточно требовать совпадающие траекторные пространства вещественной и мнимой части размерности $1$. 
 \end{notice*}
 
 \begin{notice*}
-	В случае $d = 2$ условию удовлетворяет ряд $S$ с $\Re(S)~=~\Im(S)$. 
+	В случае $\rk S = 2$ условию удовлетворяет сигнал $S$ с $\Re(S)~=~\Im(S)$. 
 \end{notice*}
 
 %\begin{notice*}
@@ -697,13 +697,13 @@ $f^{(1)*}_{\Im} = \mathcal{H}(\mathbf{H}^{(1)}(\mathbf{\Im(E)}, \Im(S)))$ пер
 %\end{notice*}
 
 \begin{notice*}
-	Примером ряда, для которого в общем случае очевидно не выполняются требования теоремы, является комплексная экспонента $s_n = e^{\phi(n) + i\psi(n)}$, поскольку $\rk S = 1$, а $\rk\Re(S) = \rk\Im(S) = 2$.
+	Примером сигнала, для которого в общем случае очевидно не выполняются требования теоремы, является комплексная экспонента $s_n = e^{\phi(n) + i\psi(n)}$, поскольку $\rk S = 1$, а $\rk\Re(S) = \rk\Im(S) = 2$.
 \end{notice*}
 
 
 \section{Шум}
 
-Рассмотрим случай, когда ряд возмущён шумом $R$ с независимыми вещественной и мнимой частями.
+Рассмотрим случай, когда сигнал возмущён шумом $R$ с независимыми вещественной и мнимой частями.
 
 Тогда $\mathbf{E}$~--- траекторная матрица шума $R$.
 
@@ -736,11 +736,11 @@ $f^{(1)*}_{\Im} = \mathcal{H}(\mathbf{H}^{(1)}(\mathbf{\Im(E)}, \Im(S)))$ пер
 \end{proof}
 
 \begin{notice*}
-	В случае $d = 2$  численные эксперименты, приведённые в \cite[раздел 4.3.3.3]{Golyandina.etal2018} показано, что равенство \eqref{eq:dispsum} приближённо выполнено для синусоидальных рядов со сдвигом, не равным $\pi / 2$.
+	В случае $\rk S = 2$  численными экспериментами, приведёнными в \cite[раздел 4.3.3.3]{Golyandina.etal2018} показано, что равенство \eqref{eq:dispsum} приближённо выполнено для синусоидальных сигналов со сдвигом, не равным $\pi / 2$.
 \end{notice*}
 
 \subsection{Частный случай}
-Рассматриваем ряд с $s_n = c + ic$ и матрицу шума $\mathbf{E}$ с дисперсиями вещественной и мнимой частей $\sigma_1$ и $\sigma_2$.\\
+Рассматриваем ряд с $s_n = c_1 + ic_2$ и матрицу шума $\mathbf{E}$ с дисперсиями вещественной и мнимой частей $\sigma_1$ и $\sigma_2$.\\
 Сингулярные вектора такого ряда являются нормированными векторами с одинаковыми компонентами, они также сингулярные для вещественной и мнимой части. Тогда выполняются условия теоремы \ref{th:sum} и
 
 $$f^{(1)} = f^{(1)*}_{\Re(S)} + if^{(1)*}_{\Im(S)}.$$
@@ -752,7 +752,7 @@ $$f^{(1)} = f^{(1)*}_{\Re(S)} + if^{(1)*}_{\Im(S)}.$$
 Обозначим $L = \alpha N$, $\alpha \leq \frac{1}{2}$, $\lambda = \lim_{N\to\infty} 2 l / N$, воспользовавшись утверждением \ref{st:dispsum}, получаем
 
 $$    
-\mathbb{D} f^{(1)}_l = \mathbb{D} f^{(1)*}_{\Re, l} + \mathbb{D} f^{(1)*}_{\Re, l} \sim \frac{\sigma^2_1 + \sigma^2_2}{N}
+\mathbb{D} f^{(1)}_l = \mathbb{D} f^{(1)*}_{\Re, l} + \mathbb{D} f^{(1)*}_{\Im, l} \sim \frac{\sigma^2_1 + \sigma^2_2}{N}
 \begin{cases}
 	D_1(\alpha, \lambda), &\text{$0 \leq \lambda \leq 2 (1 - 2\alpha)$}\\
 	D_2(\alpha, \lambda), &\text{$2 (1 - 2\alpha) < \lambda < 2\alpha$}\\
@@ -862,64 +862,77 @@ $$f^{(1)} = \mathcal{H}(\mathbf{H}^{(1)})$$
 
 $k \leq L/2$
 
-$k \leq L - K$
+$k \leq K - L$
 
 $$f^{(1)}_l = \frac{a}{{LK}}
 \begin{cases}
 	(L + K - k), & \text{$1 \leq l \leq k$}\\
-	\frac{1}{l}(L + K + l - 2k)k, & \text{$k < l < 2k$}\\
-	\frac{1}{l}(L + K - l)k, &\text{$2k \leq l \leq L$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l \leq L$}\\
 	\frac{1}{L}K(L + k - l), &\text{$L < l < L + k$}\\
 	0, &\text{$L + k \leq l \leq K$}\\
-	\frac{1}{N - l - 1}(K - l)(L - k), &\text{$K < l < K + k$}\\
+	\frac{1}{N - l + 1}(K - l)(L - k), &\text{$K < l < K + k$}\\
 	-k, &\text{$K + k \leq l \leq N $}
 \end{cases}.
 $$
 
 $k \leq L/2$
 
-$k > L - K$
+$k > K - L$
 
 $$f^{(1)}_l = \frac{a}{{LK}}
 \begin{cases}
 	(L + K - k), & \text{$1 \leq l \leq k$}\\
-	\frac{1}{l}(L + K + l - 2k)k, & \text{$k < l < 2k$}\\
-	\frac{1}{l}(L + K - l)k, &\text{$2k \leq l \leq L$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l \leq L$}\\
 	\frac{1}{L}K(L + k- l), &\text{$L < l < K$}\\
-	\frac{1}{N - l - 1}(2k + (L - l)K), &\text{$K \leq l \leq L + k$}\\
-	\frac{1}{N - l - 1}( K - l)(L - k), &\text{$K < l < K + k$}\\
+	\frac{1}{N - l + 1}(2KL - l(L + K - k)), &\text{$K \leq l \leq L + k$}\\
+	\frac{1}{N - l + 1}( K - l)(L - k), &\text{$L + k < l < K + k$}\\
 	-k, &\text{$K + k \leq l \leq N$}
 \end{cases}.
 $$
 
 $k > L/2$
 
-$k \leq L - K$
+$k \leq K - L$
 
 $$f^{(1)}_l = \frac{a}{{LK}}
 \begin{cases}
 	(L + K - k), & \text{$1 \leq l \leq k$}\\
-	\frac{1}{l}(L + K + l - 2k)k, & \text{$k < l < L$}\\
-	\frac{1}{L}(L(2k - l + K) + k(3K - 4k)), & \text{$L\leq l \leq 2k$}\\
-	\frac{1}{L}K(L + k - l), &\text{$2k < l < L + k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l < L$}\\
+	%\frac{1}{L}((K + l - 2k)(L - k) + (2k - l)(L + K - k)), & \text{$L\leq l \leq 2k$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L \leq l < L + k$}\\
 	0, &\text{$L + k \leq l \leq K$}\\
-	\frac{1}{N - l - 1}(L - K)(L - k), &\text{$K < l < K + k$}\\
+	\frac{1}{N - l + 1}(L - K)(L - k), &\text{$K < l < K + k$}\\
 	-k, &\text{$K + k \leq l \leq N$}
 \end{cases}.
 $$
 
-$k > L/2$
+$k > L / 2$
 
-$k > L - K$
+$k > K - L$
+
+$k \leq K/2$
+
+$$f^{(1)}_l = \frac{a}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l < L$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L \leq l < K$}\\
+	\frac{1}{N - l + 1}(2KL - l(L + K - k)), &\text{$K \leq l \leq L + k$}\\
+	\frac{1}{N - l + 1}(L - K)(L - k), &\text{$L + k < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N$}
+\end{cases}.
+$$
+
+$k > K/2$
+
 
 $$f^{(1)}_l = \frac{1}{{LK}}
 \begin{cases}
 	(L + K - k), & \text{$1 \leq l \leq k$}\\
-	\frac{1}{l}(L + K + l - 2k)k, & \text{$k < l < L$}\\
-	\frac{1}{L}(L(2k - l + K) + k(3K - 4k)), & \text{$L \leq l \leq 2k$}\\
-	\frac{1}{L}K(L + k - l), &\text{$2k < l < K$}\\
-	\frac{1}{N - l - 1}(2k + (L - l)K), &\text{$K \leq l \leq L + k$}\\
-	\frac{1}{N - l - 1}(K - l)(L - k), &\text{$K < l < K + k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l < L$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L \leq l < K$}\\
+	\frac{1}{N - l + 1}(2KL - l(L + K - k)), &\text{$K \leq l \leq L + k$}\\
+	\frac{1}{N - l + 1}(K - l)(L - k), &\text{$L + k < l < K + k$}\\
 	-k, &\text{$K + k \leq l \leq N $}
 \end{cases}.
 $$
@@ -954,12 +967,12 @@ $$\mathbf{H}^{(1)} = \frac{a}{L}\begin{pmatrix}
 $$f^{(1)}_l = \frac{a}{{L}}
 \begin{cases}
 	\frac{1}{\min(L, l)}(l - k + L), & \text{$k - L \leq l \leq k$}\\
-	\frac{1}{\min(L, N - l - 1)}(L + k - l), & \text{$k < l < L + k$}\\
+	\frac{1}{\min(L, N - l + 1)}(L + k - l), & \text{$k < l < L + k$}\\
 	0, & \text{иначе}
 \end{cases}.$$
 
 
-\subsection{$K < k < N$}
+\subsection{$K < k \leq N$}
 Данный случай полностью аналогичен инвертированному первому случаю, то есть строим ряд для $N - k + 1$ и разворачиваем его.
 
 \vspace{1em}
@@ -971,7 +984,7 @@ $$f^{(1)}_l = \frac{a}{{L}}
 
 Матрицу возмущения для выброса $a + ib$ можно записать как  $\mathbf{E} = a\mathbf{G} + ib\mathbf{G}$, где $\frac{1}{a}\Re\mathbf{E} = \frac{1}{b}\Im\mathbf{E}  = \mathbf{G}$
 \begin{statement}\label{st:RMSEinv}
-	Пусть ряд $S$ удовлетворяет условиям теоремы \ref{th:sum} 
+	Пусть сигнал $S$ удовлетворяет условиям теоремы \ref{th:sum}. 
 	
 	Тогда RMSE для ряда с сигналом $S$ и выбросом $a + ib$, и  ряда с сигналом $S$ и выбросом $a^* + ib^*$, т.ч. $|a^* + ib^*| = |a + ib|$, совпадают.
 \end{statement}
@@ -981,12 +994,12 @@ $$f^{(1)}_l = \frac{a}{{L}}
 	По теореме \ref{th:sum} и формулам \eqref{eq:main}, \eqref{eq:main1}
 	$$f^{(1)}_l = a\mathcal{H}(\mathbf{H}(\mathbf{G}), \Re(S)) + ib\mathcal{H}(\mathbf{H}(\mathbf{G}), \Im(S)) = c_l(a + bi).$$
 	
-	Для $S$ с выбросом $a + ib$
+	Для ряда с сигналом $S$ и выбросом $a + ib$
 	$$RMSE = |a + ib|\sqrt{\frac{1}{N}\sum_{l = 1}^{N} c_l^2} $$
 	 
 	Рассмотрим $a^* + ib^*$, такое что $|a^* + ib^*| = |a + ib|$.
 	
-	Для $S$ с выбросом $a^* + ib^*$
+	Для ряда с сигналом $S$ и выбросом $a^* + ib^*$
 	
 	$$RMSE = |a^* + ib^*| \sqrt{\frac{1}{N}\sum_{l = 1}^{N} c_l^2} = |a + ib| \sqrt{\frac{1}{N}\sum_{l = 1}^{N} c_l^2}$$
 \end{proof}

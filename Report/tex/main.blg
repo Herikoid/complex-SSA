@@ -14,45 +14,45 @@ Warning--unknown month in l1pca
  : 
  : \endinput
 (Error may have been on previous line)
-You've used 11 entries,
+You've used 10 entries,
             5635 wiz_defined-function locations,
-            1648 strings with 17535 characters,
-and the built_in function-call counts, 3538 in all, are:
-= -- 461
-> -- 106
-< -- 13
-+ -- 36
-- -- 25
-* -- 171
-:= -- 384
-add.period$ -- 37
-call.type$ -- 11
+            1644 strings with 17470 characters,
+and the built_in function-call counts, 3236 in all, are:
+= -- 429
+> -- 93
+< -- 12
++ -- 32
+- -- 22
+* -- 160
+:= -- 351
+add.period$ -- 34
+call.type$ -- 10
 change.case$ -- 0
 chr.to.int$ -- 0
-cite$ -- 15
-duplicate$ -- 183
-empty$ -- 434
-format.name$ -- 25
-if$ -- 1000
+cite$ -- 14
+duplicate$ -- 165
+empty$ -- 390
+format.name$ -- 22
+if$ -- 914
 int.to.chr$ -- 0
-int.to.str$ -- 11
+int.to.str$ -- 10
 missing$ -- 0
-newline$ -- 76
-num.names$ -- 33
-pop$ -- 82
+newline$ -- 71
+num.names$ -- 30
+pop$ -- 70
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 106
+skip$ -- 96
 stack$ -- 0
 substring$ -- 51
-swap$ -- 98
+swap$ -- 92
 text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 4
-while$ -- 15
-width$ -- 13
-write$ -- 145
+while$ -- 14
+width$ -- 12
+write$ -- 135
 (There was 1 error message)
