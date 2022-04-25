@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.3.31)  25 APR 2022 03:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2022.3.31)  25 APR 2022 11:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -879,36 +879,36 @@ LaTeX Font Info:    T2A-bx encoding encountered on input line 68.
 [1
 
 {d:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]<<ot1rbxn-m.cmap
->><<ot1ssmn-m.cmap>>
-LaTeX Font Info:    T2A-bx encoding encountered on input line 116.
-LaTeX Font Info:    T2A-bx encoding encountered on input line 116.
- [2] [3]
-LaTeX Font Info:    T2A-m encoding encountered on input line 184.
-LaTeX Font Info:    T2A-m encoding encountered on input line 184.
+>><<ot1ssmn-m.cmap>> [2]
+LaTeX Font Info:    T2A-bx encoding encountered on input line 119.
+LaTeX Font Info:    T2A-bx encoding encountered on input line 119.
+ [3]
+LaTeX Font Info:    T2A-m encoding encountered on input line 191.
+LaTeX Font Info:    T2A-m encoding encountered on input line 191.
  [4]
-<img/first_vs_full_re.pdf, id=116, 433.62pt x 289.08pt>
+<img/first_vs_full_re.pdf, id=122, 433.62pt x 289.08pt>
 File: img/first_vs_full_re.pdf Graphic file (type pdf)
 <use img/first_vs_full_re.pdf>
-Package pdftex.def Info: img/first_vs_full_re.pdf  used on input line 202.
+Package pdftex.def Info: img/first_vs_full_re.pdf  used on input line 209.
 (pdftex.def)             Requested size: 259.49013pt x 172.9994pt.
-LaTeX Font Info:    T2A-m encoding encountered on input line 203.
+LaTeX Font Info:    T2A-m encoding encountered on input line 210.
  [5 <./img/first_vs_full_re.pdf>] [6]
-(./cssa.aux)
+[7] (./cssa.aux)
 Package rerunfilecheck Info: File `cssa.out' has not changed.
-(rerunfilecheck)             Checksum: 9680C6B5C46C91029DCCD144F9EE5037;2778.
+(rerunfilecheck)             Checksum: B431E6DF980B589B05AAE79ECBED29B0;2778.
  )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 110 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 17469 strings out of 478276
- 266882 string characters out of 5850489
- 587998 words of memory out of 5000000
- 35302 multiletter control sequences out of 15000+600000
+ 17475 strings out of 478276
+ 266959 string characters out of 5850489
+ 586033 words of memory out of 5000000
+ 35305 multiletter control sequences out of 15000+600000
  490427 words of font info for 81 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,13n,77p,1011b,4341s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 75i,13n,77p,1011b,4353s stack positions out of 5000i,500n,10000p,200000b,80000s
 {d:/texlive/2021/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t
 2a.enc}<d:/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><d
 :/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb><d:/texlive/
@@ -929,10 +929,10 @@ r/sfrm0600.pfb><d:/texlive/2021/texmf-dist/fonts/type1/public/cm-super/sfrm0800
 exlive/2021/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><d:/texlive/202
 1/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><d:/texlive/2021/texmf-di
 st/fonts/type1/public/cm-super/sfxc1440.pfb>
-Output written on cssa.pdf (6 pages, 335081 bytes).
+Output written on cssa.pdf (7 pages, 345969 bytes).
 PDF statistics:
- 223 PDF objects out of 1000 (max. 8388607)
- 169 compressed objects within 2 object streams
- 30 named destinations out of 1000 (max. 500000)
+ 235 PDF objects out of 1000 (max. 8388607)
+ 180 compressed objects within 2 object streams
+ 33 named destinations out of 1000 (max. 500000)
  118 words of extra memory for PDF output out of 10000 (max. 10000000)
 
