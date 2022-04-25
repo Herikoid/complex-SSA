@@ -2,7 +2,7 @@ library(Rssa)
 library(PRIMME)
 library(QZ, quiet = TRUE)
 
-outl_error.cssa <- function(ser){
+outl_error.cssa <- function(ser, N){
   s <- ssa(ser, kind = "cssa", svd.method = "primme")
   rec <- reconstruct(s, groups = 1:2)
   res <- rec$F1-sig
@@ -174,6 +174,8 @@ for(N in c(50, 100, 400, 1600)){
   
   k <- L - 1
   
+  sig <- rep(1 + 1i, N)
+  
   outl <- rep(0, N)
   outl[k] <- a
   ser <- sig + outl
@@ -199,6 +201,8 @@ for(N in c(50, 100, 400, 1600)){
   K <- N - L + 1
   
   k <- L - 1
+  
+  sig <- rep(1 + 1i, N)
   
   outl <- rep(0, N)
   outl[k] <- a
