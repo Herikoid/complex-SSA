@@ -34,4 +34,5 @@
 *.tdo
 .Rproj.user
 .DS_Store
-main.pdf
+Rplots.pdf
+ssa2020.pdf
