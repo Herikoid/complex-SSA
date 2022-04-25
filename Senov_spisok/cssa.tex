@@ -1,0 +1,294 @@
+\documentclass{spisok-article}
+
+\usepackage{latexsym,amssymb, amsthm}
+\usepackage{subcaption}
+\usepackage{physics}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\input{letters_series_mathbb}
+\input{newcommands}
+\newtheorem{proposition}{Предложение}%[section]
+\newtheorem{corollary}{Следствие}%[section]
+\newtheorem{theorem}{Теорема}%[section]
+\newtheorem{remark}{Замечание}%[section]
+\newtheorem{lemma}{Лемма}%[section]
+\newtheorem{definition}{Определение}%[section]
+\newtheorem{algorithm}{Алгоритм}%[section]
+
+\newcommand{\sfS}{\sf S}
+\newcommand{\bfPi}{\mathbf{\Pi}}
+\newcommand{\bfZero}{\mathbf{0}}
+\newcommand{\argmin}{\mathop{\rm argmin}}
+\newcommand{\ord}{\mathop{\rm ord}}
+\newcommand{\fdim}{\mathop{\rm fdim}}
+%\newcommand{\eqref}[1]{(\ref{#1})}
+
+
+\title{Ошибки оценивания сигнала с помощью комплексного анализа сингулярного спектра
+%\title{Ошибки оценивания сигнала с помощью комплексного анализа сингулярного спектра для зашумленной суммы мнимых экспонент.
+    \thanks{Работа выполнена при поддержке гранта РФФИ 20-01-00067}
+}
+
+\author{Голяндина Н.\,Э., доцент кафедры Статистического Моделирования СПбГУ,
+    \href{mailto:n.golyandina@spbu.ru}{n.golyandina@spbu.ru }\\
+    Сенов М.\,А., студент, СПбГУ,
+    \href{mailto:senov.mikhail@gmail.com}{senov.mikhail@gmail.com}%,\\
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Анализ Сингулярного Спектра (Singular Spectrum Analysis, SSA)
+--- непараметрический метод для разложения временного ряда на сумму
+интерпретируемых компонент, таких как тренд, периодики и шум. Расширение SSA на комплексный случай называется CSSA. В комплексных временных рядах одним из часто встречающихся случаев является сигнал, состоящий из суммы мнимых экспонент. В работе проведено теоретическое сравнение CSSA и SSA, примененного отдельно к вещественной и мнимой части, для случая синусоидальных сигналов, частным случаем которых является мнимая экспонента. Для константного сигнала получен явный вид первого порядка ошибки его оценки в случае наличия в ряде выброса. 
+\end{abstract}
+
+\section{Введение}
+Анализ Сингулярного Спектра (Singular Spectrum Analysis, SSA)  \cite{Golyandina.etal2001}
+ --- мощный метод анализа временных
+рядов, не требующий предварительного задания параметрической модели ряда.
+Однако есть класс сигналов, а именно временный ряды, управляемые линейными рекуррентными соотношениями, который позволяет получать теоретические результаты.
+
+В данной работе рассматриваются случаи константного и двух синусоидальных сигналов. 
+Для анализа ошибки оценивания сигнала используется теория возмущений \cite{Kato}, которая была применена для выделения сигнала методом SSA в ряде работ, см., например, \cite{Nekrutkin}. 
+
+%\section{Элементы теории возмущений}
+%\label{sec:pert}
+%TODO: нужно это?
+
+\section{Алгоритм CSSA}
+\label{sec:basessa}
+
+\begin{algorithm}
+\label{alg:ssa}
+~\\
+\textbf{Вход:} Временной ряд $\tX = (x_1, \dots, x_N)$, \emph{длина окна} $L$,
+    ранг сигнала $r$.\\
+\textbf{Выход:} Оценка сигнала $\wtilde\tS$.\\
+\textbf{Алгоритм:}
+\begin{enumerate}
+    \item \textbf{Вложение.}
+        \label{item:embedding}
+        Построим $\bfX \in \spaceR^{L \times K}$, \emph{$L$-траекторную матрицу} ряда $\tX$:
+        $\bfX = \calT_L \tX = [X_1 : \dots X_K]$,
+        где $K = N - L + 1$,
+        а $X_i$ --- \emph{векторы $L$-вложения:}
+        $X_i = (x_i, \dots, x_{i+L-1})^\mathrm{T} \in \spaceR^L$.
+    \item \textbf{Разложение.}
+        \label{item:decomposition}
+        Построим SVD-разложение матрицы $\bfX$:
+        $\bfX =
+        \sum_{k=1}^{\rank \bfX} \sqrt{\lambda_k} U_k V_k^\mathrm{H} = \sum_{k=1}^{\rank \bfX} \widehat{\bfX}_k$,
+        где $U_k$, $V_k$ --- правые и левые сингулярные векторы матрицы $\bfX$ соответственно,
+        $\sqrt{\lambda_k}$ --- сингулярные числа.
+    \item \textbf{Группировка.} Сгруппируем матрицы компонент сигнала $\widehat{\bfS}$:
+        $\widehat{\bfS} = \sum_{k=1}^r \widehat{\bfX}_k$.
+    \item \textbf{Диагональное усреднение.}
+        \label{item:reconstruction}
+        Применим процедуру диагонального усреднения (проекции в норме Фробениуса
+        на линейное пространство ганкелевых матриц):
+        $\widetilde{\bfS} = \calH \widehat{\bfS}$,
+        затем сопоставим полученным Ганкелевым матрицам ряды длины~$N$:
+        $\widetilde{\tS} = \calT_L^{-1} \widetilde{\bfS}$.
+\end{enumerate}
+\end{algorithm}
+
+
+\section{Применение теории возмущений к SSA и CSSA}
+% и \cite{Konstantinov}
+
+Наблюдаем комплексный временной ряд $\tX$ длины $N$ и длиной окна $L$, данный ряд представляется как $\tX = \tS + \tR$, где $\tS$~--- сигнал, $\tR$~--- возмущение.
+
+В работе \cite{Nekrutkin} вводится разложение восстановления сигнала в модели $\tS(\delta) = \tS + \delta \tR$, что соответствует $\mathbf{H}(\delta) = \mathbf{H} + \delta \mathbf{E}$, где $\mathbf{H}(\delta)$~--- траекторная матрица $\tS(\delta)$, $\mathbf{H}$~--- траекторная матрица $\tS$, $\delta\mathbf{E}$~--- траекторная матрица возмущения $\delta \tR$ и рассматривается линейный по $\delta$ член ошибки восстановления, называемый первым порядком ошибки восстановления. 
+
+Рассмотрим возмущение ряда $\tR$ с $\delta = 1$, его траекторная матрица $\mathbf{E}$. Первый порядок ошибки восстановления обозначим как $\tF^{(1)} = \mathcal{H}(\mathbf{H}^{(1)})$. 
+
+В работе \cite{Konstantinov} была получена формула для $\mathbf{H}^{(1)}$
+\begin{equation} \label{eq:main}
+	\mathbf{H}^{(1)} = \mathbf{P}_0 \mathbf{E} \mathbf{Q}^{\perp}_0 + \mathbf{P}^{\perp}_0 \mathbf{E},
+\end{equation}
+
+где $\mathbf{P}^{\perp}_0$~--- проектор на пространство столбцов $\mathbf{H}$, $\mathbf{Q}^{\perp}_0$~--- проектор на пространство строк $\mathbf{H}$, $\mathbf{P}_0 = \mathbf{I} - \mathbf{P}^{\perp}_0$, $\mathbf{I}$~--- единичная матрица.
+
+\subsection{Сравнение CSSA и SSA в случае совпадающих пространств сигналов}
+
+Обозначим за:
+
+$\tF^{(1)} = (f^{(1)}_1, \ldots, f^{(1)}_N)$ первый порядок ошибки восстановления $\tS$ с возмущением $\tR$ метода CSSA,
+
+$\tF^{(1)}_{\Re} = (f^{(1)}_{\Re,1}, \ldots, f^{(1)}_{\Re, N})$ первый порядок ошибки восстановления $\Re(\tS)$ с возмущением $\Re(\tR)$ метода SSA,
+
+$\tF^{(1)}_{\Im} = (f^{(1)}_{\Im,1}, \ldots, f^{(1)}_{\Im, N})$ первый порядок ошибки восстановления $\Im(\tS)$ с возмущением $\Im(\tR)$ метода SSA.
+
+
+\begin{theorem}\label{th:sum}
+Пусть траекторные пространства $\tS$, $\Re(\tS)$ и $\Im(\tS)$ совпадают.
+
+Тогда $$\tF^{(1)} = \tF^{(1)}_{\Re} + i\tF^{(1)}_{\Im}.$$
+\end{theorem}
+
+Линейность вхождения $\mathbf{E}$ в формулу \eqref{eq:main} позволяет доказать данное утверждение.
+
+\subsubsection{Случайное возмущение}
+
+Рассмотрим случайное возмущение $\tR$.
+
+Для дальнейших рассуждений приведём известный результат.
+\begin{lemma} \label{std:disp}
+Пусть $\zeta = \xi + i\eta$. Тогда $\mathbb{D}\zeta = \mathbb{D}\xi + \mathbb{D}\eta$.
+\end{lemma}
+\begin{proof}
+\begin{multline*}
+	\mathbb{D}\zeta = \mathbb{E}(|\zeta - \mathbb{E}\zeta|^2) = \mathbb{E}(|(\xi - \mathbb{E}\xi) + i((\eta - \mathbb{E}\eta))|^2) = \\
+	= \mathbb{E}((\xi - \mathbb{E}\xi)^2 + (\eta - \mathbb{E}\eta)^2)= \mathbb{E}(\xi - \mathbb{E}\xi)^2 + \mathbb{E}(\eta - \mathbb{E}\eta)^2 = \mathbb{D}\xi + \mathbb{D}\eta.
+\end{multline*}
+\end{proof}
+
+\begin{corollary} \label{st:dispsum}
+	Пусть выполнены условия теоремы \ref{th:sum}.
+	
+	Тогда
+	\begin{equation} \label{eq:dispsum}
+		\mathbb{D}f^{(1)}_l = \mathbb{D}f^{(1)}_{\Re, l} + \mathbb{D}f^{(1)}_{\Im, l}.	
+	\end{equation}
+\end{corollary}
+
+Получается автоматически из теоремы \ref{th:sum} и леммы \ref{std:disp}.
+
+\subsection{Случай двух зашумленных синусоид}
+\begin{corollary}
+Для комплексного ряда, состоящего из двух зашумленных синусоид со сдвигом, не равным $\pi/2$, выполняется формула \eqref{eq:dispsum}.
+\end{corollary}
+Совпадение траекторных пространств сигналов для такого ряда было показано в \cite{Golyandina.Stepanov2005}.
+
+\begin{remark}
+Численные эксперименты показывают, что для сигнала в виде комлексной экспоненты MSE CSSA-оценки сигнала поточечно равна полусумме MSE SSA-оценок сигнала его вещественной и мнимой частей.
+\end{remark}
+
+\subsection{Случай константных сигналов с выбросом}
+Рассматриваем сигнал $\tS = (c_1 + ic_2, \ldots, c_1 + ic_2)$, возмущённый выбросом $a_1 + ia_2$ на позиции $k$. Исходя из теоремы \ref{th:sum}, достаточно уметь вычислять первый порядок ошибки восстановления сигнала $\tS = (c, \ldots, c)$, возмущённого выбросом $a$ на позиции $k$.
+
+В работе \cite{Nekrutkin} была получен частный случай формулы \eqref{eq:main} для сигналов единичного ранга.
+
+$$\mathbf{H}^{(1)} = -U^{\mathrm{H}} \mathbf{E} V U V^{\mathrm{H}} + U U^{\mathrm{H}} \mathbf{E} + \mathbf{E} V V^{\mathrm{H}},$$
+где $U$, $V$~--- сингулярные вектора матрицы $\mathbf{H}$.
+
+Подставляя $U = \{1/\sqrt{L}\}^{L}_{i = 1},\, V = \{1/\sqrt{K}\}^{K}_{i = 1}$, $K = N - L + 1$ и в предположении, что $L \leq K$, можно получить явный вид первого порядка ошибки восстановления.
+
+Выпишем его для случая $k \leq \min(L/2, K - L)$
+$$f^{(1)}_l = \frac{a}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l \leq L$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L < l < L + k$}\\
+	0, &\text{$L + k \leq l \leq K$}\\
+	\frac{1}{N - l + 1}(K - l)(L - k), &\text{$K < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N $}
+\end{cases}.$$
+
+\begin{remark}
+Из данной формулы видно, что при фиксированном $L$, не зависящим от $N$, первый порядок ошибки не стремится к $0$ с ростом $N$, тогда как численные эксперименты показывают, что полная ошибка восстановления стремится к $0$ с ростом $N$. 
+\end{remark}
+
+\section{Численное сравнение первого порядка ошибки и полной ошибки оценивания сигнала}
+\label{sec:results}
+Для случая зашумленных гармоник рассмотрен пример с сигналом $s_l = \cos(2 \pi l / 10) + i\cos(2 \pi l / 10 + \pi/2)$, $\sigma^2 = 0.1$, $N = 49$, $L = 20$. Результат представлен на Рис.~\ref{fig:harm_noise}.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.8\linewidth]{img/first_vs_full_re.pdf}
+		\caption{Вещественные части первого порядка и полной ошибок.}
+		\label{fig:harm_noise}
+	\end{center}
+\end{figure}
+
+Для случая возмущения в виде выброса был рассмотрен пример с сигналом $s_l = 1 + 1i$, возмущённым выбросом $a_1 + ia_2 = 10 + i10$. Результаты представлены в таблице~\ref{tab:const_outl}.
+
+\begin{table}[H]
+	\begin{center}
+		\caption{Максимальное различие первого порядка и полной ошибок.}
+		\label{tab:const_outl}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			$N$	& 50 & 100 & 400 & 1600 \\ 
+			\hline
+			$L = N / 2$ & 0.1313  & 0.0419  & 0.0033 & 0.0002 \\
+			\hline
+			$L = 20$ & 0.3074  & 0.1965  & 0.5655 & 0.6720 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+Численные результаты показывают, что для случая зашумленных гармоник первый порядок адекватно оценивает полную ошибку восстановления сигнала в каждой точке.
+
+Однако для случая возмущения в виде выброса это верно только когда $L$ и $K$ стремятся к бесконечности с ростом $N$.
+
+Все численные результаты были получены при помощи пакета~\cite{Korobeynikov.etal2014}.
+
+%\begin{figure}[!htb]
+%    \centering
+%    \begin{subfigure}{.45\textwidth}
+%        \centering
+%        \includegraphics[width=\textwidth]{img/noise}
+%        \caption*{Зашумленный синус.}
+%    \end{subfigure}
+%    \begin{subfigure}{.45\textwidth}
+%        \centering
+%        \includegraphics[width=\textwidth]{img/outlier}
+%        \caption*{Константа с выбросом.}
+%    \end{subfigure}
+%    \caption{Сравнение первого порядка ошибки и полной ошибкой.}
+%    \label{fig:order1}
+%\end{figure}
+
+\section{Заключение}
+\label{sec:conclusions}
+В работе удалось подвести теоретическую базу под имеющиеся ранее численные результаты (\cite{Golyandina.etal2013}) по сравнению CSSA и SSA для двух зашумленных гармоник с одинаковой частотой и сдвигом, не равным $\pi/2$. Для мнимой экспоненты был получен более общий, нежели имеющиеся ранее, численный результат.  
+Для константного ряда с выбросами был получен явный вид ошибок первого порядка оценки сигнала в каждой точке, а также численно исследовано соотношение между ошибкой первого порядка и полной ошибкой.
+
+\renewcommand\refname{Литература}
+
+
+\begin{thebibliography}{10}
+
+\bibitem{Golyandina.etal2013}
+N.~Golyandina, A.~Korobeynikov, A.~Shlemov, and K.~Usevich.
+\newblock Multivariate and {2D} extensions of singular spectrum analysis with
+  the {R}ssa package.
+\newblock {\em Journal of Statistical Software}, 67(2):1--78, 2015.
+
+\bibitem{Golyandina.etal2001}
+N.~Golyandina, V.~Nekrutkin, and A.~Zhigljavsky.
+\newblock {\em Analysis of Time Series Structure: {SSA} and Related
+  Techniques}.
+\newblock Chapman\&Hall/CRC, 2001.
+
+\bibitem{Golyandina.Stepanov2005}
+Д.~Степанов, Н.~Голяндина.
+\newblock Варианты метода "Гусеница"{-SSA} для прогноза многомерных временных рядов.
+\newblock Труды IV Международной конференции "Идентификация систем и задачи управления" { SICPRO'05}. Москва, 2005, c. 1831-1848.
+
+\bibitem{Korobeynikov.etal2014}
+A.~Korobeynikov, A.~Shlemov, K.~Usevich, and N.~Golyandina.
+\newblock {\em {Rssa}: A collection of methods for singular spectrum analysis
+  {http://CRAN.R-project.org/package=Rssa}}, 2021.
+\newblock {R}~package version~1.04.
+
+\bibitem{Kato}
+Kato
+
+\bibitem{Nekrutkin}
+V.V.~Nekrutkin.
+\newblock {\em Perturbations in SSA}.
+\newblock Manuscript, 2008.
+
+\bibitem{Konstantinov}
+Константинов
+
+\end{thebibliography}
+
+\end{document}
