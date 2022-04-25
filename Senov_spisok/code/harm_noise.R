@@ -57,7 +57,7 @@ rec <- reconstruct(s, groups = list(1:2))[[1]]
 
 err <- rec - sig
 
-#pdf("img/first_vs_full_re.pdf", paper = "special", width = 6, height = 4) 
+#pdf(".../img/first_vs_full_re.pdf", paper = "special", width = 6, height = 4) 
 plot(Re(err.1), type='l', col = "red", xlab = "l", ylab = "error")
 lines(Re(err), type = 'l', col = "blue")
 legend('topright', c("first error", "full error"),
