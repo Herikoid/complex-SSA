@@ -1,7 +1,7 @@
 library(Rssa)
 library(QZ, quiet = TRUE)
 
-N <- 50
+N <- 9
 L <- 5
 
 sig.n <- function(N) {
