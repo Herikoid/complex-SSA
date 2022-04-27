@@ -9,6 +9,7 @@ outl_error.cssa <- function(ser, N){
 }
 
 outl_error.theor <- function(l, N, L, a, k) {
+  K <- N - L + 1
   ## k > K => reverse
   if (k > K) {
     k = N - k + 1
