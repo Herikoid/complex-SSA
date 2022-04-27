@@ -238,10 +238,10 @@ $$\text{SSA-}f^{(1)}_{\Re, l} = \frac{a}{{LK}}
 \alert{Замечание:} При фиксированном $L$ первый порядок ошибки не стремится к $0$ с ростом $N$.
 \end{frame}
 
-\begin{frame}{Выброс: График первого порядка для $k = 1$}
+\begin{frame}{Выброс: График первого порядка для $k < L$}
 Рассмотрим
 $$s_l = 1 + \iu,$$
-$\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = 1$, $N = 50$, $L = 20$.
+$\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = 1, 5, 10$, $N = 50$, $L = 20$.
 
 % \begin{figure}[H]
 %     \begin{center}
@@ -255,13 +255,12 @@ $\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = 1$, $N = 50$, $
         \caption{График $\Re(\text{CSSA-}\tX{F}^{(1)})$.}
     \end{center}
 \end{figure}
-\footnote{Здесь хорошо бы добавить динамику по $k$, беря, скажем, $k = 1, 5, 10$.}
 \end{frame}
 
-\begin{frame}{Выброс: График первого порядка для $k = N / 2$}
+\begin{frame}{Выброс: График первого порядка для $L < k < K$}
 Рассмотрим
 $$s_l = 1 + \iu,$$
-$\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = N / 2$, $N = 50$, $L = 20$.
+$\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = 26$, $N = 51$, $L = 10, 20, 25$.
 
 % \begin{figure}[H]
 %     \begin{center}
@@ -275,7 +274,6 @@ $\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = N / 2$, $N = 50
         \caption{График $\Re(\text{CSSA-}\tX{F}^{(1)})$.}
     \end{center}
 \end{figure}
-\footnote{Здесь хорошо бы добавить динамику по $L$, беря, скажем, $L = 5 (10?), 15 (20?), 25$.}
 \end{frame}
 
 \begin{frame}{Сравнение первого порядка и полной ошибок: Зашумлённые гармоники}
@@ -290,7 +288,6 @@ $\tX{R}$~--- белый шум с $\sigma^2 = 0.1$, $N = 9$, $L = 5$.
 	\end{center}
 \end{figure}
 \alert{Вывод:} Первый порядок почти совпадает с полной ошибкой.
-\footnote{Нужно добавить шкалу по осям, хотя бы по Y}
 \end{frame}
 
 \begin{frame}{Сравнение первого порядка и полной ошибок: Константный сигнал с выбросом}
@@ -332,5 +329,41 @@ $\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = L - 1$.
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Список литературы}
+\begin{thebibliography}{10}
+	
+	\bibitem{Golyandina.etal2013}
+	N.~Golyandina, A.~Korobeynikov, A.~Shlemov, and K.~Usevich.
+	\newblock Multivariate and {2D} extensions of singular spectrum analysis with
+	the {R}ssa package.
+	
+	
+	\bibitem{Golyandina.etal2001}
+	N.~Golyandina, V.~Nekrutkin, and A.~Zhigljavsky.
+	\newblock {\em Analysis of Time Series Structure: {SSA} and Related
+		Techniques}.
+
+	
+	\bibitem{Golyandina.Stepanov2005}
+	Д.~Степанов, Н.~Голяндина.
+	\newblock Варианты метода "Гусеница"{-SSA} для прогноза многомерных временных рядов.
+
+	\bibitem{Nekrutkin}
+	V.~Nekrutkin.
+	\newblock Perturbation expansions of signal subspaces for long signals.
+
+	
+	\bibitem{NekrutkinPerp}
+	V.~Nekrutkin.
+	\newblock Perturbations in SSA.
+
+	
+	\bibitem{Konstantinov}
+	А.~Константинов.
+	\newblock Некоторые задачи анализа временных рядов.
+
+	
+\end{thebibliography}
+\end{frame}
 
 \end{document}
