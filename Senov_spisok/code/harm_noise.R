@@ -1,7 +1,7 @@
 library(Rssa)
 library(QZ, quiet = TRUE)
 
-N <- 9
+N <- 50
 L <- 5
 
 sig.n <- function(N) {
@@ -48,10 +48,10 @@ rec <- reconstruct(s, groups = list(1:2))[[1]]
 U <- list(s$U[,1] + 1i * 0, s$U[,2] + 1i * 0)
 V <- list(s$V[,1] + 1i * 0, s$V[,2] + 1i * 0)
 
-set.seed(1)
+set.seed(6)
 err.1 <- hankL2(H.1(Rssa::hankel(noise(N), L), U, V))
 
-set.seed(1)
+set.seed(6)
 s <- ssa(sig + noise(N), L = L, kind = "cssa", svd.method = "svd")
 rec <- reconstruct(s, groups = list(1:2))[[1]]
 

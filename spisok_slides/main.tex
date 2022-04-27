@@ -36,24 +36,20 @@
 \newcommand{\tX}[1]{\mathsf{#1}}
 \newcommand{\iu}{{i\mkern1mu}}
 
-\title[Комплексные выбросы и SSA]
+\title[Ошибки CSSA]
 {Ошибки оценивания сигнала с помощью комплексного анализа сингулярного спектра}
 
 \subtitle
 {}
 
-\author[Сенов М.А.] 
-{Сенов Михаил Андреевич}
+\author[Голяндина Н.Э., Сенов М.А.] 
+{Голяндина Нина Эдуардовна, \underline{Сенов Михаил Андреевич}}
 
-\institute[Санкт-Петербургский Государственный Университет]{%
-    \small
-    Санкт-Петербургский государственный университет\\
-    Прикладная математика и информатика\\
-    Вычислительная стохастика и статистические модели\\
-    \vspace{1.25cm}
-    Отчет по научно-исследовательской работе}
+\institute[СПИСОК]{
+СПИСОК\\
+Вычислительная стохастика и статистические модели}
 
-\date[Зачет]{Санкт-Петербург, 2022}
+\date[Зачет]{Санкт-Петербург, 28 апреля 2022}
 
 \begin{document}
 
@@ -66,72 +62,122 @@
 
 $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 \vspace{1em}
-\alert{Модель:} $\tX{X} = \tX{S} + \tX{R}$, $\tX{S}$ сигнал, $\tX{R}$ возмущение.\\
+\alert{Модель:} $\tX{X} = \tX{S} + \tX{R}$, $\tX{S}$ сигнал, $\tX{R}$ возмущение (шум или выброс).\\
 \vspace{1em}
-\alert{Проблема:} Извлечение сигнала $\tilde{\tX{S}} = F(\tX{X})$, $F$ используемый метод.\\
+\alert{Задача:} Извлечение сигнала $\tilde{\tX{S}} = F(\tX{X})$, $F$ используемый метод.\\
 \vspace{1em}
-\alert{Метод:} SSA (Singular Spectrum Analysis) [Analysis of Time Series
-Structure: SSA and Related Techniques, Golyandina N., Nekrutkin V.,
-Zhigljavsky A., 2001].
+\alert{Метод:} SSA (Singular Spectrum Analysis) [Golyandina et al., 2001] для вещественных рядов, CSSA (Complex Singular Spectrum Analysis) для комплексных.\\
+\vspace{1em}
+\alert{Проблема:} Что лучше, с точки зрения $\tilde{\tX{S}} - \tX{S}$,
+
+SSA$(\tX{X}_{\Re}) + \iu \text{SSA}(\tX{X}_{\Im})$ или CSSA$(\tX{X}_{\Re} + \iu \tX{X}_{\Im})$?
+
+\end{frame}
+
+\begin{frame}{ведение: Обозначения}
+Рассмотрим временной ряд $\tX{X}=(x_1, \ldots, x_{N})$, $L$ длина окна.\\
+\vspace{1em}
+$\mathcal{M}_{r}$ --- пространство матриц ранга не больше $r$, размера $L \times K$,
+
+$\mathcal{M}_{\mathcal{H}}$~--- пространство ганкелевых матриц $L\times K$.\\
+\vspace{1em}
+Оператор вложения $\mathcal{T}_L:\mathbb{R}^N \rightarrow \mathcal{M}_{\mathcal{H}}: \mathcal{T}_L (\tX{X}) = \mathbf{X} $,\\
+$$\mathbf{X} = \begin{pmatrix}
+           x_1 & x_2 & \ldots & x_{K}\\
+           x_2 & x_3 & \ldots & x_{K+1}\\
+           \vdots & \vdots & & \vdots\\
+           x_{L} & x_{L+1} & \ldots & x_{N}
+         \end{pmatrix}, K = N - L + 1,$$
+$\mathbf{X}$~--- $L$-траекторная матрица $\tX{X}$.\\
+\vspace{1em}
+$\Pi_{r}:\mathcal{M}\rightarrow \mathcal{M}_r$,
+$\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$~--- проекторы на $\mathcal{M}_{r}$ и $\mathcal{M}_{\mathcal{H}}$ по норме Форбениуса.
 
     \note{}
+
 \end{frame}
 
 \begin{frame}{Введение: Ошибка восстановления}
-    \alert{Модель:} $\tX{S}(\delta) = \tX{S} + \delta \tX{R}$ длины $N$\\
-    или\\
-     $\mathbf{H}(\delta) = \mathbf{H} + \delta \mathbf{E}$, где $\mathbf{H}(\delta) = \mathcal{T}(\tX{S}(\delta))$, $\mathbf{H} = \mathcal{T}(\tX{S})$, $\delta\mathbf{E} = \mathcal{T}(\delta \tX{R})$, $\mathcal{T}$~--- оператор ганкелизации.\\
-     $\mathbf{P}_k$~--- проектор на $k$-ое ортогональное собственное пространство $\mathbf{H}\mathbf{H}^{\mathrm{H}}$.\\
-     $\mathbf{P}_k(\delta) = \mathbf{P}_k + \delta\mathbf{P}^{(1)}_k +  \delta^2\mathbf{P}^{(2)}_k + \ldots$\\
-     $\mathbf{H}_k(\delta) = \mathbf{P}_k(\delta) \mathbf{H} = \mathbf{H}_k + \delta\mathbf{H}^{(1)}_k +  \delta^2\mathbf{H}^{(2)}_k + \ldots$\\
-     \vspace{1em}
-     $\mathbf{H}^{(1)} = \sum_{i = 1}^{r} \mathbf{H}^{(1)}_i$\\
-     $\tX{F}^{(1)} = \mathcal{H}(\mathbf{H}^{(1)})$ первый порядок ошибки восстановления.\\
-     \vspace{1em}
+Временной ряд $\tX{X}=(x_1, \ldots, x_{N})$, $L$ длина окна.
+    \begin{block}{Алгоритм SSA (CSSA) выделения сигнала}
+\begin{equation*}
+	\tilde{\tX{S}} = \mathcal{T}^{-1}_{L} \Pi_{\mathcal{H}} \Pi_{r} \mathcal{T}_L (\tX{X}).
+\end{equation*}
+\end{block}
     
+\alert{Модель:} $\tX{S}(\delta) = \tX{S} + \delta \tX{R}$ длины $N$ или $\mathbf{H}(\delta) = \mathbf{H} + \delta \mathbf{E}$, 
+     
+где $\mathbf{H}(\delta) = \mathcal{T}_L(\tX{S}(\delta))$, $\mathbf{H} = \mathcal{T}_L(\tX{S})$, $\delta\mathbf{E} = \mathcal{T}_L(\delta \tX{R})$.\\
+\vspace{1em}
+$\tilde{\tX{S}} = \mathcal{T}^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)}))$ из (Nekrutkin, 2008).\\
+\vspace{1em}
+$\tX{F} = \tilde{\tX{S}} - \tX{S} = \mathcal{T}^{-1} \Pi_{\mathcal{H}} (\delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)}))$ ошибка восстановления.\\
+\vspace{1em}
+Рассматриваем $\delta = 1$,\\
+$\tX{F}^{(1)} = \mathcal{T}^{-1}_{L}(\mathbf{H}^{(1)})$ первый порядок ошибки восстановления.\\
+
 \end{frame}
 
 \begin{frame}{Ошибка восстановления: Формула для $\mathbf{H}^{(1)}$}
-На основе результатов из (Константинов, 2018) и (Некруткин, 2015) была получена формула для $\mathbf{H}^{(1)}$ в случае достаточно маленького возмущения.
+$\tX{X} = \tX{S}(1) = \tX{S} + \tX{R}$,
+
+$\tilde{\tX{S}} = \mathcal{T}^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \mathbf{H}^{(1)} + \mathbf{H}^{(2)}))$,
+
+$\tX{F} = \tilde{\tX{S}} - \tX{S}$,
+
+$\tX{F}^{(1)} = \mathcal{T}^{-1}_{L}(\mathbf{H}^{(1)})$.\\
+\vspace{1em}
+На основе результатов из (Константинов,~2018) и (Некруткин,~2015) была получена формула для $\mathbf{H}^{(1)}$ в случае достаточно маленького возмущения.
 
 \begin{equation*} \label{eq:main}
-	\mathbf{H}^{(1)} = \mathbf{P}_0 \mathbf{E} \mathbf{Q}^{\perp}_0 + \mathbf{P}^{\perp}_0 \mathbf{E},
+	\mathbf{H}^{(1)} = \mathbf{P}^{\perp}_0 \mathbf{E} \mathbf{Q}_0 + \mathbf{P}_0 \mathbf{E},
 \end{equation*}
-где $\mathbf{P}^{\perp}_0$~--- проектор на пространство столбцов $\mathbf{H}$, $\mathbf{Q}^{\perp}_0$~--- проектор на пространство строк $\mathbf{H}$, $\mathbf{P}_0 = \mathbf{I} - \mathbf{P}^{\perp}_0$, $\mathbf{I}$~--- единичная матрица.
+где $\mathbf{P}_0$~--- проектор на пространство столбцов $\mathbf{H}$, $\mathbf{Q}_0$~--- проектор на пространство строк $\mathbf{H}$, $\mathbf{P}^{\perp}_0 = \mathbf{I} - \mathbf{P}_0$, $\mathbf{I}$~--- единичная матрица.
 \end{frame}
 
 \begin{frame}{Ошибка восстановления: Теорема}
-    $\tX{F}^{(1)} = (f^{(1)}_1, \ldots, f^{(1)}_N)$ первый порядок ошибки восстановления $\tX{S}$ с возмущением $\tX{R}$ метода CSSA,
+    CSSA-$\tX{F}^{(1)}$ первый порядок ошибки восстановления $\tX{S}$ с возмущением $\tX{R}$ метода CSSA,
 
-    $\tX{F}^{(1)}_{\Re} = (f^{(1)}_{\Re,1}, \ldots, f^{(1)}_{\Re, N})$ первый порядок ошибки восстановления $\Re(\tX{S})$ с возмущением $\Re(\tX{R})$ метода SSA,
+    SSA-$\tX{F}^{(1)}_{\Re}$ первый порядок ошибки восстановления $\Re(\tX{S})$ с возмущением $\Re(\tX{R})$ метода SSA,
 
-    $\tX{F}^{(1)}_{\Im} = (f^{(1)}_{\Im,1}, \ldots, f^{(1)}_{\Im, N})$ первый порядок ошибки восстановления $\Im(\tX{S})$ с возмущением $\Im(\tX{R})$ метода SSA.
+    SSA-$\tX{F}^{(1)}_{\Im}$ первый порядок ошибки восстановления $\Im(\tX{S})$ с возмущением $\Im(\tX{R})$ метода SSA.
     
     \begin{block}{Теорема \label{th:sum}}
         Пусть пространства столбцов траекторных матриц рядов $\tX{S}$, $\Re(\tX{S})$ и $\Im(\tX{S})$ совпадают и то же самое верно для пространств строк.
     Тогда при любом достаточно малом возмущении $\tX{R}$ 
-    $$\tX{F}^{(1)} = \tX{F}^{(1)}_{\Re} + \iu\tX{F}^{(1)}_{\Im}.$$
+    $$\text{CSSA-}\tX{F}^{(1)} = \text{SSA-}\tX{F}^{(1)}_{\Re} + \iu\text{SSA-}\tX{F}^{(1)}_{\Im}.$$
     \end{block}
-    Получается из линейности вхождения $\mathbf{E}$ в формулу для $\mathbf{H}^{(1)}$.
+    Получается из линейности вхождения $\mathbf{E}$ в формулу
+    $$\mathbf{H}^{(1)} = \mathbf{P}^{\perp}_0 \mathbf{E} \mathbf{Q}_0 + \mathbf{P}_0 \mathbf{E}.$$
 \end{frame}
 
 \begin{frame}{Ошибка восстановления: Случайное возмущение}
-    $\tX{R}$~--- случайный вектор.\\
-    \vspace{1em}
-    \alert{Известно:} Пусть $\zeta = \xi + \iu\eta$. Тогда $\mathbb{D}(\zeta) = \mathbb{D}(\xi) + \mathbb{D}(\eta)$.
-    \begin{block}{Следствие (из теоремы)}
-        Пусть выполнены условия теоремы.
+$\text{CSSA-}\tX{F}^{(1)} = (\text{CSSA-}f^{(1)}_1, \ldots, \text{CSSA-}f^{(1)}_N)$,
+
+$\text{SSA-}\tX{F}^{(1)}_{\Re} = (\text{SSA-}f^{(1)}_{\Re, 1}, \ldots, \text{SSA-}f^{(1)}_{\Re, N})$,
+
+$\text{SSA-}\tX{F}^{(1)}_{\Im} = (\text{SSA-}f^{(1)}_{\Im, 1}, \ldots, \text{SSA-}f^{(1)}_{\Im, N})$\\
+\vspace{1em}
+
+Пусть возмущение $\tX{R}$~--- шум, т.е. комплексный случайный вектор с нулевым матожиданием.\\
+\vspace{1em}
+\begin{block}{Применение теоремы}
+Пусть выполнены условия теоремы.
 	
-	Тогда
-	\begin{equation*} \label{eq:dispsum}
-	\mathbb{D}f^{(1)}_l = \mathbb{D}f^{(1)}_{\Re, l} + \mathbb{D}f^{(1)}_{\Im, l}.	
-	\end{equation*}
-    \end{block}
-    Получается автоматически из теоремы и известного результата.
+Тогда
+\begin{equation*} \label{eq:dispsum}
+\mathbb{D}(\text{CSSA-}f^{(1)}_l) = \mathbb{D}(\text{SSA-}f^{(1)}_{\Re, l}) + \mathbb{D}(\text{SSA-}f^{(1)}_{\Im, l}).	
+\end{equation*}
+\end{block}
     
+\alert{Известно:} Пусть $\zeta = \xi + \iu\eta$. Тогда $\mathbb{D}(\zeta) = \mathbb{D}(\xi) + \mathbb{D}(\eta)$.
+
+Что является причиной, по которой можно не требовать независимость шума.
 \end{frame}
 
-\begin{frame}{Две зашумлённые синусоиды: Модель}
+\begin{frame}{Шум: Две зашумлённые синусоиды}
+\alert{Опр.:} $L$-рангом ряда называется ранг $L$-траекторной матрицы.\\
+\vspace{1em}
 Пусть сигнал $\tX{S}$ имеет вид
 \begin{equation*}
 \label{eq:general_ts}
@@ -139,40 +185,45 @@ s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2),
 \end{equation*}
 где $0<\omega\le 0.5$ и $0\le\phi_i < 2\pi$.
 
-При $|\psi_2-\psi_1| = \pi/2$ и $A=B$, 
-$$s_l = e^{i(2 \pi\omega l + \phi_1)}.$$
+При $|\phi_2-\phi_1| = \pi/2$ и $A=B$, 
+$$s_l = Ae^{\pm \iu(2 \pi\omega l + \phi_1)}.$$
+В данном случае $L$-ранг $s_l$ равен $1$, иначе $2$, $L$-ранг $\Re(s_l)$ и $\Im(s_l)$ равен $2$ (Степанов,~Голяндина,~2005).\\
+\vspace{1em}
 Пусть возмущение $\tX{R}$~--- шум, т.е. случайный вектор с нулевым матожиданием и достаточно малой дисперсией.
-
 \end{frame}
 
-\begin{frame}{Две зашумлённые синусоиды: MSE}
+\begin{frame}{Шум: MSE}
 \begin{block}{Замечание}
-    Для сигнала $s_l$, $s_l \neq e^{i(2 \pi\omega l + \phi_1)}$ с возмущением $\tX{R}$ выполняется формула разложения дисперсии из следствия.
+    Для сигнала $s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2)$, при сдвиге не $\pi / 2$, с возмущением $\tX{R}$ выполняется
+    $$\mathbb{D}(\text{CSSA-}f^{(1)}_l) = \mathbb{D}(\text{SSA-}f^{(1)}_{\Re, l}) + \mathbb{D}(\text{SSA-}f^{(1)}_{\Im, l}).$$
 \end{block}
 
 Совпадение пространств для $s_l$ известно из (Степанов,~Голяндина,~2005).
 
-Для сигнала $s_l = e^{i(2 \pi\omega l + \phi_1)}$ численно было показано поточечное равенство MSE CSSA-оценок полусумме MSE SSA-оценок вещественной и мнимой части. 
-
+\begin{block}{Замечание}
+    Для сигнала $s_l = Ae^{\pm \iu(2 \pi\omega l + \phi_1)}$, с возмущением $\tX{R}$ выполняется
+    $$\mathbb{D}(\text{CSSA-}f^{(1)}_l) \stackrel{?}{=} \frac{1}{2}[\mathbb{D}(\text{SSA-}f^{(1)}_{\Re, l}) + \mathbb{D}(\text{SSA-}f^{(1)}_{\Im, l})].$$
+\end{block} 
+Показано эмпирически.
 \end{frame}
 
-\begin{frame}{Константный сигнал с выбросом: Модель и вид $\mathbf{H}^{(1)}$}
+\begin{frame}{Выброс: Константный сигнал с выбросом}
 Пусть сигнал $\tX{S}$ имеет вид
 $$s_l = c_1 + \iu c_2.$$
-Пусть возмущение $\tX{R} = (0, \ldots, a_1 + \iu a_2, \ldots, 0)$~--- выброс на позиции $k$.
-
-По теореме достаточно выразить $\tX{F}^{(1)}_{\Re}$.
-
-Для вещественных рядов с $\rk(\mathbf{H}) = 1$ известна формула (Nekrutkin, 2008).
+Пусть возмущение $\tX{R} = (0, \ldots, a_1 + \iu a_2, \ldots, 0)$~--- выброс на позиции $k$.\\
+\vspace{1em}
+По теореме достаточно уметь выражать $\text{SSA-}\tX{F}^{(1)}_{\Re}$.\\
+\vspace{1em}
+Для сигнала $\Re(s_l)$ известна формула (Nekrutkin, 2008)
 $$\mathbf{H}^{(1)} = -U^{\mathrm{T}} \mathbf{E} V U V^{\mathrm{T}} + U U^{\mathrm{T}} \mathbf{E} + \mathbf{E} V V^{\mathrm{T}},$$
-где $U$, $V$~--- сингулярные вектора матрицы $\mathbf{H}$.
-
-Подставляем  $U = \{1/\sqrt{L}\}^{L}_{i = 1},\, V = \{1/\sqrt{K}\}^{K}_{i = 1}$, $K = N - L + 1$.
+где $U = \{1/\sqrt{L}\}^{L}_{i = 1},\, V = \{1/\sqrt{K}\}^{K}_{i = 1}$, $K = N - L + 1$.
 \end{frame}
 
-\begin{frame}{Константный сигнал с выбросом: Явный вид $f^{(1)}_l$}
+\begin{frame}{Выброс: Явный вид SSA-$f^{(1)}_{\Re,l}$}
+$\text{SSA-}f^{(1)}_{\Re, l} = \mathcal{T}^{-1}_{L}(\mathbf{H}^{(1)})_{l}.$\\
+\vspace{1em}
     Приведем результат для случая $k \leq \min(L/2, K - L)$ и $L < K$
-$$f^{(1)}_l = \frac{a}{{LK}}
+$$\text{SSA-}f^{(1)}_{\Re, l} = \frac{a}{{LK}}
 \begin{cases}
 	(L + K - k), & \text{$1 \leq l \leq k$}\\
 	\frac{1}{l}(L + K - l)k, & \text{$k < l \leq L$}\\
@@ -183,6 +234,44 @@ $$f^{(1)}_l = \frac{a}{{LK}}
 \end{cases}.$$
 
 \alert{Замечание:} При фиксированном $L$ первый порядок ошибки не стремится к $0$ с ростом $N$.
+\end{frame}
+
+\begin{frame}{Выброс: График первого порядка для $k = 1$}
+Рассмотрим
+$$s_l = 1 + \iu,$$
+$\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = 1$, $N = 50$, $L = 20$.
+
+% \begin{figure}[H]    
+%     \begin{center}
+%         \includegraphics[, height = 2.2cm]{const_outl_graph_1.PNG}
+%         \caption{График $\Re(\tX{X})$.}
+%     \end{center}
+% \end{figure}
+\begin{figure}[H]    
+     \begin{center}
+        \includegraphics[, height = 5cm]{const_outl_err_1.PNG}
+        \caption{График $\Re(\text{CSSA-}\tX{F}^{(1)})$.}
+    \end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Выброс: График первого порядка для $k = N / 2$}
+Рассмотрим
+$$s_l = 1 + \iu,$$
+$\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = N / 2$, $N = 50$, $L = 20$.
+
+% \begin{figure}[H]    
+%     \begin{center}
+%         \includegraphics[, height = 2.2cm]{const_outl_graph_2.PNG}
+%         \caption{График $\Re(\tX{X})$.}
+%     \end{center}
+% \end{figure}
+\begin{figure}[H]    
+     \begin{center}
+        \includegraphics[, height = 5cm]{const_outl_err_2.PNG}
+        \caption{График $\Re(\text{CSSA-}\tX{F}^{(1)})$.}
+    \end{center}
+\end{figure}
 \end{frame}
 
 \begin{frame}{Сравнение первого порядка и полной ошибок: Зашумлённые гармоники}
@@ -227,11 +316,14 @@ $\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = L - 1$.
 
 \begin{frame}{Заключение}
     \begin{itemize}
-        \item Подведена теоретическая база под имеющиеся численные результаты (Golyandina et al., 2013) для случая зашумлённых гармоник со сдвигом, не равным $\pi / 2$.
-        \item Для случая комплексной экспоненты известный численный результат был обобщён.
-        \item Результаты показывают, что применение CSSA имеет смысл только для случая комплексной экспоненты.
-        \item Для константного ряда с выбросами был получен явный вид первого порядка ошибки в каждой точке.
-        \item Для обоих случаев было численно исследовано соотношение между первым порядком ошибки и полной ошибкой.  
+        \item При совпадении траекторных пространств комплексного ряда для первого порядка было показано, что результаты CSSA и SSA совпадают.
+        \item Из численных экспериментов, в случае случайного возмущения, первый порядок адекватно описывает полную ошибку.
+        \item $s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2)$, сдвиг не $\pi / 2$
+        $$\mathbb{D}(\text{CSSA-}f^{(1)}_l) = \mathbb{D}(\text{SSA-}f^{(1)}_{\Re, l}) + \mathbb{D}(\text{SSA-}f^{(1)}_{\Im, l}).$$
+        $s_l = Ae^{\pm \iu(2 \pi\omega l + \phi_1)}$
+        $$\mathbb{D}(\text{CSSA-}f^{(1)}_l) \stackrel{?}{=} \frac{1}{2}[\mathbb{D}(\text{SSA-}f^{(1)}_{\Re, l}) + \mathbb{D}(\text{SSA-}f^{(1)}_{\Im, l})].$$
+        \item Из численных экспериментов, в случае выброса первый порядок адекватно оценивает полную ошибку при $L = \alpha N$.
+        \item Для $s_l = c_1 + \iu c_2$ с выбросом, была получена аналитическая формула первого порядка. При $L = \alpha N$ ошибка стремится к $0$.
     \end{itemize}
 \end{frame}
 
