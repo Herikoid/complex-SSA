@@ -219,3 +219,55 @@ for(N in c(50, 100, 400, 1600)){
 max.diff_n
 max.er.theor_n
 max.er.real_n
+
+# GRAPHS
+er.theor <- vector()
+
+N <- 50
+L <- 20
+K <- N - L + 1
+sig <- rep(1 + 1i, N)
+a <- 10 + 10i
+for(k in c(1, 5, 10)) {
+  
+  outl <- rep(0, N)
+  outl[k] <- a
+  ser <- sig + outl
+  
+  er.theor <- c(er.theor, sapply(1:N, function(i) outl_error.theor(i, N, L, a, k)))
+  er.real <- c(er.real, outl_error.cssa(ser))
+}
+
+
+#pdf("img/const_outl_err_1.pdf", paper = "special", width = 6, height = 4)
+plot(x = 1:N, y = Re(er.theor[1:50]), xlab = "", ylab = "", type = "l", ylim = c(min(Re(er.theor)), max(Re(er.theor))))
+lines(x = 1:N, y = Re(er.theor[(N+1):(2*N)]), type = "l", col = "blue")
+lines(x = 1:N, y = Re(er.theor[(2*N+1):(3*N)]), type = "l", col = "red")
+lines(x = c(1, N), y = c(0, 0), type = "l", lty = 2)
+legend('topright', c("k = 1", "k = 5", "k = 10"),
+       col=c("black", "blue", "red"), lty=1, cex=0.8, lw=c(2, 2))
+#dev.off()
+
+er.theor <- vector()
+
+N <- 51
+k <- 26
+sig <- rep(1 + 1i, N)
+a <- 10 + 10i
+outl <- rep(0, N)
+outl[k] <- a
+ser <- sig + outl
+
+for(L in c(10, 20, 25)) {
+  K <- N - L + 1
+  er.theor <- c(er.theor, sapply(1:N, function(i) outl_error.theor(i, N, L, a, k)))
+}
+
+
+#pdf("img/const_outl_err_2.pdf", paper = "special", width = 6, height = 4)
+plot(x = 1:N, y = Re(er.theor[1:N]), xlab = "", ylab = "", type = "l")
+lines(x = 1:N, y = Re(er.theor[(N+1):(2*N)]), type = "l", col = "blue")
+lines(x = 1:N, y = Re(er.theor[(2*N+1):(3*N)]), type = "l", col = "red")
+legend('topright', c("L = 10", "L = 20", "k = 25"),
+       col=c("black", "blue", "red"), lty=1, cex=0.8, lw=c(2, 2))
+#dev.off()
