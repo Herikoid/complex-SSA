@@ -106,8 +106,7 @@ $\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$~--- про
 \end{equation*}
 \end{block}
 
-\alert{Модель:} $\tX{X} = \tX{S}(\delta)$, где $\tX{S}(\delta) = \tX{S} + \delta \tX{R}$ длины $N$ или \\ $\mathbf{H}(\delta) = \mathbf{H} + \delta \mathbf{E}$,
-где $\mathbf{H}(\delta) = \mathcal{T}_L(\tX{S}(\delta))$, $\mathbf{H} = \mathcal{T}_L(\tX{S})$, $\delta\mathbf{E} = \mathcal{T}_L(\delta \tX{R})$.\\
+\alert{Модель:} $\tX{X} = \tX{S}(\delta)$, где $\tX{S}(\delta) = \tX{S} + \delta \tX{R}$ длины $N$\\ $\mathbf{H} = \mathcal{T}_L(\tX{S})$.\\
 \vspace{1em}
 $\tilde{\tX{S}} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)})$ из (Nekrutkin, 2008).\\
 \vspace{1em}
@@ -135,7 +134,8 @@ $\tX{F}^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})$.\\
 \begin{equation*} \label{eq:main}
 	\mathbf{H}^{(1)} = \mathbf{P}^{\perp}_0 \mathbf{E} \mathbf{Q}_0 + \mathbf{P}_0 \mathbf{E},
 \end{equation*}
-где $\mathbf{P}_0$~--- проектор на пространство столбцов $\mathbf{H}$, \\$\mathbf{Q}_0$~--- проектор на пространство строк $\mathbf{H}$,\\ $\mathbf{P}^{\perp}_0 = \mathbf{I} - \mathbf{P}_0$, $\mathbf{I}$~--- единичная матрица.
+где $\mathbf{P}_0$~--- проектор на пространство столбцов $\mathbf{H}$, \\$\mathbf{Q}_0$~--- проектор на пространство строк $\mathbf{H}$,\\ $\mathbf{P}^{\perp}_0 = \mathbf{I} - \mathbf{P}_0$, $\mathbf{I}$~--- единичная матрица,\\
+$\mathbf{E} = \mathcal{T}_L(\tX{R})$.
 \end{frame}
 
 \begin{frame}{Ошибка восстановления: Теорема}
@@ -332,14 +332,13 @@ $\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = L - 1$.
 \begin{frame}{Список литературы}
 \begin{thebibliography}{10}
 {\small
-	
 	\bibitem{Golyandina.etal2013}
 	N.~Golyandina, A.~Korobeynikov, A.~Shlemov, and K.~Usevich (2015)
 	\newblock Multivariate and {2D} extensions of singular spectrum analysis with
 	the {R}ssa package.
 	
 
-\bibitem{Golyandina.etal2001}
+	\bibitem{Golyandina.etal2001}
 	N.~Golyandina, V.~Nekrutkin, and A.~Zhigljavsky (2001)
 	\newblock {\em Analysis of Time Series Structure: {SSA} and Related
 		Techniques}.
