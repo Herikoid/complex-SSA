@@ -109,26 +109,26 @@ $\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$~--- про
 \alert{Модель:} $\tX{X} = \tX{S}(\delta)$, где $\tX{S}(\delta) = \tX{S} + \delta \tX{R}$ длины $N$ или \\ $\mathbf{H}(\delta) = \mathbf{H} + \delta \mathbf{E}$,
 где $\mathbf{H}(\delta) = \mathcal{T}_L(\tX{S}(\delta))$, $\mathbf{H} = \mathcal{T}_L(\tX{S})$, $\delta\mathbf{E} = \mathcal{T}_L(\delta \tX{R})$.\\
 \vspace{1em}
-$\tilde{\tX{S}} = \mathcal{T}^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)})$ из (Nekrutkin, 2008).\\
+$\tilde{\tX{S}} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)})$ из (Nekrutkin, 2008).\\
 \vspace{1em}
-$\tX{F} = \tilde{\tX{S}} - \tX{S} = \mathcal{T}^{-1} \Pi_{\mathcal{H}} (\delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)})$ ошибка восстановления.\\
+$\tX{F} = \tilde{\tX{S}} - \tX{S} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)})$ ошибка восстановления.\\
 \vspace{1em}
 Рассматриваем $\delta = 1$,\\
-\fbox{$\tX{F}^{(1)} = \mathcal{T}^{-1}_{L}(\mathbf{H}^{(1)})$ первый порядок ошибки восстановления.}
+\fbox{$\tX{F}^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})$ первый порядок ошибки восстановления.}
 
 \end{frame}
 
 \begin{frame}{Ошибка восстановления: Формула для $\mathbf{H}^{(1)}$}
 
-Итак, рассматриваем $\delta = 1$, 
+Итак, рассматриваем $\delta = 1$,
 $\tX{X} = \tX{S}(1) = \tX{S} + \tX{R}$,
 
 Тогда
-$\tilde{\tX{S}} = \mathcal{T}^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \mathbf{H}^{(1)} + \mathbf{H}^{(2)}))$,
+$\tilde{\tX{S}} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \mathbf{H}^{(1)} + \mathbf{H}^{(2)}))$,
 
 $\tX{F} = \tilde{\tX{S}} - \tX{S}$,
 
-$\tX{F}^{(1)} = \mathcal{T}^{-1}_{L}(\mathbf{H}^{(1)})$.\\
+$\tX{F}^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})$.\\
 \vspace{1em}
 На основе результатов из (Константинов,~2018) и (Некруткин,~2010) была получена формула для $\mathbf{H}^{(1)}$ в случае достаточно маленького возмущения:
 
@@ -222,7 +222,7 @@ $$\mathbf{H}^{(1)} = -U^{\mathrm{T}} \mathbf{E} V U V^{\mathrm{T}} + U U^{\mathr
 \end{frame}
 
 \begin{frame}{Выброс: Явный вид SSA-$f^{(1)}_{\Re,l}$}
-$\text{SSA-}f^{(1)}_{\Re, l} = \big( \mathcal{T}^{-1}_{L}(\mathbf{H}^{(1)})\big)_{l}$\\
+$\text{SSA-}f^{(1)}_{\Re, l} = \big( \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})\big)_{l}$\\
 \vspace{1em}
     Приведем результат для случая $k \leq \min(L/2, K - L)$ и $L < K$, где $K=N-L+1$:
 $$\text{SSA-}f^{(1)}_{\Re, l} = \frac{a}{{LK}}
@@ -331,38 +331,38 @@ $\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = L - 1$.
 
 \begin{frame}{Список литературы}
 \begin{thebibliography}{10}
+{\small
 	
 	\bibitem{Golyandina.etal2013}
-	N.~Golyandina, A.~Korobeynikov, A.~Shlemov, and K.~Usevich.
+	N.~Golyandina, A.~Korobeynikov, A.~Shlemov, and K.~Usevich (2015)
 	\newblock Multivariate and {2D} extensions of singular spectrum analysis with
 	the {R}ssa package.
 	
-	
-	\bibitem{Golyandina.etal2001}
-	N.~Golyandina, V.~Nekrutkin, and A.~Zhigljavsky.
+
+\bibitem{Golyandina.etal2001}
+	N.~Golyandina, V.~Nekrutkin, and A.~Zhigljavsky (2001)
 	\newblock {\em Analysis of Time Series Structure: {SSA} and Related
 		Techniques}.
 
 	
-	\bibitem{Golyandina.Stepanov2005}
-	Д.~Степанов, Н.~Голяндина.
+	\bibitem{Golyandina.Stepanov2005} 
+	Д.~Степанов, Н.~Голяндина (2005)
 	\newblock Варианты метода "Гусеница"{-SSA} для прогноза многомерных временных рядов.
 
 	\bibitem{Nekrutkin}
-	V.~Nekrutkin.
+	V.~Nekrutkin (2010)
 	\newblock Perturbation expansions of signal subspaces for long signals.
 
 	
 	\bibitem{NekrutkinPerp}
-	V.~Nekrutkin.
+	V.~Nekrutkin (2008)
 	\newblock Perturbations in SSA.
 
 	
 	\bibitem{Konstantinov}
-	А.~Константинов.
+	А.~Константинов (2018)
 	\newblock Некоторые задачи анализа временных рядов.
-
-	
+}	
 \end{thebibliography}
 \end{frame}
 
