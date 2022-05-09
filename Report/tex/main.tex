@@ -669,22 +669,24 @@ $$x_n = e^{4n/N} e^{\iu 2n\pi/30} + \frac{1}{2}e^{4n/N} \varepsilon_n, ~ \vareps
 Сравним оба этих подхода на примере. 
 Длину ряда возьмём $N = 50$, $L = 20$
 $$x_n = \cos(2n\pi/10) + \iu\cos(2n\pi/10 + \phi) + \varepsilon_n, ~ \varepsilon_n \sim CN(0,0.01).$$
-добавим к ряду $5\%$ выбросов с величиной выброса $5x_i$,
+добавим к ряду выброс с величиной выброса $5x_i$ на позиции $N/2$,
 
-Результаты сравнения MSE для $\phi = pi / 4$ приведены в таблице \ref{tab:th_ex}.
+Будем сравнивать MSE для комплексных и вещественных алгоритмов на 100 повторах.
+
+Результаты сравнения MSE для $\phi = \pi / 4$ приведены в таблице \ref{tab:th_ex}.
 \begin{table}[H]
-	\caption{MSE для комплексных и вещественных алгоритмов на 100 повторах, $\phi = \pi / 4$.}
+	\caption{MSE, $\phi = \pi / 4$.}
 	\label{tab:th_ex}
 	\begin{center}
-		\begin{tabular}{|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			Method & CSSA(SSA) & weighted L2 & median L2\\ 
+			Method & Series & CSSA(SSA) & weighted L2 & median L2\\ 
 			\hline
-			$\tX$ & 0.16 & 0.0011 & 0.01\\
+			CSSA & $\tX$ & 0.064 & 0.0011 & 0.012\\
 			\hline
-			$\Re(\tX)$ & 0.08 & 0.0005 &   0.006\\
+			SSA & $\Re(\tX)$ & 0.042 & 0.0006 &   0.006\\
 			\hline
-			$\Im(\tX)$ & 0.07   & 0.0006 &   0.003\\
+			SSA & $\Im(\tX)$ & 0.022   & 0.0006 &   0.006\\
 			\hline
 		\end{tabular} \\
 	\end{center}
@@ -695,18 +697,18 @@ $$x_n = \cos(2n\pi/10) + \iu\cos(2n\pi/10 + \phi) + \varepsilon_n, ~ \varepsilon
 Приведём аналогичный пример, но с комплексной экспонентой. Результаты в таблице \ref{tab:th_ex_exp}.
 
 \begin{table}[H]
-	\caption{MSE для комплексных и вещественных алгоритмов на 100 повторах, $\phi = \pi / 2$.}
+	\caption{MSE, $\phi = \pi / 2$.}
 	\label{tab:th_ex_exp}
 	\begin{center}
-		\begin{tabular}{|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			Method & CSSA(SSA) & weighted L2 & median L2 \\ 
+			Method & Series & CSSA(SSA) & weighted L2 & median L2 \\ 
 			\hline
-			$\tX$ & 0.09 & 0.0006 & 0.004\\
+			CSSA & $\tX$ & 0.021 & 0.0006 & 0.0006\\
 			\hline
-			$\Re(\tX)$ & 0.08 & 0.0005 &   0.006\\
+			SSA & $\Re(\tX)$ & 0.042 & 0.0006 &   0.0006\\
 			\hline
-			$\Im(\tX)$ & 0.08   & 0.0006 &   0.002\\
+			SSA & $\Im(\tX)$ & 0.0006   & 0.0006 &   0.0006\\
 			\hline
 		\end{tabular} \\
 	\end{center}
@@ -719,36 +721,36 @@ $$x_n = \cos(2n\pi/10) + \iu\cos(2n\pi/10 + \phi) + \varepsilon_n, ~ \varepsilon
 
 Результаты сравнения MSE приведены в таблице \ref{tab:re_outl}, таблице \ref{tab:re_outl_exp}.
 \begin{table}[H]
-	\caption{MSE для комплексных и вещественных алгоритмов на 100 повторах, $\phi = \pi/4$.}
+	\caption{MSE, $\phi = \pi/4$.}
 	\label{tab:re_outl}
 	\begin{center}
-		\begin{tabular}{|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			Method & CSSA(SSA) & weighted L2 & median L2\\ 
+			Method & Series & CSSA(SSA) & weighted L2 & median L2\\ 
 			\hline
-			$\tX$ & 0.16 & 0.0012 & 0.011\\
+			CSSA & $\tX$ & 0.066 & 0.0011 & 0.0012\\
 			\hline
-			$\Re(\tX)$ & 0.16 & 0.0005 &   0.012\\
+			SSA & $\Re(\tX)$ & 0.066 & 0.0005 &   0.0006\\
 			\hline
-			$\Im(\tX)$ & 0.0006   & 0.0006 &   0.0006\\
+			SSA & $\Im(\tX)$ & 0.0006   & 0.0006 &   0.0006\\
 			\hline
 		\end{tabular} \\
 	\end{center}
 \end{table}
 
 \begin{table}[H]
-	\caption{MSE для комплексных и вещественных алгоритмов на 100 повторах, $\phi = \pi/2$.}
+	\caption{MSE, $\phi = \pi/2$.}
 	\label{tab:re_outl_exp}
 	\begin{center}
-		\begin{tabular}{|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			Method & CSSA(SSA) & weighted L2 & median L2\\ 
+			Method & Series & CSSA(SSA) & weighted L2 & median L2\\ 
 			\hline
-			$\tX$ & 0.06 & 0.006 & 0.003\\
+			CSSA & $\tX$ & 0.022 & 0.006 & 0.0006\\
 			\hline
-			$\Re(\tX)$ & 0.14 & 0.0006 &   0.007\\
+			SSA & $\Re(\tX)$ & 0.044 & 0.0006 &   0.0007\\
 			\hline
-			$\Im(\tX)$ & 0.0006   & 0.0006 &   0.0006\\
+			SSA & $\Im(\tX)$ & 0.0006   & 0.0006 &   0.0006\\
 			\hline
 		\end{tabular} \\
 	\end{center}
@@ -884,6 +886,8 @@ $\tF^{(1)} = (f^{(1)}_1, \ldots, f^{(1)}_N)$, $\tF^{(1)}_{\Re} = (f^{(1)}_{\Re,1
 	
 	$$\text{RMSE} = |b_1 + \iu b_2| \sqrt{\frac{1}{N}\sum_{l = 1}^{N} |c_l|^2} = |a_1 + \iu a_2| \sqrt{\frac{1}{N}\sum_{l = 1}^{N} |c_l|^2}.$$
 \end{proof}
+
+Данное утверждение показывает, почему в разделе \ref{sec:comp} сохраняется ошибка CSSA при изменении выброса.
 
 %\subsection{Частный случай}
 %Рассматриваем ряд с $s_n = c_1 + ic_2$ и матрицу шума $\mathbf{E}$ с дисперсиями вещественной и мнимой частей $\sigma_1$ и $\sigma_2$.\\
