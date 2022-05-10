@@ -796,8 +796,6 @@ $$x_n = \cos(2n\pi/10) + \iu\cos(2n\pi/10 + \phi) + \varepsilon_n, ~ \varepsilon
 
 Рассмотрим $\delta = 1$ и $\tX = \tS + \tR$. Первый порядок ошибки восстановления обозначим как $\tF^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})$.
 
-
-На основе результатов из \cite[стр.12]{Konstantinov} и теоремы 2.1 из \cite{Nekrutkin} была получена следующая формула для $\mathbf{H}^{(1)}$ в случае достаточно маленького возмущения.
 \begin{statement} \label{st:main}
 	
 	Обозначим $\mathbf{E}(\delta) = \mathcal{T}_L(\delta R)$ и рассмотрим $\delta_0 > 0$. Если
@@ -1039,7 +1037,6 @@ $U = \{1/\sqrt{L}\}^{L}_{i = 1},\, V = \{1/\sqrt{K}\}^{K}_{i = 1}$, $K = N - L +
 \subsubsection{Случай $1 \leq k < L$}
 
 Рассмотрим члены суммы из формулы \eqref{eq:real_rk1} покомпонентно.
-\footnote{Ниже не хватает слов и выглядит как черновик доказательства на бумажке}
 
 Найдём $\mathbf{I}_1$
 $$U^{\mathrm{T}} \mathbf{E} = \begin{pmatrix}
@@ -1104,7 +1101,7 @@ $$\mathbf{H}^{(1)}(\tR, \tS) = \frac{a}{LK}\begin{pmatrix}
 \end{pmatrix}.$$
 
 Теперь приведём выражение первого порядка ошибки через $\mathbf{H}^{(1)}(\tR, \tS)$
-$$\tF^{(1)} = \mathcal{H}(\mathbf{H}^{(1)}(\tR, \tS)).$$
+$$\tF^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)}(\tR, \tS)).$$
 
 И получаем формулы для поэлементного выражения первого порядка ошибки восстановления
 
