@@ -1,5 +1,6 @@
 library(QZ, quiet = TRUE)
 
+# weights function
 weights<-function(R,sigma,a,m,n){
   x<-R/sigma
   W<-matrix(0L, nrow = m, ncol = n)
@@ -7,6 +8,7 @@ weights<-function(R,sigma,a,m,n){
   return(W)
 }
 
+# calc ends function used in median approach
 calc.ends<-function(vec,L){
   N<-length(vec)
   res<-rep(NaN, (L+1))
@@ -17,6 +19,10 @@ calc.ends<-function(vec,L){
   return(res)
 }
 
+# modified complex IRLS
+# M - matrix to decompose
+# k - signal rank
+# trend.ver - comp method 
 CIRLS_mod<-function(M, k, trend.ver='loess', alpha=4.046, eps=1e-7, maxITER=10, maxiter=5){
   m<-nrow(M)
   n<-ncol(M)
