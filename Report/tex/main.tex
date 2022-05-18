@@ -808,7 +808,7 @@ $$x_n = \cos(2n\pi/10) + \iu\cos(2n\pi/10 + \phi) + \varepsilon_n, ~ \varepsilon
 	\begin{equation} \label{eq:main_cond}
 		\|\mathbf{E}(\delta)\| < \mu_{\min} / 2
 	\end{equation}
-	для любого $\delta \in (-\delta_0, \delta_0)$, где $\mu_{\min}$~--- минимальное сингулярное число $\mathbf{H}$, то
+	для любого $\delta \in (-\delta_0, \delta_0)$, где $\mu_{\min}$~--- минимальное собственное число $\mathbf{H}\mathbf{H}^\mathrm{H}$, то
 \begin{equation} \label{eq:main}
 	\mathbf{H}^{(1)} = \mathbf{P}^{\perp}_0 \mathbf{E} \mathbf{Q}_0 + \mathbf{P}_0 \mathbf{E},
 \end{equation}
@@ -875,7 +875,10 @@ $\tF^{(1)}_{\Im} = \mathcal{H}(\mathbf{H}^{(1)}(\Im(\tR), \Im(\tS)))$ первы
 
 \subsubsection{Случайное возмущение}
 
-Рассмотрим случайное возмущение $\tR$. Стоит отметить, что, в силу своей случайности, такое возмущение не всегда будет удовлетворять \eqref{eq:main_cond}. А значит и теорема \ref{th:sum} не всегда будет применима, даже для требуемого сигнала. Однако мы будем считать, что возмущение $\tR$ имеет достаточно малую дисперсию, при которой вероятность подобного исхода пренебрежимо мала.
+Рассмотрим случайное возмущение $\tR$. 
+\begin{remark} \label{rm:probl_rand}
+	В силу своей случайности, такое возмущение не всегда будет удовлетворять \eqref{eq:main_cond}. А значит и теорема \ref{th:sum} не всегда будет применима, даже для требуемого сигнала. Однако мы будем считать, что возмущение $\tR$ имеет достаточно малую дисперсию, при которой вероятность подобного исхода пренебрежимо мала.
+\end{remark}
 
 Для дальнейших рассуждений приведём известный результат.
 \begin{lemma} \label{std:disp}
@@ -925,6 +928,51 @@ $\tF^{(1)} = (f^{(1)}_1, \ldots, f^{(1)}_N)$, $\tF^{(1)}_{\Re} = (f^{(1)}_{\Re,1
 
 Данное утверждение объясняет, почему в численных экспериментах раздела \ref{sec:comp} сохраняется ошибка CSSA при изменении выброса.
 
+\subsubsection{Достаточно малое возмущение}
+
+Для выполнения теоремы \ref{th:sum} и формулы \eqref{eq:main} требуется достаточно малое $\tR$.
+Что означает выполнение \eqref{eq:main_cond}. Продемонстрируем выполнение условия на конкретных примерах.
+
+Будем рассматривать сигналы вида
+\begin{equation} \label{eq:signal_const}
+	s_l = A + \iu B,
+\end{equation}
+
+\begin{equation} \label{eq:signal_harm}
+	s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2),
+\end{equation}
+где $0<\omega < 0.5$ и $0\le\phi_i < 2\pi$.
+
+\begin{statement} [\cite{Golyandina.Stepanov2005}]\label{st:singular_values}
+	Рассмотрим сигнал $\tS$ и собственные числа матрицы $\mathbf{H}\mathbf{H}^\mathrm{H}$, где $\mathbf{H} = \mathcal{T}_L(\tS)$.
+	
+	Для сигнала вида \eqref{eq:signal_const} собственное число $$\lambda = (A^2 + B^2) L K.$$
+	
+	Для сигнала вида \eqref{eq:signal_harm} при $L$ и $K$, кратных $\omega$:
+	\begin{enumerate}
+		\item При $A = B$, $|\phi_1 - \phi_2| = \pi / 2(\mmod \pi)$ с.ч. $$\lambda = A^2 L K.$$
+		\item В остальных случаях с.ч. $$\lambda_{1,2} = (A^2 + B^2 \pm 2 A B \sin(\phi_2 - \phi_1)) L K / 4.$$
+	\end{enumerate}
+\end{statement} 
+
+\begin{statement} \label{st:cond_compl}
+	Для сигналов вида \eqref{eq:signal_const}, \eqref{eq:signal_harm} и случая возмущения в виде конечного выброса или шума, случайного возмущения $\xi$, $\mathbb{E}(\xi) = 0$, $\mathbb{D}(\xi) < \infty$.
+	$$P(\|\mathbf{E}(\delta)\| < \mu_{\min} / 2) \xrightarrow[N \rightarrow \infty]{} 1$$
+\end{statement}
+\begin{proof}
+	Оценим $\|\mathbf{E}(\delta)\|$ для обоих типов возмущения.
+	\begin{enumerate}
+		\item Выброс $a = a_1 + \iu a_2$ на позиции $k$
+		$$\|\mathbf{E}(\delta)\| \leq |\delta||a|\sqrt{L}.$$
+		\item Шум 
+		$$\|\mathbf{E}(\delta)\| = |\delta| s \sqrt{LK},$$
+		где $s$ стандартное отклонение и $s \xrightarrow[N \rightarrow \infty]{} \sqrt{\mathbb{D}(\xi)} < \infty$.
+	\end{enumerate}
+	Из утверждения \ref{st:singular_values} известно, что $\mu_{\min} / 2 = cLK$, где $c = const$.
+	$$\lim_{N \rightarrow \infty} \frac{|\delta||a|\sqrt{L}}{cLK} = \lim_{N \rightarrow \infty} \frac{|\delta| s \sqrt{LK}}{cLK} = 0.$$
+\end{proof}
+
+Из доказательства видно, что при конкретных $L$ и $K$ можно подобрать максимальное значение выброса $a$ для выполнения \eqref{eq:main_cond}. Как отмечалось в замечании \ref{rm:probl_rand}, для случая шума точное выполнение \eqref{eq:main_cond} невозможно, однако, можно подобрать такую $\mathbb{D}(\xi)$, что $P(\|\mathbf{E}(\delta)\| < \mu_{\min} / 2) \approx 1$.
 %\subsection{Частный случай}
 %Рассматриваем ряд с $s_n = c_1 + ic_2$ и матрицу шума $\mathbf{E}$ с дисперсиями вещественной и мнимой частей $\sigma_1$ и $\sigma_2$.\\
 %Сингулярные векторы такого ряда являются нормированными векторами с одинаковыми компонентами, они также сингулярные для вещественной и мнимой части. Тогда выполняются условия теоремы \ref{th:sum} и
