@@ -1,0 +1,12 @@
+Содержание приложенных файлов.
+
+"help_with_examples.html" --- описание реализованных методов
+и примеры, демонстрирующие их работу.
+
+В следующих файлах содержатся реализации этих функций, 
+ниже приведено, каких именно:
+"CIRLS.R" --- ф-ии CIRLS, weight
+"CIRLS_modification.R" --- ф-ии CIRLS.mod, calc.ends, weight
+"l1_complex.R" --- ф-ии l1.complex, weight.median
+"H_1.R" --- ф-ия H.1
+"hank.R" --- ф-ии hankL1, hankL2

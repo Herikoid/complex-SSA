@@ -1,0 +1,278 @@
+---
+title: "Описание реализаций методов с примерами работы"
+output:
+  html_document:
+    df_print: paged
+    toc: true
+---
+# Методы
+## CIRLS
+**Прототип**
+
+- `CIRLS(M, k, alpha=4.685, eps=1e-5, maxITER=10, maxiter=5)`
+
+**Описание**
+
+- Реализация комплексной версии IRLS для проекции матрицы на подпространство требуемого ранга.
+
+**Параметры**
+
+- `M` - траекторная матрица, которую требуется спроецировать
+- `k` - ранг сигнала
+- `alpha` - порог весовой функции, по умолчанию `4.685`
+- `eps` - достаточная точность сходимости для остановки, по умолчанию `1e-5`
+- `maxITER` - максимальное число итераций обновления матрицы весов, по умолчанию `10`
+- `maxiter` - максимальное число итераций для одной матрицы весов, по умолчанию `5`
+
+## CIRLS.mod
+**Прототип** 
+
+- `CIRLS.mod(M, k, trend.ver="loess", alpha=4.046, eps=1e-7, maxITER=10, maxiter=5)`
+
+**Описание**
+
+- Модификация комплексной версии IRLS для проекции матрицы на подпространство требуемого ранга.
+
+**Параметры**
+
+- `M` - траекторная матрица, которую требуется спроецировать
+- `k` - ранг сигнала
+- `trend.ver` - принимает три значения: `'loess'`, `'lowess'`, `'median'`, каждое из которых соотсветсвует одноимённому методу, использующимся для поиска тренда ряда остатков, по умолчанию `'loess'`
+- `alpha` - порог весовой функции, по умолчанию `4.046`
+- `eps` - достаточная точность сходимости для остановки, по умолчанию `1e-7`
+- `maxITER` - максимальное число итераций обновления матрицы весов, по умолчанию `10`
+- `maxiter` - максимальное число итераций для одной матрицы весов, по умолчанию `5`
+
+## l1.complex
+**Прототип** 
+
+- `l1.complex(M, k, eps=1e-5, maxiter=10)`
+
+**Описание**
+
+- Реализация комплексной версии алгоритма для проекции матрицы на подпространство требуемого ранга по норме L1.
+
+**Параметры**
+
+- `M` - траекторная матрица, которую требуется спроецировать
+- `k` - ранг сигнала
+- `eps` - достаточная точность сходимости для остановки, по умолчанию `1e-5`
+- `maxiter` - максимальное число итераций, по умолчанию `10`
+
+# Вспомогательные функции
+## weights
+**Прототип**
+
+- `weights(R,sigma,a,m,n)`
+
+**Описание**
+
+- Вычисление матрицы весов, используемой в методах.
+
+**Параметры**
+
+- `R` - матрица остатков
+- `sigma` - матрица для нормировки остатков
+- `a` - порог весовой функции
+- `m` - число строк
+- `n` - число столбцов
+
+## calc.ends
+**Прототип**
+
+- `calc.ends(vec,L)`
+
+**Описание**
+
+- Вычисление скользяшей мединаны для метода `CIRLS.mod`
+
+**Параметры**
+
+- `vec` - вектор для вычисления
+- `L` - длина окна
+
+## weight.median
+**Прототип**
+
+- `weight.median(x, w)`
+
+**Описание**
+
+- Вычисления взвешенной медианы для метода `l1.complex`
+
+**Параметры**
+
+- `x` - веткор для вычисления
+- `w` - веса
+
+## hankL1
+**Прототип**
+
+- `hankL1(A)`
+
+**Описание**
+
+Диагональное усреднение для нормы в L1
+
+**Параметры**
+
+- `A` - матрица для усреднения
+
+## hankL2
+**Прототип**
+
+- `hankL2(A)`
+
+**Описание**
+
+- Диагональное усреднение для нормы в L2
+
+**Параметры**
+
+- `A` - матрица для усреднения
+
+# Пример работы методов
+
+Подключим используемые библиотеки
+```{r, message=FALSE, warning=FALSE}
+library(Rssa)
+library(cmvnorm)
+
+source("hank.R")
+source("CIRLS_modified.R")
+source("l1_complex.R")
+source("CIRLS.R")
+source("H_1.R")
+```
+
+Зададим ряд с шумом и выбросами
+```{r}
+N<-240
+Per<-120
+
+set.seed(7)
+sig <- exp(4*(1:N)/N)*exp(2i*pi*(1:N)/30)
+rnk<-1
+sig.outl<-sig
+outlier.seq<-sample(1:(N),N*0.01)
+sig.outl[outlier.seq]<-sig.outl[outlier.seq] + 5*sig.outl[outlier.seq] 
+
+ser<-sig.outl + 0.5*exp(4*(1:N)/N)*rcnorm(N)
+```
+
+Запустим все реализованные методы на данном примере, а так же cssa, для сравнения
+```{r, warning=FALSE}
+X <- Rssa::hankel(ser, L=120)
+
+Pr <- CIRLS(X, rnk)
+Pr0 <- hankL2(Pr)
+
+Pr <- l1.complex(X, rnk)
+Pr.L1 <- hankL1(Pr)
+
+Pr <- CIRLS.mod(X,rnk,'loess') #CIRLS modification (trend extraction with loess)
+Pr1 <- hankL2(Pr)
+
+Pr <- CIRLS.mod(X,rnk,'median') #CIRLS modification (trend extraction with median)
+Pr2 <- hankL2(Pr)
+
+Pr <- CIRLS.mod(X,rnk,'lowess') #CIRLS modification (trend extraction with lowess)
+Pr3 <- hankL2(Pr)
+
+s <- ssa(ser, kind = "cssa")
+r <- reconstruct(s, groups = list(Trend = 1:rnk))
+```
+
+Отразим результаты работы методов на графике.
+
+Вещественная часть
+```{r}
+plot(Re(ser),col='black',type='l', xlab = "l", ylab = "")
+lines( Re(sig), type='l', col='yellow', lw=2)
+lines( Re(r$Trend),type='l',col='blue',lw=2)
+lines( Re(Pr0),type='l',col='red',lw=2)
+lines( Re(Pr.L1), type='l', col='green', lw=2)
+legend('topleft', c("series", "target", "cssa", "l2-weighted", "l1"),
+       col=c("black", "yellow", "blue", "red", "green"), lty=1, cex=0.8, lw=c(2, 2, 2, 2, 2))
+```
+
+Мнимая часть
+```{r}
+plot(Im(ser),col='black',type='l', xlab = "l", ylab = "")
+lines( Im(sig), type='l', col='yellow', lw=2)
+lines( Im(r$Trend),type='l',col='blue',lw=2)
+lines( Im(Pr0),type='l',col='red',lw=2)
+lines( Im(Pr.L1), type='l', col='green', lw=2)
+legend('topleft', c("series", "target", "cssa", "l2-weighted", "l1"),
+       col=c("black", "yellow", "blue", "red", "green"), lty=1, cex=0.8, lw=c(2, 2, 2, 2, 2))
+```
+
+
+# Первый порядок ошибки
+## H.1
+**Прототип**
+
+- `H.1(E, U, V)`
+
+**Описание**
+- Функция для вычисления матрицы, соответствующей первому порядку ошибки восстановления сигнала.
+**Параметры**
+
+- `E` - траекторная матрица возмущения. Может быть получена при помощи `Rssa::hankel()`
+- `U` - `list`, состоящий из правых сингулярных векторов траекторной матрицы сигнала
+- `V` - `list`, состоящий из левых сингулярных векторов траекторной матрицы сигнала
+
+# Пример нахождения первого порядка ошибки.
+Генерация сигнала и шума, задание длины ряда и длины окна.
+```{r}
+sig.n <- function(N) {
+  cos(2 * pi * (1:N) / 10) +  1i * cos(2 * pi * (1:N) / 10 + pi/4)
+}
+
+noise.n <- function(N) {
+  0.1 * (rnorm(N, sd = 1) + 1i * rnorm(N, sd = 1))
+}
+
+N <- 9 #series length
+L <- 5 #window length
+
+sig <- sig.n(N)
+
+set.seed(6)
+noise <- noise.n(N)
+```
+
+Найдём сигнулярные вектора для траекторной матрицы сигнала при помощи пакета Rssa
+```{r}
+s <- ssa(sig, L = L, kind = "cssa", svd.method = "svd")
+
+rec <- reconstruct(s, groups = list(1:2))[[1]]
+U <- list(s$U[,1] + 1i * 0, s$U[,2] + 1i * 0)
+V <- list(s$V[,1] + 1i * 0, s$V[,2] + 1i * 0)
+```
+
+Теперь достаточно найти таректорную матрицу шума и можно найти первый порядок ошибки
+```{r}
+E <- Rssa::hankel(noise, L)
+H <- H.1(E, U, V)
+#first order error
+err.1 <- hankL2(H)
+```
+
+Найдём полную ошибку
+```{r}
+s <- ssa(sig + noise, L = L, kind = "cssa", svd.method = "svd")
+rec <- reconstruct(s, groups = list(1:2))[[1]]
+#full error
+err <- rec - sig
+```
+
+Сравним полученное на графике
+```{r}
+plot(Re(err.1), type='l', col = "red", xlab = "l", ylab = "error")
+lines(Re(err), type = 'l', col = "blue")
+legend('topright', c("first order error", "full error"),
+       col=c("red", "blue"), lty=1, cex=0.8, lw=c(2, 2))
+```
+
+

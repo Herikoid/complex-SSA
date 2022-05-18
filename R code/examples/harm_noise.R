@@ -63,3 +63,34 @@ lines(Re(err), type = 'l', col = "blue")
 legend('topright', c("first error", "full error"),
        col=c("red", "blue"), lty=1, cex=0.8, lw=c(2, 2))
 #dev.off()
+
+#table
+diff.1 <- vector()
+diff.k <- vector()
+set.seed(1)
+for(N in c(50, 100, 400, 1600)) {
+  L = floor(N / 2)
+  k = floor(L / 2)
+  sig = sig.n(N)
+  noise = noise.n(N)
+  
+  s <- ssa(sig, L = L, kind = "cssa", svd.method = "svd")
+  
+  rec <- reconstruct(s, groups = list(1:2))[[1]]
+  U <- list(s$U[,1] + 1i * 0, s$U[,2] + 1i * 0)
+  V <- list(s$V[,1] + 1i * 0, s$V[,2] + 1i * 0)
+  err.1 <- hankL2(H.1(Rssa::hankel(noise, L), U, V))
+  
+  s <- ssa(sig + noise, L = L, kind = "cssa", svd.method = "svd")
+  rec <- reconstruct(s, groups = list(1:2))[[1]]
+  
+  err <- rec - sig
+  
+  diff <- abs(err.1 - err)
+  
+  diff.1 <- c(diff.1, diff[1])
+  diff.k <- c(diff.k, diff[k])
+}
+
+diff.1
+diff.k

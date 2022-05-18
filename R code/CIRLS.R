@@ -7,17 +7,7 @@ weights<-function(R,sigma,a,m,n){
   return(W)
 }
 
-calc.ends<-function(vec,L){
-  N<-length(vec)
-  res<-rep(NaN, (L+1))
-  for (i in (1:(L+1))) {
-    slide<-vec[(N-2*L+i):N]
-    res[i]<-median(slide)
-  }
-  return(res)
-}
-
-CIRLS.mod<-function(M, k, trend.ver='loess', alpha=4.046, eps=1e-7, maxITER=10, maxiter=5){
+CIRLS <- function(M, k, alpha=4.685, eps=1e-5, maxITER=10, maxiter=5){
   m<-nrow(M)
   n<-ncol(M)
   initial<-svd(M, nu=k, nv=k)
@@ -25,42 +15,23 @@ CIRLS.mod<-function(M, k, trend.ver='loess', alpha=4.046, eps=1e-7, maxITER=10, 
   U <- as.matrix(U, nrow = nrow(U), ncol = k)
   Lambda<-initial$d
   V<-initial$v
-  V <- as.matrix(V, nrow = nrow(), ncol = k)
   U<-U%*%diag(Lambda, nrow = k, ncol = k)
   ITER<-0
   iter<-0
-  L<-m
-  
+  V <- as.matrix(V, nrow = nrow(), ncol = k)
   repeat {
     R<-M-U%*%H(V)
     r<-as.vector(H(R))
-    RR<-hankL1(R)
-    RR.trmatrix<-hankel(RR,L=L)
-    
-    if (trend.ver == 'loess') { 
-      loessMod30 <- loess(abs(RR) ~ c(1:length(abs(RR))), span=0.35)
-      sigma <- predict(loessMod30)}
-    
-    else if (trend.ver == 'median') {
-      sigma<-runmed(abs(RR),L/2+1)
-      sigma[(length(RR)-L/4):length(RR)]<-calc.ends(abs(RR),L/4)}
-    
-    else if (trend.ver == 'lowess') {
-      sigma<-lowess(c(1:length(RR)),abs(RR), f=0.35)$y}
-    
-    sigma.trmatrix<-hankel(sigma,L=L)
-    W<-weights(RR.trmatrix,sigma.trmatrix,alpha,m,n)
-    
+    sigma<-1.4826*median(abs(r-median(abs(r))))
+    W<-weights(R,sigma,alpha,m,n)
     
     repeat{
-      # updating U
       for (i in (1:m)){
         Wi<-diag(W[i,1:ncol(W)])
         mi<-M[i,1:ncol(M)]
         beta <- qr.solve(H(V)%*%Wi%*%V, H(V)%*%Wi%*%t(H(mi)))
         U[i,1:ncol(U)]<-H(beta)
       }
-      # updating V
       for (j in (1:n)){
         Wj<-diag(W[1:nrow(W),j])
         mj<-M[1:nrow(M),j]
