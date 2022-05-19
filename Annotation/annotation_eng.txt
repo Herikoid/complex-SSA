@@ -1,0 +1,30 @@
+Senov Mikhail Andreevich
+
+Robust versions of the SSA method
+
+Graduation Project
+
+Applied Mathematics and Computer Science
+
+Computational Stochastics and Statistical Models
+
+Scientific Supervisor: Associate Professor,
+Department of Statistical Modelling N.E. Golyandina 
+
+Singular spectrum analysis (SSA) is a non-parametric method 
+for the decomposition of time series into the sum of 
+interpreted components, such as trend, periodicals and noise. 
+The extension of SSA to the complex case is called CSSA. 
+CSSA method is not robust (unstable to outliers) according
+to that the construction of robust modifications of CSSA
+was described. The example with demonstration of modifications
+usage was considered. Modifications were implemented in the R.
+Theoretical comparison of CSSA and SSA applied by
+separately to the real and imaginary parts was provided.
+Comparison was based on the first order (in terms of 
+perturbation magnitude) of the signal estimation error. 
+First order and full errors were numerically compared.
+For a constant signal with outlier explicit formulas for
+first order error were recieved.
+
+2022.
