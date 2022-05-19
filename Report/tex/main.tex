@@ -2,7 +2,10 @@
                substylefile = spbu.rtx,
                subf,href,colorlinks=true, 12pt]{disser}
 \usepackage[breakable]{tcolorbox}
-\usepackage[a4paper,left=3cm, right=1.5cm, top=2cm, bottom=2cm, headsep=1cm, footskip=1cm]{geometry}
+\usepackage[a4paper,
+mag=1000, includefoot,
+left=3cm, right=1.5cm, top=2cm, bottom=2cm, headsep=1cm, footskip=1cm]{geometry}
+\ifpdf\usepackage{epstopdf}\fi
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
 \usepackage{graphicx}
@@ -61,26 +64,68 @@
 
 \begin{document}
 
+
 \institution{
-    Санкт-Петербургский государственный университет \\
-    Прикладная математика и информатика \\
-    Вычислительная стохастика и статистические модели
+	Санкт-Петербургский государственный университет
 }
 
-\title{Отчет о научно-исследовательской работе}
+\title{Выпускная квалификационная работа}
 
+%\topic{\normalfont\scshape
+%	Робастные варианты метода SSA для анализа комплексных временных рядов}
 \topic{\normalfont\scshape
-  Робастные варианты метода SSA для анализа комплексных временных рядов}
+		Робастные варианты метода SSA}
 
-\author{Сенов Михаил Андреевич}
+\author{\textsc{Сенов} Михаил Андреевич}
+
+\group{
+	Уровень образования: бакалавриат\\
+	Направление 01.03.02 <<Прикладная математика и информатика>>\\
+	Основная образовательная программа СВ.5004.2018 <<Прикладная математика и информатика>> \\
+	Профессиональная траектория <<Вычислительная стохастика и статистические модели>>
+}
 
 \sa       {Н.\,Э.~Голяндина}
-\sastatus {к.\,ф.-м.\,н., доцент}
+\sastatus {Доцент, кафедра статистического моделирования\,\\
+	к.\,ф.-м.\,н., доцент}
+
+\rev      {А.\,Н.~Пепелышев}
+\revstatus{Лектор, Университет Кардиффа (Великобритания)\\
+	к.\,ф.-м.\,н.,}
 
 \city{Санкт-Петербург}
 \date{\number\year}
 
 \maketitle
+
+
+\institution{
+	Saint Petersburg State University \\
+	Applied Mathematics and Computer Science \\
+	Computational Stochastics and Statistical Models
+}
+
+\title{Graduation Project}
+
+
+\topic{Robust versions of the SSA method}
+
+\author{\textsc{Senov} Mikhail Andreevich}
+\group{}
+
+\sa       {N.\,E.~Golyandina}
+\sastatus {Associate Professor, Department of Statistical Modelling}
+
+
+\rev      {A.\,N.~Pepelyshev}
+\revstatus{Lecturer, Cardiff University}
+
+
+\city{Saint Petersburg}
+\date{\number\year}
+
+\maketitle[en]
+
 
 \tableofcontents
 
@@ -187,14 +232,13 @@ $$\tX_N = \sum^{m}_{k = 1} \tX_{I_k}.$$
 
 
 Теперь приведем результат по значениям ненулевых собственных чисел, порождаемых комплексным рядом $\tS = \tS^{(1)} + \iu \tS^{(2)}$. 
-\footnote{Я немного подпортила ваш текст, сорри, но все же это утверждение должно быть здесь, оно общее. Посмотрите, чтобы были согласованы обозначения ниже и в разделе про малые возмущения.}
 
 \begin{statement} [\cite{Golyandina.Stepanov2005}]\label{st:singular_values}
-	Рассмотрим сигнал $\tS$ и собственные числа матрицы $\mathbf{H}\mathbf{H}^\mathrm{H}$, где $\mathbf{H} = \mathcal{T}_L(\tS)$.
+	Рассмотрим сигнал $\tS = \tS^{(1)} + \iu \tS^{(2)}$, где $\tS^{(1)}$ и $\tS^{(2)}$ заданы в \eqref{eq:gen_ts}, $N\ge 3$, $L\ge 2$. Рассмотрим $\lambda_i$, собственные числа матрицы $\mathbf{H}\mathbf{H}^\mathrm{H}$, где $\mathbf{H} = \mathcal{T}_L(\tS)$.
 	
-	Для сигнала вида \eqref{eq:signal_const} собственное число $$\lambda = (A^2 + B^2) L K.$$
+	Для сигнала c $\omega = 0$ (для простоты $\phi_1=\phi_2=0$) собственное число $$\lambda = (A^2 + B^2) L K.$$
 	
-	Для сигнала вида \eqref{eq:signal_harm} при $L$ и $K$, кратных $\omega$:
+	Для сигнала c $0< \omega < 0.5$ при $L$ и $K$, кратных $\omega$:
 	\begin{enumerate}
 		\item При $A = B$, $|\phi_1 - \phi_2| = \pi / 2(\mmod \pi)$ с.ч. $$\lambda = A^2 L K.$$
 		\item В остальных случаях с.ч. $$\lambda_{1,2} = (A^2 + B^2 \pm 2 A B \sin(\phi_2 - \phi_1)) L K / 4.$$
@@ -967,25 +1011,21 @@ $\tF^{(1)} = (f^{(1)}_1, \ldots, f^{(1)}_N)$, $\tF^{(1)}_{\Re} = (f^{(1)}_{\Re,1
 Рассмотрим подробнее выполнение условия \eqref{eq:main_cond} для конкретных сигналов и видов возмущения.
 
 Будем рассматривать сигналы вида
-\begin{equation} \label{eq:signal_const}
-	s_l = A + \iu B
-\end{equation}
-и
 \begin{equation} \label{eq:signal_harm}
 	s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2),
 \end{equation}
-где $0<\omega < 0.5$ и $0\le\phi_i < 2\pi$.
+где $0 \leq \omega < 0.5$ и $0\le\phi_i < 2\pi$.
 
 \subsubsection{Возмущение в виде выброса}
 
 \begin{statement} \label{st:cond_compl_outlier}
-	Для сигналов вида \eqref{eq:signal_const} и возмущением в виде выброса $a = a_1 + \iu a_2$ на позиции $k$ $\exists N_0 : \forall N > N_0$ выполнено \eqref{eq:main_cond}.
+	Для сигналов вида \eqref{eq:signal_harm} и возмущением в виде выброса $a = a_1 + \iu a_2$ на позиции $k$ $\exists N_0 : \forall N > N_0$ выполнено \eqref{eq:main_cond}.
 \end{statement}
 \begin{proof}
-	Не умаляя общности будем считать, что $k \leq L$.\footnote{а L<=K не нужно здесь?}
+	Не умаляя общности будем считать, что $k \leq L \leq K$.
 Из вида траекторной матрицы выброса и из соотношения норм сразу следует, что
 	$$\|\mathbf{E}(\delta)\| \leq \|\mathbf{E}(\delta)\|_\mathrm{F} = |\delta||a|\sqrt{k}.$$
-	По утверждению~\ref{st:singular_values}, $\mu_{\min} / 2 = cLK$, где $c$ --- квадрат нормы значения ряда.
+	По утверждению~\ref{st:singular_values}, $\mu_{\min} / 2 = cLK$, где $c = const$.
 Так как	
 	$$\lim_{N \rightarrow \infty} \frac{|\delta| |a| \sqrt{k}}{cLK} = 0,$$
 то найдётся такое $N_0$, что $\forall N > N_0$ выполнено \eqref{eq:main_cond}.
@@ -996,14 +1036,15 @@ $\tF^{(1)} = (f^{(1)}_1, \ldots, f^{(1)}_N)$, $\tF^{(1)}_{\Re} = (f^{(1)}_{\Re,1
 \subsubsection{Случайное возмущение}
 
 \begin{statement} \label{st:cond_compl_noise}
-	Для сигналов вида \eqref{eq:signal_const}, \eqref{eq:signal_harm} и возмущения в виде случайного стационарного процесса $\xi_l$, т.ч. $\mathbb{E}(\xi_l) = 0$ и $\mathbb{D}(\xi_l) < \infty$, выполняется
-	$$P(\|\mathbf{E}(\delta)\| < \mu_{\min} / 2) \xrightarrow[N \rightarrow \infty]{} 1.$$
+	Для сигналов вида \eqref{eq:signal_harm} и возмущения в виде случайного стационарного процесса $\xi_l$, т.ч. $\mathbb{E}(\xi_l) = 0$ и $\mathbb{D}(\xi_l) < \infty$, выполняется
+	$$P(\|\mathbf{E}(\delta)\| < \mu_{\min} / 2) \xrightarrow[N \rightarrow \infty]{} 1,$$
+	при $L = \alpha N$ $(0 < \alpha < 1)$ и $L = L_0 = const$.
 \end{statement}
 \begin{proof}
-	Из утверждения \ref{st:singular_values} известно, что $\mu_{\min} / 2 = cLK$, где $c = const$. Таким образом, \footnote{Это же не все случаи, так как для $N^2$ нужно, чтобы $L$ было пропорционально $N$. Включить в условие эти два случая?}
+	Из утверждения \ref{st:singular_values} известно, что $\mu_{\min} / 2 = cLK$, где $c = const$. Таким образом,
 	$$\mu_{\min} / 2 =
 	\begin{cases}
-		\mathcal{O}(N^{2}), & \text{$L \xrightarrow[N \rightarrow \infty]{} \infty$}\\
+		\mathcal{O}(N^{2}), & \text{$L = \alpha N$ $(0 < \alpha < 1)$}\\
 		\mathcal{O}(N), & \text{$L = L_0 = const$}\\
 	\end{cases}.
 	$$
