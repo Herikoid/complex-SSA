@@ -458,7 +458,7 @@ $\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$ --- про
 
 Одним из преимуществ данного алгоритма является то, что пользователь сам может выбрать, каким методом он хочет вычислять тренд модулей ряда остатков. Заметим, что данный метод позволяет решить проблему шума с непостоянной дисперсией, поскольку гетероскедастичные остатки (с непостоянной дисперсией) приводятся к гомоскедастичным (с постоянной дисперсией), перед тем, как задавать веса.
 	
-В приведённой реализации представлены три метода для выделение тренда: локальная регрессия loess (loess L2) (\cite{ClevDev1988}), взвешенная локальная регрессия lowess (lowess L2) (\cite{Cleveland1979}), позволяющие получить более точную оценку для нормально распределённого шума, и скользящая медиана (median L2), являющаяся более робастной оценкой тренда. Для случая одномерной регрессии, методы loess и lowess отличаются между собой только с точки зрения конкретной реализации в \text{R}. Loess чуть точнее, тогда как lowess реализован более эффективно, с точки зрения времени работы.
+В приведённой реализации представлены два метода для выделение тренда: локальная регрессия loess (loess L2) (\cite{ClevDev1988}), позволяющий получить более точную оценку для нормально распределённого шума, и скользящая медиана (median L2), являющаяся более робастной оценкой тренда.
 
 %\subsection{Трудоёмкость методов}
 %
@@ -556,11 +556,11 @@ $$x_n = e^{\iu 2n\pi/30} + \varepsilon_n, ~ \varepsilon_n \sim CN(0,1).$$
 	\begin{center}
 		\caption{Аддитивный ряд без выбросов. Оценки RMSE.}
 		\label{tab1}
-		\begin{tabular}{|c|c|c|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|c|}
 			\hline
-			Метод	& CSSA & L1 & weighted L2 & loess L2 & median L2 & lowess L2 \\
+			Метод	& CSSA & L1 & weighted L2 & loess L2 & median L2 \\
 			\hline
-			RMSE & $\mathbf{0.1016}$  & 0.125  & 0.1017 & 0.103 & 0.105 & 0.104\\
+			RMSE & $\mathbf{0.1016}$  & 0.125  & 0.1017 & 0.103 & 0.105\\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -570,11 +570,11 @@ $$x_n = e^{\iu 2n\pi/30} + \varepsilon_n, ~ \varepsilon_n \sim CN(0,1).$$
 	\caption{Аддитивный ряд без выбросов. p-value сравнения методов с наилучшим CSSA.}
 	\label{tab: pval1}
 	\begin{center}
-		\begin{tabular}{|c|c|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			Метод & L1 & weighted L2 & loess L2 & median L2 & lowess L2  \\
+			Метод & L1 & weighted L2 & loess L2 & median L2  \\
 			\hline
-			p-value & 1.5e-06   & \textbf{0.91} & \textbf{0.69}  & \textbf{0.24} & \textbf{0.43}  \\
+			p-value & 1.5e-06   & \textbf{0.91} & \textbf{0.69}  & \textbf{0.24}\\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -622,11 +622,11 @@ $$x_n = e^{\iu 2n\pi/30} + \varepsilon_n, ~ \varepsilon_n \sim CN(0,1).$$
 	\begin{center}
 		\caption{Аддитивный ряд с выбросами. Оценки RMSE.}
 		\label{tab2}
-		\begin{tabular}{|c|c|c|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|c|}
 			\hline
-			Method 	& CSSA & L1 & weighted L2 & loess L2 & median L2 & lowess L2 \\
+			Method 	& CSSA & L1 & weighted L2 & loess L2 & median L2 \\
 			\hline
-			RMSE & 0.285  & 0.147  & 0.158 & $\mathbf{0.112}$ & 0.114 & 0.114\\
+			RMSE & 0.285  & 0.147  & 0.158 & $\mathbf{0.112}$ & 0.114\\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -636,17 +636,17 @@ $$x_n = e^{\iu 2n\pi/30} + \varepsilon_n, ~ \varepsilon_n \sim CN(0,1).$$
 	\caption{Аддитивный ряд с выбросами. p-value сравнения с наилучшим loess L2.}
 	\label{tab: pval2}
 	\begin{center}
-		\begin{tabular}{|c|c|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			Method & CSSA	& L1 & weighted L2 & median L2 & lowess L2  \\
+			Method & CSSA	& L1 & weighted L2 & median L2 \\
 			\hline
-			p-value & 0  & 7.7e-13 &   4.1e-10  &  \textbf{0.134} & \textbf{0.262}  \\
+			p-value & 0  & 7.7e-13 &   4.1e-10  &  \textbf{0.134} \\
 			\hline
 		\end{tabular} \\
 	\end{center}
 \end{table}
 
-В случае наличия выбросов метод loess L2 показал наилучший результат, за исключением того, что сравнения с другими вариациями модифицированной взвешенной проекции незначимы.
+В случае наличия выбросов метод loess L2 показал наилучший результат, за исключением того, что сравнение с median L2 незначимо.
 
 
 \subsubsection{Мультипликативная модель ряда}
@@ -660,11 +660,11 @@ $$x_n = e^{4n/N} e^{\iu 2n\pi/30} + \frac{1}{2}e^{4n/N} \varepsilon_n, ~ \vareps
 	\begin{center}
 		\caption{Мультипликативный ряд без выбросов. Оценки RMSE.}
 		\label{tab3}
-		\begin{tabular}{|c|c|c|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|c|}
 			\hline
-			Method 	& CSSA & L1 & weighted L2 & loess L2 & median L2 & lowess L2 \\
+			Method 	& CSSA & L1 & weighted L2 & loess L2 & median L2 \\
 			\hline
-			RMSE & $\mathbf{1.28}$  & 1.52  & 1.90 & 1.36 & 1.43 & 1.37\\
+			RMSE & $\mathbf{1.28}$  & 1.52  & 1.90 & 1.36 & 1.43\\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -674,11 +674,11 @@ $$x_n = e^{4n/N} e^{\iu 2n\pi/30} + \frac{1}{2}e^{4n/N} \varepsilon_n, ~ \vareps
 	\caption{Мультипликативный ряд без выбросов. p-value сравнения методов с наилучшим CSSA.}
 	\label{tab: pval3}
 	\begin{center}
-		\begin{tabular}{|c|c|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			Method & L1 & weighted L2 & loess L2 & median L2 & lowess L2  \\
+			Method & L1 & weighted L2 & loess L2 & median L2 \\
 			\hline
-			p-value & 0.005   & 0.0001 & 0.001  & 7.6e-5 & 0.0007  \\
+			p-value & 0.005   & 0.0001 & 0.001  & 7.6e-5 \\
 			\hline
 		\end{tabular} \\
 	\end{center}
@@ -726,11 +726,11 @@ $$x_n = e^{4n/N} e^{\iu 2n\pi/30} + \frac{1}{2}e^{4n/N} \varepsilon_n, ~ \vareps
 	\begin{center}
 		\caption{Мультипликативный ряд с выбросами. Оценки RMSE.}
 		\label{tab4}
-		\begin{tabular}{|c|c|c|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|c|}
 			\hline
-			Method 	& CSSA & L1 & weighted L2 & loess L2 & median L2 & lowess L2 \\
+			Method 	& CSSA & L1 & weighted L2 & loess L2 & median L2 \\
 			\hline
-			RMSE & 6.14  & 1.78  & 1.66 & $\mathbf{1.48}$ & 1.50 & 1.49\\
+			RMSE & 6.14  & 1.78  & 1.66 & $\mathbf{1.48}$ & 1.50 \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -740,17 +740,17 @@ $$x_n = e^{4n/N} e^{\iu 2n\pi/30} + \frac{1}{2}e^{4n/N} \varepsilon_n, ~ \vareps
 	\caption{Мультипликативный ряд с выбросами. p-value сравнения методов с наилучшим loess L2.}
 	\label{tab: pval4}
 	\begin{center}
-		\begin{tabular}{|c|c|c|c|c|c|}
+		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			Method & CSSA	& L1 & weighted L2 & median L2 & lowess L2  \\
+			Method & CSSA	& L1 & weighted L2 & median L2 \\
 			\hline
-			p-value & 3.5e-16   & 0.005 &   \textbf{0.13}  &  \textbf{0.387} & \textbf{0.28}  \\
+			p-value & 3.5e-16   & 0.005 &   \textbf{0.13}  &  \textbf{0.387} \\
 			\hline
 		\end{tabular} \\
 	\end{center}
 \end{table}
 
-В случае присутствия выбросов loess L2 показывает себя наилучшим образом на данном примере, однако сравнения с weighted L2, median~\ L2 и lowess L2 не являются значимыми.
+В случае присутствия выбросов loess L2 показывает себя наилучшим образом на данном примере, однако сравнения с weighted L2 и median L2 не являются значимыми.
 
 Приведённые примеры подтверждают эффективность робастных модификаций CSSA, с точки зрения RMSE. Помимо этого, была подтверждена эффективность модификации weighted L2 (конкретно, loess L2) для рядов с гетероскедастичным шумом. Однако, требуется исследовать трудоёмкость методов, для более полного ответа на вопрос, какой из них более предпочтителен в конкретной ситуации.
 
