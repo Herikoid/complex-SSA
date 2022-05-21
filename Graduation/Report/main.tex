@@ -331,7 +331,7 @@ $\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$ --- про
 Пусть $\mathbf{Y} \in \mathbb{C}^{L\times K}$ --- траекторная матрица ряда.
 Необходимо решить задачу
 \begin{equation*}
-		\norm{\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H}})}_\mathrm{F} \longrightarrow \min_{\mathbf{U},\mathbf{V}}, \, \mathbf{U} \in \mathbb{C}^{L\times r}, \mathbf{V} \in \mathbb{C}^{K\times r}.
+		\|\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H}})\|^2_\mathrm{F} \longrightarrow \min_{\mathbf{U},\mathbf{V}}, \, \mathbf{U} \in \mathbb{C}^{L\times r}, \mathbf{V} \in \mathbb{C}^{K\times r}.
 \end{equation*}
 Для начала рассмотрим алгоритм с фиксированной матрицей весов.
 
@@ -341,7 +341,7 @@ $\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$ --- про
 	\KwOut{$\widehat{\mathbf{Y}} = \mathbf{U}\mathbf{V}^{\mathrm{H}}$ --- решение задачи взвешенной аппроксимации при фиксированной матрице весов $\mathbf{W}$}
 	
 	1. $t:=0$\;
-	2. \While{ $\norm{\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H})}}_\mathrm{F} > \varepsilon\text{~и~} \text{t}< N_\alpha$}{
+	2. \While{ $\|\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H})}\|^2_\mathrm{F} > \varepsilon\text{~и~} \text{t}< N_\alpha$}{
 		a. Вычисление матрицы $\mathbf{U}\in \mathbb{C}^{L\times r}$ с помощью решения задачи
 		\begin{equation}\label{taskA}
 			(\mathbf{y}_i^\mathrm{H}-\mathbf{V}\mathbf{u}_i^\mathrm{H})^\mathrm{H} \mathbf{W}_i (\mathbf{y}_i^\mathrm{H}-\mathbf{V}\mathbf{u}_i^\mathrm{H}) \to \min_{\mathbf{u}_i},~~ i=1,\ldots L,
@@ -371,7 +371,7 @@ $\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$ --- про
 \KwOut{$\mathbf{\hat{Y}} = \mathbf{U}\mathbf{V}^\mathrm{H}$~--- проекция траекторной матрицы на множество матриц ранга, не превосходящего $r$}
  Инициализация $\mathbf{U} \in \mathbb{C}^{L\times r}$ и $\mathbf{V} \in \mathbb{C}^{K\times r}$ (например, с помощью сингулярного разложения матрицы $\mathbf{Y}$)\;
  $t := 0$\;
- \While{$\|\mathbf{W}^\frac{1}{2} \odot (\mathbf{Y} - \mathbf{U}\mathbf{V}^\mathrm{H})\|_\mathrm{F} > \varepsilon$ и {$t < N_{iter}$}}{
+ \While{$\|\mathbf{W}^\frac{1}{2} \odot (\mathbf{Y} - \mathbf{U}\mathbf{V}^\mathrm{H})\|^2_\mathrm{F} > \varepsilon$ и {$t < N_{iter}$}}{
   Вычисление матрицы остатков $\mathbf{R} = \{r_{ij}\}_{i,j=1}^{L,K} = \mathbf{Y} - \mathbf{U}\mathbf{V}^\mathrm{H}$\;
   Обновление матрицы $\mathbf{\Sigma} = \{\sigma_{ij}\}^{L,K}_{i,j=1}$\;
   Вычисление матрицы весов $\mathbf{W} = \{w_{ij}\}^{L,K}_{i,j=1} = \{w(\frac{r_{ij}}{\sigma_{ij}})\}^{L,K}_{i,j=1}$, используя
@@ -381,7 +381,7 @@ $\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$ --- про
    0 &|x| > \alpha\\
  \end{cases};$$
  Решение задачи взвешенной аппроксимации
- $$\|\mathbf{W}^\frac{1}{2} \odot (\mathbf{Y} - \mathbf{U}\mathbf{V}^\mathrm{H})\|_\mathrm{F} \longrightarrow \min_{\mathbf{U}, \mathbf{V}},$$
+ $$\|\mathbf{W}^\frac{1}{2} \odot (\mathbf{Y} - \mathbf{U}\mathbf{V}^\mathrm{H})\|^2_\mathrm{F} \longrightarrow \min_{\mathbf{U}, \mathbf{V}},$$
  при помощи алгоритма \ref{alg}\;
  Обновление матриц $\mathbf{U}$, $\mathbf{V}$\;
  $t:=t+1$\;
@@ -418,7 +418,7 @@ $\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$ --- про
 		
 		1. Инициализация $\mathbf{U}\in \mathbb{C}^{L\times r}$ и $\mathbf{V}\in \mathbb{C}^{K\times r}$ (например, с помощью сингулярного разложения матрицы $\mathbf{Y}$)\;
 		2. $t:=0$\;
-		3. \Repeat{ $\|\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H}})\|_\mathrm{F} > \varepsilon \text{~и~} t < N_{IRLS}$}{
+		3. \Repeat{ $\|\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H}})\|^2_\mathrm{F} > \varepsilon \text{~и~} t < N_{IRLS}$}{
 			a. Вычисление матрицы остатков $\mathbf{R}=\{r_{ij}\}_{i,j=1}^{L,K} = \mathbf{Y}-\mathbf{U}\mathbf{V}^\mathrm{H}$\;
 			b. Ганкелизация матрицы $\mathbf{R}$ и получение ряда длины $N$ из остатков: $\tR = \mathcal{T}^{-1} \Pi_{\mathcal{H}} (\mathbf{R}) = (r_1,\ldots,r_N)$\;
 			c. Пусть $\tR_+=(|r_1|, \ldots, |r_N|)$~--- ряд из модулей остатков.  Вычисление $\bm{\sigma} = (\sigma_1,\ldots,\sigma_{N})$ как оценки мат. ожидания $\mathbb{E}(\tR_+)$ некоторым методом;
@@ -434,7 +434,7 @@ $\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$ --- про
 				\; \end{equation*}
 			f. Решение задачи взвешенной аппроксимации (обновление матриц $\mathbf{U}$ и $\mathbf{V}$)
 			\begin{equation*}
-				\|\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H}})\|_\mathrm{F} \longrightarrow \min_{\mathbf{U},\mathbf{V}}\;
+				\|\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H}})\|^2_\mathrm{F} \longrightarrow \min_{\mathbf{U},\mathbf{V}}\;
 			\end{equation*}	
 			g. $t:=t+1$.
 		}
@@ -442,13 +442,11 @@ $\Pi_{\mathcal{H}}:\mathcal{M} \rightarrow \mathcal{M}_{\mathcal{H}}$ --- про
 	\end{algorithm}
 }
 
-\footnote{Здесь в третьем пункте и в f без квадрата? Где-то вы вроде бы исправляли на квадрат в аналогичном месте.}
 %\normalsize{Приведём пример, показывающий, что алгоритм действительно присваивает правильные веса в случае %нестационарного шума.}
 
 Одним из преимуществ данного алгоритма является то, что пользователь сам может выбрать, каким методом он хочет вычислять тренд модулей ряда остатков. Заметим, что данный метод позволяет решить проблему шума с непостоянной дисперсией, поскольку гетероскедастичные остатки (с непостоянной дисперсией) приводятся к гомоскедастичным (с постоянной дисперсией), перед тем, как задавать веса.
 	
-В приведённой реализации представлены три метода для выделение тренда: локальная регрессия loess (loess L2), взвешенная локальная регрессия lowess (lowess L2), позволяющие получить более точную оценку для нормально распределённого шума, и скользящая медиана (median L2), являющаяся более робастной оценкой тренда.
-\footnote{а вы смотрели, что за методы loess и чем loess отличается от lowess здесь? На loess/lowess надо бы ссылки добавить.}
+В приведённой реализации представлены три метода для выделение тренда: локальная регрессия loess (loess L2) (\cite{ClevDev1988}), взвешенная локальная регрессия lowess (lowess L2) (\cite{Cleveland1979}), позволяющие получить более точную оценку для нормально распределённого шума, и скользящая медиана (median L2), являющаяся более робастной оценкой тренда. Для случая одномерной регрессии, методы loess и lowess отличаются между собой только с точки зрения конкретной реализации в \text{R}. Loess чуть точнее, тогда как lowess реализован более эффективно, с точки зрения времени работы.
 
 %\subsection{Трудоёмкость методов}
 %
@@ -1380,14 +1378,12 @@ $$f^{(1)}_l = \frac{a}{{L}}
 
 \subsection{Сравнение трудоёмкостей реализаций SSA и CSSA}
 При анализе рядов большой длины остро стоит вопрос времени работы метода. Исходя из этого, осмысленно сравнить трудоёмкость методов между собой. Мы будем сравнивать трудоёмкости конкретных реализаций SSA и CSSA, представленных в пакете \cite{Korobeynikov.etal2014}.
-\footnote{Не поняла, почему исправили представленных на представленные}
 
 Мы будем сравнивать CSSA, применённый к комплексному ряду, с SSA, применённым к вещественному ряду. Трудоёмкость SSA, применённого к комплексному ряду, то есть отдельно к вещественной и мнимой частям, отличается в два раза, поэтому асимптотика остаётся той же.
 
 В качестве одного из параметров реализаций выступает выбор метода для вычисления SVD. Оптимальный метод для SSA, представленный в пакете, носит название <<propack>>. В \cite{Golyandina.etal2018} было показано, что трудоёмкость такого подхода составляет $\mathcal{O}(k N \log(N) + k^2 N)$, где $N$~--- длина ряда, $k$~--- число вычисляемых компонент на этапе SVD, обоснование такой трудоёмкости приведено в \cite{Korobeynikov2010}.
 
-Для CSSA оптимальная реализация использует метод <<primme>>. Одним из ключевых решений, позволяющим уменьшить трудоёмкость работы метода, является быстрое умножение вектора на ганкелеву матрицу. Произведение вычисляется при помощи DTF (дискретного преобразования Фурье), которое, в свою очередь, вычисляется через FFT (быстрое преобразование Фурье), подробнее данная идея описана в \cite{Korobeynikov2010}. В пакете \cite{Korobeynikov.etal2014} представлено вычисление вещественного FFT. Поэтому отличие реализации CSSA через <<primme>> от реализации SSA через <<propack>> заключается в том, что в комплексном случае FFT вычисляется четыре раза, вместо одного. То есть, если в случае SSA мы вычисляем одно произведение $C v$, то в случае CSSA произведение $C v$ вычисляется через  $\Re(C)\Re(v)$, $\Re(C)\Im(v)$, $\Im(C)\Re(v)$ и $\Im(C)\Im(v)$. Исходя из этого, трудоёмкость CSSA также равна $\mathcal{O}(k N \log(N) + k^2 N)$.
-\footnote{Напоминаю про теор.вопрос --- можно ли было просто применить быстрое преобразование Фурье прямо к комплексному умножению? Это важно, так как если АИ просто не успел этого сделать, то и не надо выпячивать этот момент. Способ реализации FFT не влияет на порядок трудоемкости в данном случае, если он логарифмический.}
+Для CSSA оптимальная реализация использует метод <<primme>>. Одним из ключевых решений, позволяющим уменьшить трудоёмкость работы метода, является быстрое умножение вектора на ганкелеву матрицу. Произведение вычисляется при помощи DTF (дискретного преобразования Фурье), которое, в свою очередь, вычисляется через FFT (быстрое преобразование Фурье), подробнее данная идея описана в \cite{Korobeynikov2010}. Отличие реализации CSSA через <<primme>> от реализации SSA через <<propack>> заключается в реализации FFT, но в обоих случаях асимптотика FFT равна $\mathcal{O}(N \log N)$. Исходя из этого, трудоёмкость CSSA также равна $\mathcal{O}(k N \log(N) + k^2 N)$.
 
 \section{Численное сравнение первого порядка ошибки и полной ошибки оценивания сигнала}
 \label{sec:results}
