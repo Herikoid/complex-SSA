@@ -11,8 +11,7 @@ Computational Stochastics and Statistical Models
 Scientific Supervisor: Associate Professor,
 Department of Statistical Modelling N.E. Golyandina 
 
-Singular spectrum analysis,
-SSA) is a nonparametric method for decomposing a time series into a sum of interpretable components, such as trend, periodics, and noise. The extension of SSA to the complex-valued case is called CSSA. Since the CSSA method is not robust to outliers, this paper considers the construction of robust modifications of CSSA. Using an example, the work of the considered modifications is demonstrated. These modifications are implemented in R. 
+Singular spectrum analysis (SSA), is a nonparametric method for decomposing a time series into a sum of interpretable components, such as trend, periodics, and noise. The extension of SSA to the complex-valued case is called CSSA. Since the CSSA method is not robust to outliers, this paper considers the construction of robust modifications of CSSA. Using an example, the work of the considered modifications is demonstrated. These modifications are implemented in R. 
 A theoretical comparison of CSSA and SSA applied separately to the real and imaginary parts, based on the first order of the signal estimation error, where the first order is considered by the magnitude of the perturbation, is performed. A numerical comparison of the total error and the first order error by examples is fulfilled.
 For a constant signal an explicit form of the first order of the error of the signal estimation in the case of an outlier in the series is obtained.
 
