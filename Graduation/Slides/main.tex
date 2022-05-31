@@ -77,10 +77,10 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 \vspace{1em}
 \alert{Проблемы:}
 \begin{enumerate}
-	\item Разработаны робастные модификации SSA (Третьякова, 2020). Робастные модификации CSSA? 
+	\item Разработаны робастные модификации SSA (Третьякова, 2020). Робастные модификации CSSA?
 	\item Что лучше, с точки зрения величины ошибки $\tilde{\tX{S}} - \tX{S}$,\\
 	SSA$(\tX{X}_{\Re}) + \iu \text{SSA}(\tX{X}_{\Im})$ или CSSA$(\tX{X}_{\Re} + \iu \tX{X}_{\Im})$?
-\end{enumerate} 
+\end{enumerate}
 
 \end{frame}
 
@@ -171,12 +171,12 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 %\end{frame}
 
 \begin{frame}{Часть \RomanNumeralCaps{1}: Результаты}
-	Траекторная матрица $\mathbf{Y} \in \mathbb{C}^{L\times K}$ на вход.\\ 
+	Траекторная матрица $\mathbf{Y} \in \mathbb{C}^{L\times K}$ на вход.\\
 	Обозначим $\mathbf{M} \in \mathbb{C}^{L\times r}, \mathbf{V} \in \mathbb{C}^{K\times r}, \mathbf{W} \in \mathbb{R}^{L\times K}$.\\
 	\vspace{1em}
 	Алгоритмы, решающие следующие задачи, были реализованы на языке R:
 	\begin{itemize}
-		\item $\mathbb{L}_2$ CSSA: 
+		\item $\mathbb{L}_2$ CSSA:
 		$$ \|\mathbf{Y}-\mathbf{M}\mathbf{V}^{\mathrm{H}}\|_\mathrm{F} \longrightarrow \min_{\mathbf{M},\mathbf{V}},$$
 		имеет точное решение.
 		\item $\mathbb{L}_1$ CSSA:
@@ -184,7 +184,7 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 		решение вычисляется итеративно.
 		\item weighted $\mathbb{L}_2$ CSSA:
 		$$\|\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{M}\mathbf{V}^{\mathrm{H}})\|_\mathrm{F} \longrightarrow \min_{\mathbf{M},\mathbf{V}},$$
-		решение вычисляется итеративно, $\mathbf{W}$ обновляется на каждой итерации. 
+		решение вычисляется итеративно, $\mathbf{W}$ обновляется на каждой итерации.
 	\end{itemize}
 
 \end{frame}
@@ -253,7 +253,7 @@ $\tilde{\tX{S}} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \mathbf{H}^
 	\item SSA-$\tX{F}^{(1)}_{\Re}$: сигнал $\Re(\tX{S})$, возмущение $\Re(\tX{R})$, метод SSA,	
 	\item SSA-$\tX{F}^{(1)}_{\Im}$: сигнал $\Im(\tX{S})$, возмущение $\Im(\tX{R})$, метод SSA.
 	\end{itemize}
-    
+
     \begin{block}{Теорема \label{th:sum}}
         Пусть пространства столбцов траекторных матриц рядов $\tX{S}$, $\Re(\tX{S})$ и $\Im(\tX{S})$ совпадают и то же самое верно для пространств строк.
     Тогда при любом достаточно малом возмущении $\tX{R}$
@@ -329,8 +329,10 @@ $$s_l = c_1 + \iu c_2.$$
 \vspace{1em}
 Тракторные пространства сигнала совпадают, возмущение достаточно малое, справедлива теорема $$\text{CSSA-}\tX{F}^{(1)} = \text{SSA-}\tX{F}^{(1)}_{\Re} + \iu\text{SSA-}\tX{F}^{(1)}_{\Im}.$$
 
-$\text{SSA-}\tX{F}^{(1)}_{\Re} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)}_{\Re})$.
+\vspace{1em}
+\underline{Достаточно уметь вычислять $\text{SSA-}\tX{F}^{(1)}_{\Re} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)}_{\Re})$.}
 
+\vspace{1em}
 Для $\mathbf{H}^{(1)}_{\Re}$ известна формула (Nekrutkin, 2008)
 
 $$\mathbf{H}^{(1)}_{\Re} = -U^{\mathrm{T}} \mathbf{E} V U V^{\mathrm{T}} + U U^{\mathrm{T}} \mathbf{E} + \mathbf{E} V V^{\mathrm{T}},$$
@@ -422,7 +424,7 @@ $\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = L - 1$.
 
 \begin{frame}{Основные результаты}
     \begin{itemize}
-    	\item \alert{Реадизации на R:} Робастные модификации были обобщены на комплексный случай. 
+    	\item \alert{Реадизации на R:} Робастные модификации были обобщены на комплексный случай.
         \item \alert{Теория:} при совпадении траекторных пространств комплексного ряда первые порядки ошибок для CSSA и SSA совпадают.
         \item $s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2)$, сдвиг не $\pi / 2$
         $$\mathbb{D}(\text{CSSA-}f^{(1)}_l) = \mathbb{D}(\text{SSA-}f^{(1)}_{\Re, l}) + \mathbb{D}(\text{SSA-}f^{(1)}_{\Im, l}).$$
@@ -448,7 +450,7 @@ $\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = L - 1$.
 %		Techniques}.
 %
 %	
-%	\bibitem{Golyandina.Stepanov2005} 
+%	\bibitem{Golyandina.Stepanov2005}
 %	Д.~Степанов, Н.~Голяндина (2005)
 %	\newblock Варианты метода "Гусеница"{-SSA} для прогноза многомерных временных рядов.
 %
