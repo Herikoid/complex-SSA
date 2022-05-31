@@ -150,7 +150,8 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 		\item $\mathbb{L}_1$: робастная версия SSA
 		$$\|\mathbf{X}\|_1 = \sum_{i = 1}\sum_{j = 1}|x_{ij}|.$$
 		\item weighted $\mathbb{L}_2$ : робастная версия SSA
-		$$\|\mathbf{W}^{1/2}\odot\mathbf{X}\|_\mathrm{F} = \sqrt{\sum_{i = 1}\sum_{j = 1}w_{ij}|x_{ij}|^2}.$$
+		$$\|\mathbf{W}^{1/2}\odot\mathbf{X}\|_\mathrm{F} = \sqrt{\sum_{i = 1}\sum_{j = 1}w_{ij}|x_{ij}|^2},$$
+где выбросам соответствуют маленькие веса.
 	\end{itemize}
 	\note{}
 \end{frame}
@@ -171,20 +172,25 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 %\end{frame}
 
 \begin{frame}{Часть \RomanNumeralCaps{1}: Результаты}
-	Траекторная матрица $\mathbf{Y} \in \mathbb{C}^{L\times K}$ на вход.\\
-	Обозначим $\mathbf{M} \in \mathbb{C}^{L\times r}, \mathbf{V} \in \mathbb{C}^{K\times r}, \mathbf{W} \in \mathbb{R}^{L\times K}$.\\
+	Алгоритмы, реализующие робастные версии алгоритма CSSA, были построены и реализованы на языке R.
+
 	\vspace{1em}
-	Алгоритмы, решающие следующие задачи, были реализованы на языке R:
+Алгоритмы основаны на решении следующих задач.
+
+	Траекторная матрица $\mathbf{Y} \in \mathbb{C}^{L\times K}$ на вход.
+    Разложение $\mathbf{M}\mathbf{V}^{\mathrm{H}}$ на выходе,
+	где $\mathbf{M} \in \mathbb{C}^{L\times r}, \mathbf{V} \in \mathbb{C}^{K\times r}, \mathbf{W} \in \mathbb{R}^{L\times K}$.\\
+	\vspace{1em}
 	\begin{itemize}
 		\item $\mathbb{L}_2$ CSSA:
 		$$ \|\mathbf{Y}-\mathbf{M}\mathbf{V}^{\mathrm{H}}\|_\mathrm{F} \longrightarrow \min_{\mathbf{M},\mathbf{V}},$$
-		имеет точное решение.
+		имеет решение в замкнутой форме.
 		\item $\mathbb{L}_1$ CSSA:
 		$$\|\mathbf{Y}-\mathbf{M}\mathbf{V}^{\mathrm{H}}\|_1 \longrightarrow \min_{\mathbf{M},\mathbf{V}}.$$
 		решение вычисляется итеративно.
 		\item weighted $\mathbb{L}_2$ CSSA:
 		$$\|\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{M}\mathbf{V}^{\mathrm{H}})\|_\mathrm{F} \longrightarrow \min_{\mathbf{M},\mathbf{V}},$$
-		решение вычисляется итеративно, $\mathbf{W}$ обновляется на каждой итерации.
+		решение вычисляется итеративно, $\mathbf{W}$ обновляется на каждой итерации согласно величине остатков разложения.
 	\end{itemize}
 
 \end{frame}
