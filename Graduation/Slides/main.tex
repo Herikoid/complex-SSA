@@ -84,7 +84,7 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 
 \end{frame}
 
-\begin{frame}{Часть \RomanNumeralCaps{1}: Введение}
+\begin{frame}{Часть \RomanNumeralCaps{1}. Robust CSSA: Введение}
 	Базовый SSA: реагирует на выбросы.
 	\begin{center}
 		\includegraphics[, height = 3cm]{img/otliers_ssa.PNG}
@@ -195,7 +195,7 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 
 \end{frame}
 
-\begin{frame}{Часть \RomanNumeralCaps{2}: Введение}
+\begin{frame}{Часть \RomanNumeralCaps{2}. Ошибки в SSA и CSSA: Введение}
 	
 	$\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 	\vspace{1em}
@@ -211,14 +211,21 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 	Рассматриваем теорию возмущений (Kato, 1966). Будем вычислять первый порядок ошибки (Nekrutkin, 2008), в предположении, что он достаточно точно описывает полную ошибку.
 \end{frame}
 
-\begin{frame}{Часть \RomanNumeralCaps{2}: Структура}
-	Структура доклада:
+\begin{frame}{Часть \RomanNumeralCaps{2}. Ошибки в SSA и CSSA: Структура}
+	Структура Части 2:
+
+\vspace{1em}
 	\begin{enumerate}
-		\item Обозначения
-		\item Первый порядок ошибки для общего случая
-		\item Пример: зашумлённые гармоники
-		\item Пример: константный сигнал с выбросом
-		\item Сравнение первого порядка и полной ошибок
+		\item Первый порядок ошибки для общего случая, теоретическое сравнение SSA и CSSA.
+
+\vspace{1em}
+		\item Пример: сигнал --- гармоники, возмущение --- шум. Особый случай комплексной экспоненты.
+
+\vspace{1em}
+		\item Пример: сигнал --- константный сигнал, возмущение --- выброс. Явный вид ошибки.
+
+\vspace{1em}
+		\item Численное сравнение первого порядка ошибки и полной ошибки.
 	\end{enumerate}
 \end{frame}
 
@@ -323,7 +330,7 @@ $\text{SSA-}\tX{F}^{(1)}_{\Re} = (\text{SSA-}f^{(1)}_{\Re, 1}, \ldots, \text{SSA
 $\text{SSA-}\tX{F}^{(1)}_{\Im} = (\text{SSA-}f^{(1)}_{\Im, 1}, \ldots, \text{SSA-}f^{(1)}_{\Im, N})$.
 \end{frame}
 
-\begin{frame}{Часть \RomanNumeralCaps{2}: MSE}
+\begin{frame}{Часть \RomanNumeralCaps{2}: Пример, две зашумлённые синусоиды. MSE}
 \begin{block}{Следствие}
     Для сигнала $s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2)$, не являющегося комплексной экспонентой, с возмущением $\tX{R}$ выполняется
     $$\mathbb{D}(\text{CSSA-}f^{(1)}_l) = \mathbb{D}(\text{SSA-}f^{(1)}_{\Re, l}) + \mathbb{D}(\text{SSA-}f^{(1)}_{\Im, l}).$$
@@ -355,7 +362,7 @@ $$\mathbf{H}^{(1)}_{\Re} = -U^{\mathrm{T}} \mathbf{E} V U V^{\mathrm{T}} + U U^{
 где $U = \{1/\sqrt{L}\}^{L}_{i = 1},\, V = \{1/\sqrt{K}\}^{K}_{i = 1}$, $K = N - L + 1$.
 \end{frame}
 
-\begin{frame}{Часть \RomanNumeralCaps{2}: Явный вид SSA-$f^{(1)}_{\Re,l}$}
+\begin{frame}{Часть \RomanNumeralCaps{2}: Пример, константный сигнал с выбросом, явный вид SSA-$f^{(1)}_{\Re,l}$}
 $\text{SSA-}f^{(1)}_{\Re, l} = \big( \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)}_{\Re})\big)_{l}$\\
 \vspace{1em}
     Приведем результат для случая $k \leq \min(L/2, K - L)$ и $L < K$, где $K=N-L+1$:
