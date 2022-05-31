@@ -35,6 +35,8 @@
 \DeclareMathOperator*{\argmin}{argmin}
 \newcommand{\tX}[1]{\mathsf{#1}}
 \newcommand{\iu}{\mathrm{i}\mkern1mu}
+\newcommand{\RomanNumeralCaps}[1]
+{\MakeUppercase{\romannumeral #1}}
 
 \title[Робастные варианты метода SSA]{%
 	Робастные варианты метода SSA}
@@ -42,8 +44,12 @@
 \author{Сенов Михаил Андреевич}
 
 \institute[СПбГУ]{Санкт-Петербургский государственный университет \\
-	Математико-механический факультет \\
-	Кафедра статистического моделирования \\
+	%Математико-механический факультет \\
+	%Кафедра статистического моделирования \\
+	Уровень образования: бакалавриат\\
+	Направление 01.03.02 <<Прикладная математика и информатика>>\\
+	Основная образовательная программа СВ.5004.2018 <<Прикладная математика и информатика>> \\
+	Профессиональная траектория <<Вычислительная стохастика и статистические модели>>\\
 	\vspace{0.4cm}
 	Научный руководитель: к.ф.-м.н., доц. Голяндина Н.Э. \\
 	Рецензент: к.ф.-м.н. Пепелышев А.Н.
@@ -59,25 +65,32 @@
   \note{}
 \end{frame}
 
-\begin{frame}{Введение: Проблема}
+\begin{frame}{Введение}
 
 $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 \vspace{1em}
 \alert{Модель:} $\tX{X} = \tX{S} + \tX{R}$, $\tX{S}$ сигнал, $\tX{R}$ возмущение (шум или выброс).\\
 \vspace{1em}
-\alert{Проблема:} Оценить сигнал $\tilde{\tX{S}} = F(\tX{X})$, $F$ --- используемый метод.\\
+\alert{Задача:} Оценить сигнал $\tilde{\tX{S}} = F(\tX{X})$, $F$ --- используемый метод.\\
 \vspace{1em}
 \alert{Метод:} SSA (Singular Spectrum Analysis) [Golyandina et al., 2001] для вещественных рядов, CSSA (Complex Singular Spectrum Analysis) --- обобщение для комплексных рядов.\\
+\vspace{1em}
+\alert{Проблемы:}
+\begin{enumerate}
+	\item Разработаны робастные модификации SSA (Третьякова, 2020). Робастные модификации CSSA? 
+	\item Что лучше, с точки зрения величины ошибки $\tilde{\tX{S}} - \tX{S}$,\\
+	SSA$(\tX{X}_{\Re}) + \iu \text{SSA}(\tX{X}_{\Im})$ или CSSA$(\tX{X}_{\Re} + \iu \tX{X}_{\Im})$?
+\end{enumerate} 
 
 \end{frame}
 
-\begin{frame}{Введение: Временной ряд с выбросами и SSA}
+\begin{frame}{Часть \RomanNumeralCaps{1}: Введение}
 	Базовый SSA: реагирует на выбросы.
 	\begin{center}
 		\includegraphics[, height = 3cm]{img/otliers_ssa.PNG}
 	\end{center}
 	
-	Робастный SSA (Третьякова, 2020): не реагирует на выбросы.
+	Робастный SSA: не реагирует на выбросы.
 	\begin{center}
 		\includegraphics[, height = 3cm]{img/outliers_l1.PNG}
 	\end{center}
@@ -85,19 +98,19 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 	\note{}
 \end{frame}
 
-\begin{frame}{Введение: Цель работы}
-	Робастный SSA разработан для вещественных временных рядов.\\
-	\vspace{1em}
-	\alert{Цель:} Обобщить временной ряд на комплексный случай.\\
-	\vspace{1em}
-	Распространённый пример комплексного временного ряда~--- это инженерные задачи, где данные получаются путём преобразования Фурье.
-	$$\tX{X}_N^{(t)} = (x_1^{(t)}, \ldots, x_N^{(t)}), \, t = 1 \ldots M,$$
-	$$\tX{DFT}(\tX{X}_N^{(t)}) = f^{(t)}_k = \sum_{n=1}^{N}x^{(t)}_n e^{-2 \pi i k  n / N}, \, k = 1 \ldots N,$$
-	$$\tX{F}^{(M)}_{k} = (f^{(1)}_k, \ldots, f^{(M)}_k).$$
-\end{frame}
+%\begin{frame}{Введение: Цель работы}
+%	Робастный SSA разработан для вещественных временных рядов.\\
+%	\vspace{1em}
+%	\alert{Цель:} Обобщить временной ряд на комплексный случай.\\
+%	\vspace{1em}
+%	Распространённый пример комплексного временного ряда~--- это инженерные задачи, где данные получаются путём преобразования Фурье.
+%	$$\tX{X}_N^{(t)} = (x_1^{(t)}, \ldots, x_N^{(t)}), \, t = 1 \ldots M,$$
+%	$$\tX{DFT}(\tX{X}_N^{(t)}) = f^{(t)}_k = \sum_{n=1}^{N}x^{(t)}_n e^{-2 \pi i k  n / N}, \, k = 1 \ldots N,$$
+%	$$\tX{F}^{(M)}_{k} = (f^{(1)}_k, \ldots, f^{(M)}_k).$$
+%\end{frame}
 
 
-\begin{frame}{Методы: Обозначения}
+\begin{frame}{Часть \RomanNumeralCaps{1}: Обозначения}
 	Рассмотрим временной ряд $\tX{X}=(x_1, \ldots, x_{N})$, $L$ длина окна, $K=N-L+1$.\\
 	\vspace{1em}
 	$\mathcal{M}_{r}$ --- пространство матриц размера $L \times K$ ранга не больше $r$.
@@ -120,7 +133,7 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 	
 \end{frame}
 
-\begin{frame}{Методы: Выделение сигнала}
+\begin{frame}{Часть \RomanNumeralCaps{1}: Выделение сигнала}
 	
 	Временной ряд $\tX{X}_N=(x_1, \ldots, x_{N})$.
 	\begin{block}{Алгоритм для выделения сигнала}
@@ -132,33 +145,36 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 	
 	Нормы для $\Pi_r$ и $\Pi_{\mathcal{H}}$:
 	\begin{itemize}
-		\item $\mathbb{L}_2$(Фробениус): выделение сигнала базовым SSA.
-		\item $\mathbb{L}_1$: робастная версия SSA.
-		\item weighted $\mathbb{L}_2$ (присвоение веса каждому элементу): робастная версия SSA.
+		\item $\mathbb{L}_2$(Фробениус): выделение сигнала базовым SSA
+		$$\|\mathbf{X}\|_\mathrm{F} = \sqrt{\sum_{i = 1}\sum_{j = 1}|x_{ij}|^2}.$$
+		\item $\mathbb{L}_1$: робастная версия SSA
+		$$\|\mathbf{X}\|_1 = \sum_{i = 1}\sum_{j = 1}|x_{ij}|.$$
+		\item weighted $\mathbb{L}_2$ : робастная версия SSA
+		$$\|\mathbf{W}^{1/2}\odot\mathbf{X}\|_\mathrm{F} = \sqrt{\sum_{i = 1}\sum_{j = 1}w_{ij}|x_{ij}|^2}.$$
 	\end{itemize}
 	\note{}
 \end{frame}
 
-\begin{frame}{Методы: Иллюстрирующий пример}
-	\begin{block}{Пример}
-		$(x_1, \ldots, x_N)$, норма $p(x)$, $\argmin\limits_{c}p((x_1 - c, \ldots, x_N - c)) =\, ?$
-	\end{block}
-	Нормы:
-	\begin{itemize}
-		\item $\mathbb{L}_2$. $\overline{x} = \argmin\limits_{c} \sqrt{\sum_{i = 1}^{N} |x_i - c|^2}$. \\
-		Если $x_j \to \infty$, тогда $\overline{x} \to \infty$. Не робастный.
-		\item $\mathbb{L}_1$. $\med = \argmin\limits_{c} \sum_{i = 1}^{N} |x_i - c|$. \\
-		Если $x_j \to \infty$, тогда $\med \not\to \infty$. Робастный.
-		\item weighted $\mathbb{L}_2$. $\overline{x}_w = \argmin\limits_{c} \sqrt{\sum_{i = 1}^{N} w_i|x_i - c|^2}$.\\
-		Если $x_j \rightarrow \infty$, тогда возьмём $w_i = 0$ и $\overline{x}_w \not\to \infty$. Робастный.
-	\end{itemize}
-\end{frame}
+%\begin{frame}{Методы: Иллюстрирующий пример}
+%	\begin{block}{Пример}
+%		$(x_1, \ldots, x_N)$, норма $p(x)$, $\argmin\limits_{c}p((x_1 - c, \ldots, x_N - c)) =\, ?$
+%	\end{block}
+%	Нормы:
+%	\begin{itemize}
+%		\item $\mathbb{L}_2$. $\overline{x} = \argmin\limits_{c} \sqrt{\sum_{i = 1}^{N} |x_i - c|^2}$. \\
+%		Если $x_j \to \infty$, тогда $\overline{x} \to \infty$. Не робастный.
+%		\item $\mathbb{L}_1$. $\med = \argmin\limits_{c} \sum_{i = 1}^{N} |x_i - c|$. \\
+%		Если $x_j \to \infty$, тогда $\med \not\to \infty$. Робастный.
+%		\item weighted $\mathbb{L}_2$. $\overline{x}_w = \argmin\limits_{c} \sqrt{\sum_{i = 1}^{N} w_i|x_i - c|^2}$.\\
+%		Если $x_j \rightarrow \infty$, тогда возьмём $w_i = 0$ и $\overline{x}_w \not\to \infty$. Робастный.
+%	\end{itemize}
+%\end{frame}
 
-\begin{frame}{Методы: Проблемы}
+\begin{frame}{Часть \RomanNumeralCaps{1}: Результаты}
 	Траекторная матрица $\mathbf{Y} \in \mathbb{C}^{L\times K}$ на вход.\\ 
 	Обозначим $\mathbf{M} \in \mathbb{C}^{L\times r}, \mathbf{V} \in \mathbb{C}^{K\times r}, \mathbf{W} \in \mathbb{R}^{L\times K}$.\\
 	\vspace{1em}
-	Методы решают следующие проблемы:
+	Алгоритмы, решающие следующие задачи, были реализованы на языке R:
 	\begin{itemize}
 		\item $\mathbb{L}_2$ CSSA: 
 		$$ \|\mathbf{Y}-\mathbf{M}\mathbf{V}^{\mathrm{H}}\|_\mathrm{F} \longrightarrow \min_{\mathbf{M},\mathbf{V}},$$
@@ -173,7 +189,7 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 
 \end{frame}
 
-\begin{frame}{Ошибка восстановления: Проблема}
+\begin{frame}{Часть \RomanNumeralCaps{2}: Введение}
 	
 	$\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 	\vspace{1em}
@@ -184,12 +200,13 @@ $\tX{X} = (x_1, \ldots, x_{N})$ временной ряд длины $N$.\\
 	\alert{Метод:} SSA (Singular Spectrum Analysis) [Golyandina et al., 2001] для вещественных рядов, CSSA (Complex Singular Spectrum Analysis) --- обобщение для комплексных рядов.\\
 	\vspace{1em}
 	\alert{Проблема:} Что лучше, с точки зрения величины ошибки $\tilde{\tX{S}} - \tX{S}$,\\
-	SSA$(\tX{X}_{\Re}) + \iu \text{SSA}(\tX{X}_{\Im})$ или CSSA$(\tX{X}_{\Re} + \iu \tX{X}_{\Im})$?
-	
+	SSA$(\tX{X}_{\Re}) + \iu \text{SSA}(\tX{X}_{\Im})$ или CSSA$(\tX{X}_{\Re} + \iu \tX{X}_{\Im})$?\\
+	\vspace{1em}
+	Рассматриваем теорию возмущений (Kato, 1966). Будем вычислять первый порядок ошибки (Nekrutkin, 2008), в предположении, что он достаточно точно описывает полную ошибку.
 \end{frame}
 
 
-\begin{frame}{Ошибка восстановления: Обозначения}
+\begin{frame}{Часть \RomanNumeralCaps{2}: Обозначения}
 Временной ряд $\tX{X}=(x_1, \ldots, x_{N})$, $L$ --- длина окна, $r$ --- ранг оцениваемого сигнала (ранга траекторной матрицы сигнала).
     \begin{block}{Алгоритм SSA (CSSA) выделения сигнала}
 \begin{equation*}
@@ -208,34 +225,35 @@ $\tX{F} = \tilde{\tX{S}} - \tX{S} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\delta
 
 \end{frame}
 
-\begin{frame}{Ошибка восстановления: Формула для $\mathbf{H}^{(1)}$}
+\begin{frame}{Часть \RomanNumeralCaps{2}: Формула для $\mathbf{H}^{(1)}$}
 
 Итак, рассматриваем $\delta = 1$,
 $\tX{X} = \tX{S}(1) = \tX{S} + \tX{R}$,
 
 Тогда
-$\tilde{\tX{S}} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \mathbf{H}^{(1)} + \mathbf{H}^{(2)}))$,
+$\tilde{\tX{S}} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \mathbf{H}^{(1)} + \mathbf{H}^{(2)}))$, $\tX{F} \approx \tX{F}^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})$.
 
-$\tX{F} = \tilde{\tX{S}} - \tX{S}$,
+Хотим найти $\mathbf{H}^{(1)}$.\\
 
-$\tX{F}^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})$.\\
-\vspace{1em}
-На основе результатов из (Константинов,~2018) и (Некруткин,~2010) была получена формула для $\mathbf{H}^{(1)}$ в случае достаточно маленького возмущения:
-
-\begin{equation*} \label{eq:main}
-	\mathbf{H}^{(1)} = \mathbf{P}^{\perp}_0 \mathbf{E} \mathbf{Q}_0 + \mathbf{P}_0 \mathbf{E},
-\end{equation*}
-где $\mathbf{P}_0$~--- проектор на пространство столбцов $\mathbf{H}$, \\$\mathbf{Q}_0$~--- проектор на пространство строк $\mathbf{H}$,\\ $\mathbf{P}^{\perp}_0 = \mathbf{I} - \mathbf{P}_0$, $\mathbf{I}$~--- единичная матрица,\\
-$\mathbf{E} = \mathcal{T}_L(\tX{R})$.
+\begin{block}{Утверждение}
+	Пусть $\tX{R}$ достаточно мало. Тогда
+	\begin{equation*} \label{eq:main}
+		\mathbf{H}^{(1)} = \mathbf{P}^{\perp}_0 \mathbf{E} \mathbf{Q}_0 + \mathbf{P}_0 \mathbf{E},
+	\end{equation*}
+	где $\mathbf{P}_0$~--- проектор на пространство столбцов $\mathbf{H}$, \\$\mathbf{Q}_0$~--- проектор на пространство строк $\mathbf{H}$,\\ $\mathbf{P}^{\perp}_0 = \mathbf{I} - \mathbf{P}_0$, $\mathbf{I}$~--- единичная матрица,\\
+	$\mathbf{E} = \mathcal{T}_L(\tX{R})$.
+\end{block}
+Получено на основе результатов из (Константинов,~2018) и (Некруткин,~2010).
 \end{frame}
 
-\begin{frame}{Ошибка восстановления: Теорема}
-    CSSA-$\tX{F}^{(1)}$ первый порядок ошибки восстановления $\tX{S}$ с возмущением $\tX{R}$ метода CSSA,
-
-    SSA-$\tX{F}^{(1)}_{\Re}$ первый порядок ошибки восстановления $\Re(\tX{S})$ с возмущением $\Re(\tX{R})$ метода SSA,
-
-    SSA-$\tX{F}^{(1)}_{\Im}$ первый порядок ошибки восстановления $\Im(\tX{S})$ с возмущением $\Im(\tX{R})$ метода SSA.
-
+\begin{frame}{Часть \RomanNumeralCaps{2}: Теорема}
+	Первые порядки ошибки восстановления:
+	\begin{itemize}
+	\item CSSA-$\tX{F}^{(1)}$: сигнал $\tX{S}$, возмущение $\tX{R}$, метод CSSA,
+	\item SSA-$\tX{F}^{(1)}_{\Re}$: сигнал $\Re(\tX{S})$, возмущение $\Re(\tX{R})$, метод SSA,	
+	\item SSA-$\tX{F}^{(1)}_{\Im}$: сигнал $\Im(\tX{S})$, возмущение $\Im(\tX{R})$, метод SSA.
+	\end{itemize}
+    
     \begin{block}{Теорема \label{th:sum}}
         Пусть пространства столбцов траекторных матриц рядов $\tX{S}$, $\Re(\tX{S})$ и $\Im(\tX{S})$ совпадают и то же самое верно для пространств строк.
     Тогда при любом достаточно малом возмущении $\tX{R}$
@@ -268,18 +286,20 @@ $\mathbf{E} = \mathcal{T}_L(\tX{R})$.
 %Такое свойство комплексных случайных величин является объяснением, почему в теореме не требуется независимость вещественной и мнимой частей шума.
 %\end{frame}
 
-\begin{frame}{Шум: Две зашумлённые синусоиды}
-Пусть сигнал $\tX{S}$ имеет вид
+\begin{frame}{Часть \RomanNumeralCaps{2}: Пример, две зашумлённые синусоиды}
+\alert{Сигнал:}
 \begin{equation*}
 \label{eq:general_ts}
 s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2),
 \end{equation*}
 где $0<\omega\le 0.5$ и $0\le\phi_i < 2\pi$.
 
-При $|\phi_2-\phi_1| = \pi/2$ и $A=B$,
+\alert{Особый случай:} При $|\phi_2-\phi_1| = \pi/2$ и $A=B$, комплексная экспонента,
 $$s_l = Ae^{\pm \iu(2 \pi\omega l + \phi_1)}.$$
-Возмущение $\tX{R}$~--- случайный стационарный процесс с нулевым матожиданием и достаточно малой дисперсией.\\
+\alert{Возмущение:} Случайный стационарный процесс с нулевым матожиданием и достаточно малой дисперсией.\\
 \vspace{1em}
+\alert{Обозначения:}
+
 $\text{CSSA-}\tX{F}^{(1)} = (\text{CSSA-}f^{(1)}_1, \ldots, \text{CSSA-}f^{(1)}_N)$,
 
 $\text{SSA-}\tX{F}^{(1)}_{\Re} = (\text{SSA-}f^{(1)}_{\Re, 1}, \ldots, \text{SSA-}f^{(1)}_{\Re, N})$,
@@ -287,8 +307,8 @@ $\text{SSA-}\tX{F}^{(1)}_{\Re} = (\text{SSA-}f^{(1)}_{\Re, 1}, \ldots, \text{SSA
 $\text{SSA-}\tX{F}^{(1)}_{\Im} = (\text{SSA-}f^{(1)}_{\Im, 1}, \ldots, \text{SSA-}f^{(1)}_{\Im, N})$.
 \end{frame}
 
-\begin{frame}{Шум: MSE}
-\begin{block}{Замечание}
+\begin{frame}{Часть \RomanNumeralCaps{2}: MSE}
+\begin{block}{Следствие}
     Для сигнала $s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2)$, не являющегося комплексной экспонентой, с возмущением $\tX{R}$ выполняется
     $$\mathbb{D}(\text{CSSA-}f^{(1)}_l) = \mathbb{D}(\text{SSA-}f^{(1)}_{\Re, l}) + \mathbb{D}(\text{SSA-}f^{(1)}_{\Im, l}).$$
 \end{block}
@@ -302,20 +322,23 @@ $\text{SSA-}\tX{F}^{(1)}_{\Im} = (\text{SSA-}f^{(1)}_{\Im, 1}, \ldots, \text{SSA
 Показано эмпирически.
 \end{frame}
 
-\begin{frame}{Выброс: Константный сигнал с выбросом}
-Пусть сигнал $\tX{S}$ имеет вид
+\begin{frame}{Часть \RomanNumeralCaps{2}: Пример, константный сигнал с выбросом}
+\alert{Сигнал:}
 $$s_l = c_1 + \iu c_2.$$
-Пусть возмущение $\tX{R} = (0, \ldots, a_1 + \iu a_2, \ldots, 0)$~--- достаточно малый выброс на позиции $k$.\\
+\alert{Возмущение:} $\tX{R} = (0, \ldots, a_1 + \iu a_2, \ldots, 0)$~--- достаточно малый выброс на позиции $k$.\\
 \vspace{1em}
-По теореме достаточно уметь выражать $\text{SSA-}\tX{F}^{(1)}_{\Re}$.\\
-\vspace{1em}
-Для сигнала $\Re(s_l)$ известна формула (Nekrutkin, 2008)
-$$\mathbf{H}^{(1)} = -U^{\mathrm{T}} \mathbf{E} V U V^{\mathrm{T}} + U U^{\mathrm{T}} \mathbf{E} + \mathbf{E} V V^{\mathrm{T}},$$
+Тракторные пространства сигнала совпадают, возмущение достаточно малое, справедлива теорема $$\text{CSSA-}\tX{F}^{(1)} = \text{SSA-}\tX{F}^{(1)}_{\Re} + \iu\text{SSA-}\tX{F}^{(1)}_{\Im}.$$
+
+$\text{SSA-}\tX{F}^{(1)}_{\Re} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)}_{\Re})$.
+
+Для $\mathbf{H}^{(1)}_{\Re}$ известна формула (Nekrutkin, 2008)
+
+$$\mathbf{H}^{(1)}_{\Re} = -U^{\mathrm{T}} \mathbf{E} V U V^{\mathrm{T}} + U U^{\mathrm{T}} \mathbf{E} + \mathbf{E} V V^{\mathrm{T}},$$
 где $U = \{1/\sqrt{L}\}^{L}_{i = 1},\, V = \{1/\sqrt{K}\}^{K}_{i = 1}$, $K = N - L + 1$.
 \end{frame}
 
-\begin{frame}{Выброс: Явный вид SSA-$f^{(1)}_{\Re,l}$}
-$\text{SSA-}f^{(1)}_{\Re, l} = \big( \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})\big)_{l}$\\
+\begin{frame}{Часть \RomanNumeralCaps{2}: Явный вид SSA-$f^{(1)}_{\Re,l}$}
+$\text{SSA-}f^{(1)}_{\Re, l} = \big( \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)}_{\Re})\big)_{l}$\\
 \vspace{1em}
     Приведем результат для случая $k \leq \min(L/2, K - L)$ и $L < K$, где $K=N-L+1$:
 $$\text{SSA-}f^{(1)}_{\Re, l} = \frac{a}{{LK}}
@@ -369,7 +392,7 @@ $$\text{SSA-}f^{(1)}_{\Re, l} = \frac{a}{{LK}}
 %\end{figure}
 %\end{frame}
 
-\begin{frame}{Сравнение первого порядка и полной ошибок: Зашумлённые гармоники}
+\begin{frame}{Часть \RomanNumeralCaps{2}: Сравнение первого порядка и полной ошибок}
 Рассмотрим
 $$s_l = \cos(2 \pi l / 10) + \iu\cos(2 \pi l / 10 + \pi/4),$$
 $\tX{R}$~--- белый шум с $\sigma^2 = 0.1$, $N = 9$, $L = 5$.
@@ -411,15 +434,14 @@ $\tX{R}$~--- выброс $10 + \iu 10$ на позиции $k = L - 1$.
 
 \begin{frame}{Основные результаты}
     \begin{itemize}
-    	\item Робастные модификации были обобщены на комплексный случай и реализованы на R. 
-        \item Теория: при совпадении траекторных пространств комплексного ряда первые порядки ошибок для CSSA и SSA совпадают.
-        \item Численные эксперименты: при случайном возмущении первый порядок адекватно описывает полную ошибку.
+    	\item \alert{Реадизации на R:} Робастные модификации были обобщены на комплексный случай. 
+        \item \alert{Теория:} при совпадении траекторных пространств комплексного ряда первые порядки ошибок для CSSA и SSA совпадают.
         \item $s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2)$, сдвиг не $\pi / 2$
         $$\mathbb{D}(\text{CSSA-}f^{(1)}_l) = \mathbb{D}(\text{SSA-}f^{(1)}_{\Re, l}) + \mathbb{D}(\text{SSA-}f^{(1)}_{\Im, l}).$$
         $s_l = Ae^{\pm \iu(2 \pi\omega l + \phi_1)}$
         $$\mathbb{D}(\text{CSSA-}f^{(1)}_l) \stackrel{?}{=} \frac{1}{2}[\mathbb{D}(\text{SSA-}f^{(1)}_{\Re, l}) + \mathbb{D}(\text{SSA-}f^{(1)}_{\Im, l})].$$
-        \item Численные эксперименты: в случае выброса первый порядок адекватно оценивает полную ошибку при $L = \alpha N$ для больших $N$. При малых $L$ это не так.
-        \item Теория: для $s_l = c_1 + \iu c_2$ с выбросом была получена аналитическая формула первого порядка. При $L = \alpha N$ ошибка стремится к $0$.
+        \item \alert{Теория:} для $s_l = c_1 + \iu c_2$ с выбросом была получена аналитическая формула первого порядка. При $L = \alpha N$ ошибка стремится к $0$.
+        \item \alert{Численные эксперименты:} Рассмотрен вопрос приближения полной ошибки первым порядком.
     \end{itemize}
 \end{frame}
 
