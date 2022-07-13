@@ -1,0 +1,1176 @@
+\documentclass[specialist,
+               substylefile = spbu.rtx,
+               subf,href,colorlinks=true, 12pt]{disser}
+\usepackage[breakable]{tcolorbox}
+\usepackage[a4paper,
+mag=1000, includefoot,
+left=3cm, right=1.5cm, top=2cm, bottom=2cm, headsep=1cm, footskip=1cm]{geometry}
+\linespread{1.5}
+\ifpdf\usepackage{epstopdf}\fi
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{graphicx}
+\usepackage[english,russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{float}
+\usepackage{amsthm}
+%\usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{physics}
+\input{letters_series_mathbb}
+\input{newcommands}=
+\newtheorem{theorem}{Теорема}
+\newtheorem*{statement*}{Утверждение}
+\newtheorem*{notice*}{Замечание}
+\newtheorem{remark}{Замечание}
+\newtheorem{lemma}{Лемма}
+\newtheorem{corollary}{Следствие}
+%\newtheorem{def}{Определение}
+\newtheorem*{def*}{Определение}
+\newtheorem*{prop*}{Предположение}
+
+
+\DeclareMathOperator{\rk}{rk}
+\DeclareMathOperator{\med}{med}
+%\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\sign}{sign}
+%\DeclareMathOperator{\tr}{tr}
+%\newcommand{\tX}[1]{\mathsf{#1}}
+%\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator*{\argminB}{argmin}
+
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+
+\DeclareMathOperator*{\argmin}{argmin}
+
+\SetKwInput{KwData}{Исходные параметры}
+\SetKwInput{KwResult}{Результат}
+\SetKwInput{KwIn}{Входные данные}
+\SetKwInput{KwOut}{Выходные данные}
+\SetKwIF{If}{ElseIf}{Else}{если}{тогда}{иначе если}{иначе}{конец условия}
+\SetKwFor{While}{до тех пор, пока}{выполнять}{конец цикла}
+\SetKw{KwTo}{от}
+\SetKw{KwRet}{возвратить}
+\SetKw{Return}{возвратить}
+\SetKwBlock{Begin}{начало блока}{конец блока}
+\SetKwSwitch{Switch}{Case}{Other}{Проверить значение}{и выполнить}{вариант}{в противном случае}{конец варианта}{конец проверки значений}
+\SetKwFor{For}{цикл}{выполнять}{конец цикла}
+\SetKwFor{ForEach}{для каждого}{выполнять}{конец цикла}
+\SetKwRepeat{Repeat}{повторять}{до тех пор, пока}
+\SetAlgorithmName{Алгоритм}{алгоритм}{Список алгоритмов}
+\setcounter{tocdepth}{1}
+
+\begin{document}
+
+
+\institution{
+	Санкт-Петербургский государственный университет
+}
+
+\title{Эссе}
+
+\topic{Ошибки оценки сигнала при помощи комплексного метода анализа сингулярного спектра}
+
+
+
+\group{
+	Уровень образования: бакалавриат\\
+	Направление 01.03.02 <<Прикладная математика и информатика>>\\
+	Основная образовательная программа СВ.5004.2018 <<Прикладная математика и информатика>> \\
+	Профессиональная траектория <<Вычислительная стохастика и статистические модели>>
+}
+
+\sa       {Н.\,Э.~Голяндина}
+\sastatus {Доцент, кафедра статистического моделирования\,\\
+	к.\,ф.-м.\,н., доцент}
+
+\rev      {А.\,Н.~Пепелышев}
+\revstatus{Лектор, Университет Кардиффа (Великобритания)\\
+	к.\,ф.-м.\,н.,}
+
+\city{Санкт-Петербург}
+\date{\number\year}
+
+\begin{center}
+	\textbf{\huge{Ошибки оценки сигнала при помощи комплексного метода анализа сингулярного спектра}}
+\end{center}
+
+\intro
+%\section*{Введение}
+Анализ cингулярного cпектра (singular spectrum analysis, SSA)  \cite{Golyandina.etal2001}
+--- мощный метод анализа временных
+рядов, не требующий предварительного задания параметрической модели ряда. Метод имеет естественное расширение на случай комплексных временных рядов, называемое Complex SSA (CSSA).
+Есть класс сигналов, а именно временные ряды, управляемые линейными рекуррентными соотношениями, который позволяет получать для него теоретические результаты относительно свойств метода SSA.
+
+Пусть наблюдаемый комплексный временной ряд имеет вид $\tX =\tS + \tR$. Для получение оценки сигнала $\wtilde\tS$ будем использовать метод CSSA. Кроме применения CSSA ко всему ряду, будем также применять метод SSA отдельно к вещественной и мнимой части ряда $\tX$.
+
+Для анализа ошибки оценивания сигнала используется теория возмущений \cite{Kato}, которая была применена для случая выделения сигнала методом SSA в ряде работ, см., например, \cite{Nekrutkin}. 
+
+Хотя теория возмущения Като дает вид полной ошибки, однако ее исследование представляется сложной задачей. Поэтому мы будем рассматривать только первый порядок ошибки в разложении ошибки по величине возмущения.
+
+При этом проведем численное сравнение первого порядка ошибки и полной ошибки для выявления случаев, когда анализ первого порядка ошибки плохо описывает полную ошибку и поэтому его анализ не представляет интереса.
+
+Даже для первого порядка ошибки получение его явного вида --- довольно трудоемкая задача. Удалось его получить для случая константного сигнала и возмущения в виде выброса. В общем случае результаты касаются сравнения MSE ошибок оценки сигнала методом CSSA и суммарного MSE при применении SSA отдельно к мнимой и вещественной частям.
+
+
+
+
+\chapter{Алгоритм и ранги}
+\label{ch:ssa}
+В данном разделе рассмотрим алгоритм SSA, согласно \cite{Golyandina.etal2001}, но с заменой операции транспонирования, обозначаемой $\mathrm{T}$, на операцию эрмитова сопряжения $\mathrm{H}$. Также рассмотрим понятие ранга временного ряда и некоторые его свойства.
+\section{Описание алгоритма SSA (CSSA)}
+\begin{algorithm}
+	\label{alg:ssa}
+	~\\
+	\textbf{Вход:} Комплексный временной ряд $\tX = (x_1, \dots, x_N)$, \emph{длина окна} $L$,
+	ранг сигнала $r$.\\
+	\textbf{Выход:} Оценка сигнала $\wtilde\tS$.\\
+	\textbf{Алгоритм:}
+	\begin{enumerate}
+		\item \textbf{Вложение.}
+		\label{item:embedding}
+		Построим $\bfX \in \spaceR^{L \times K}$, \emph{$L$-траекторную матрицу} ряда $\tX$:
+		$$\bfX = \calT_L \tX = [X_1 : \dots X_K],$$
+		где $K = N - L + 1$,
+		а $X_i$ --- \emph{векторы $L$-вложения:}
+		$X_i = (x_i, \dots, x_{i+L-1})^\mathrm{T} \in \spaceR^L$.
+		\item \textbf{Разложение.}
+		\label{item:decomposition}
+		Построим SVD-разложение матрицы $\bfX$:
+		$\bfX =
+		\sum_{k=1}^{\rank \bfX} \sqrt{\lambda_k} U_k V_k^\mathrm{H} = \sum_{k=1}^{\rank \bfX} \widehat{\bfX}_k$,
+		где $U_k$, $V_k$ --- правые и левые сингулярные векторы матрицы $\bfX$ соответственно,
+		$\sqrt{\lambda_k}$ --- сингулярные числа.
+		\item \textbf{Группировка.} Сгруппируем матрицы компонент сигнала $\widehat{\bfS}$:
+		$\widehat{\bfS} = \sum_{k=1}^r \widehat{\bfX}_k$.
+		\item \textbf{Диагональное усреднение.}
+		\label{item:reconstruction}
+		Применим процедуру диагонального усреднения (проекции в норме Фробениуса
+		на линейное пространство ганкелевых матриц):
+		$\widetilde{\bfS} = \calH \widehat{\bfS}$,
+		затем сопоставим полученным Ганкелевым матрицам ряды длины~$N$:
+		$\widetilde{\tS} = \calT_L^{-1} \widetilde{\bfS}$.
+	\end{enumerate}
+\end{algorithm}
+
+
+\section{Разложение гармоник}
+
+\begin{def*}
+	$L$-рангом ряда называется ранг его $L$-траекторной матрицы. Обозначим $L$-ранг ряда $\tX$ как $\rk_L \tX$.
+\end{def*}
+
+Очевидно, что при $\rk_L \tX = d$ должно выполняться
+\begin{equation} \label{eq:L_acc}
+	d \leq \min(L, K).
+\end{equation}
+При фиксированном $d$ будем называть $L$, удовлетворяющий \eqref{eq:L_acc}, допустимым.
+
+\begin{def*}
+	Если $\rk_L \tX = d < N/2$ для любого допустимого $L$, то будем говорить, что ряд $\tX$ имеет ранг $d$ и обозначать как $\rk \tX = d$.
+\end{def*}
+
+
+Рассмотрим ряды $\tS^{(1)} = (s^{(1)}_1, \ldots, s^{(1)}_N)$ и $\tS^{(2)} = (s^{(2)}_1, \ldots, s^{(2)}_N)$ вида
+\begin{equation}
+	\label{eq:gen_ts}
+	s^{(1)}_l = A\cos(2 \pi\omega l + \phi_1), \, s^{(2)}_l = B\cos(2 \pi\omega l + \phi_2),
+\end{equation}
+где $0\le \omega < 0.5$ и $0\le\phi_i < 2\pi$.
+
+
+\begin{statement}[\cite{Golyandina.Stepanov2005}] \label{st:L-rk}
+	Пусть $\tS = \tS^{(1)} + \iu \tS^{(2)}$, где $\tS^{(1)}$ и $\tS^{(2)}$ заданы в \eqref{eq:gen_ts}, $0< \omega < 0.5$, $N\ge 5$. Тогда
+	\begin{enumerate}
+		\item $\rk \tS^{(i)} = 2$; $\rk \tS = 1$, если $A = B$ и $|\phi_1 - \phi_2| = \pi / 2\, (\mmod \pi)$, в остальных случаях $\rk \tS = 2$.
+		\item Если $\rk \tS = 2$, $L\ge 2$, то как в вещественном, так и в комплексном случае пространство столбцов траекторной матрицы натянуто на векторы
+		$$(1, \cos(2 \pi \omega), \ldots, \cos(2 \pi (L - 1) \omega))^{\mathrm{T}}, \, (0, \sin(2 \pi \omega), \ldots, \sin(2 \pi (L - 1) \omega))^{\mathrm{T}}.$$
+		Пространство строк траекторной матрицы натянуто на векторы
+		$$(1, \cos(2 \pi \omega), \ldots, \cos(2 \pi (K - 1) \omega))^{\mathrm{T}}, \, (0, \sin(2 \pi \omega), \ldots, \sin(2 \pi (K - 1) \omega))^{\mathrm{T}}.$$
+		\item Если $\rk \tS = 1$, $L\ge 1$, то пространство столбцов траекторной матрицы $\tS$ и пространство строк натянуты соответственно на векторы
+		$$(1, e^{\iu 2 \pi \omega}, \ldots, e^{\iu 2 \pi (L - 1) \omega})^{\mathrm{T}} \text{ и } (1, e^{\iu 2 \pi \omega}, \ldots, e^{\iu 2 \pi (K - 1) \omega})^{\mathrm{T}}.$$
+		
+	\end{enumerate}
+\end{statement}
+
+\begin{remark} \label{rm:L-rk_const}
+Заметим, что $\omega=0$ соответствует константному комплексному сигналу и при $\omega=0$ будем брать $\phi_1=\phi_2=0$. Тогда $s_n = A + \iu B$ для всех $n$.
+	В этом случае имеем $\rk \tS = 1$ и пространство столбцов траекторной матрицы и пространство строк натянуты на векторы
+	$$(1, \ldots, 1)^{\mathrm{T}} \in \mathbb{R}^L \text{ и } (1, \ldots, 1)^{\mathrm{T}}\in \mathbb{R}^K.$$
+\end{remark}
+
+%В дальнейшем $L$-ранг будет рассматриваться в задаче выделения сигнала и будет выполнять роль одного из параметров алгоритма SSA (CSSA). Так как для синусоидальных сигналов величина $L$-ранга $r$ не зависит от $L$ при $r<\min(L,K)$, то будем называть его просто рангом.
+
+
+Ниже рассмотрим ненулевые собственные числа, порождаемые комплексным рядом $\tS = \tS^{(1)} + \iu \tS^{(2)}$.
+
+\begin{statement} [\cite{Golyandina.Stepanov2005}]\label{st:singular_values}
+	Рассмотрим сигнал $\tS = \tS^{(1)} + \iu \tS^{(2)}$, где $\tS^{(1)}$ и $\tS^{(2)}$ заданы в \eqref{eq:gen_ts}, $N\ge 3$, $L\ge 2$. Рассмотрим $\lambda_i$, собственные числа матрицы $\mathbf{H}\mathbf{H}^\mathrm{H}$, где $\mathbf{H} = \mathcal{T}_L(\tS)$.
+	
+	Для сигнала c $\omega = 0$ (для простоты $\phi_1=\phi_2=0$) собственное число $$\lambda = (A^2 + B^2) L K.$$
+	
+	Для сигнала c $0< \omega < 0.5$ при $L$ и $K$, кратных $\omega$:
+	\begin{enumerate}
+		\item При $A = B$, $|\phi_1 - \phi_2| = \pi / 2(\mmod \pi)$ с.ч. $$\lambda = A^2 L K.$$
+		\item В остальных случаях с.ч. $$\lambda_{1,2} = (A^2 + B^2 \pm 2 A B \sin(\phi_2 - \phi_1)) L K / 4.$$
+	\end{enumerate}
+\end{statement}
+
+
+\chapter{Ошибка оценки сигнала }
+\label{ch:perturb}
+В данной главе приведены основные результаты работы по сравнению первого порядка ошибок CSSA и SSA.
+
+\section{Применение теории возмущений}
+% и \cite{Konstantinov}
+
+Рассматриваем временной ряд $\tX=(x_1, \ldots, x_{N})$, $L$ --- длина окна, $r$ --- ранг оцениваемого сигнала (ранг траекторной матрицы сигнала).
+
+Напомним, как будет выглядеть оценка сигнала для SSA/CSSA
+	\begin{equation*}
+		\tilde{\tS} = \mathcal{T}^{-1}_{L} \Pi_{\mathcal{H}} \Pi_{r} \mathcal{T}_L (\tX).
+	\end{equation*}
+
+Рассмотрим $\tX = \tS(\delta)$, где $\tS(\delta) = \tS + \delta \tR$ длины $N$, $\mathbf{H} = \mathcal{T}_L(\tS)$.
+
+Из \cite{Nekr2008} известно следующее представление $\tilde{\tS} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)})$.
+
+Ошибку восстановления обозначим как $\tF = \tilde{\tS} - \tS = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)})$.
+
+Рассмотрим $\delta = 1$ и $\tX = \tS + \tR$. Первый порядок ошибки восстановления обозначим как $\tF^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})$. Введём $\mathbf{E} = \mathcal{T}_L(\tR)$ и $\mathbf{E}(\delta) = \mathcal{T}_L(\delta \tR)$. Нам понадобится спектральная норма матрицы, равная ее максимальному сингулярному числу; будем обозначать её просто $\|\cdot\|$.
+
+\begin{statement} \label{st:main}
+	Если для любого $\delta \in (-\delta_0, \delta_0)$ при некотором $\delta_0>0$ выполняется
+	\begin{equation} \label{eq:main_cond}
+		\|\mathbf{E}(\delta)\| < \mu_{\min} / 2,
+	\end{equation}
+	где $\mu_{\min}$~--- минимальное ненулевое собственное число матрицы $\mathbf{H}\mathbf{H}^\mathrm{H}$, то
+\begin{equation} \label{eq:main}
+	\mathbf{H}^{(1)} = \mathbf{P}^{\perp}_0 \mathbf{E} \mathbf{Q}_0 + \mathbf{P}_0 \mathbf{E},
+\end{equation}
+где $\mathbf{P}_0$~--- проектор на пространство столбцов $\mathbf{H}$, $\mathbf{Q}_0$~--- проектор на пространство строк $\mathbf{H}$, $\mathbf{P}^{\perp}_0 = \mathbf{I} - \mathbf{P}_0$, $\mathbf{I}$~--- единичная матрица.
+\end{statement}
+\begin{proof}
+	
+По теореме 2.1 из \cite{Nekrutkin}, при выполнении \eqref{eq:main_cond} верно
+\begin{equation} \label{eq:main_proof_1}
+\delta\mathbf{H}^{(1)} = \mathbf{W}_1(\delta) \mathbf{H}(\delta) + \delta \mathbf{P}_0 \mathbf{E},
+\end{equation}
+где $\mathbf{H}(\delta) = \mathcal{T}_L(\tS(\delta))$.
+Из \cite[стр.12]{Konstantinov} известно
+\begin{equation} \label{eq:main_proof_2}
+	\mathbf{W}_1(\delta) \mathbf{H}(\delta) = \delta \mathbf{P}^{\perp}_0 \mathbf{E} \mathbf{Q}_0.
+\end{equation}
+Используя \eqref{eq:main_proof_1}, \eqref{eq:main_proof_2} и сокращая на $\delta$, получаем
+\begin{equation*}
+	\mathbf{H}^{(1)} = \mathbf{P}^{\perp}_0 \mathbf{E} \mathbf{Q}_0 + \mathbf{P}_0 \mathbf{E}.
+\end{equation*}
+\end{proof}
+
+Ряд $\tF^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})$, где $\mathbf{H}^{(1)}$ задаётся формулой \eqref{eq:main}, в дальнейшем будем называть первым порядком ошибки. Выполнение условия \eqref{eq:main_cond} будем рассматривать отдельно.
+
+\subsection{Сравнение CSSA и SSA в случае совпадающих пространств сигналов}
+
+Обозначим за:
+
+$\tF^{(1)} = \mathcal{H}(\mathbf{H}^{(1)}(\tR, \tS))$ первый порядок ошибки восстановления $\tS$ с возмущением $\tR$ метода CSSA,
+
+$\tF^{(1)}_{\Re} = \mathcal{H}(\mathbf{H}^{(1)}(\Re(\tR), \Re(\tS)))$ первый порядок ошибки восстановления $\Re(\tS)$ с возмущением $\Re(\tR)$ метода SSA,
+
+$\tF^{(1)}_{\Im} = \mathcal{H}(\mathbf{H}^{(1)}(\Im(\tR), \Im(\tS)))$ первый порядок ошибки восстановления $\Im(\tS)$ с возмущением $\Im(\tR)$ метода SSA.
+
+
+\begin{theorem}\label{th:sum}
+	Пусть пространства столбцов траекторных матриц рядов $\tS$, $\Re(\tS)$ и $\Im(\tS)$ совпадают и то же самое верно для пространств строк.
+	Тогда $$\tF^{(1)} = \tF^{(1)}_{\Re} + \iu\tF^{(1)}_{\Im}.$$
+\end{theorem}
+\begin{proof}
+	Рассмотрим матрицу возмущения $\mathbf{E} = \Re(\mathbf{E}) + \iu\Im(\mathbf{E}).$
+	Заметим, что в \eqref{eq:main} $\mathbf{E}$ входит линейно, поэтому
+	\begin{equation} \label{eq_reim}
+		\mathbf{H}^{(1)}(\tR, \tS) = \mathbf{H}^{(1)}(\Re(\tR), \tS) + \iu\mathbf{H}^{(1)}(\Im(\tR), \tS).
+	\end{equation}
+	Тогда из \eqref{eq_reim}, линейности диагонального усреднения и  совпадения траекторных пространств получаем
+	\begin{multline*}
+		\tF^{(1)} = \mathcal{H}(\mathbf{H}^{(1)}(\tR, \tS)) = \mathcal{H}(\mathbf{H}^{(1)}(\Re(\tR), \tS)) + \iu\mathcal{H}(\mathbf{H}^{(1)}(\Im(\tR), \tS)) =\\
+		\mathcal{H}(\mathbf{H}^{(1)}(\Re(\tR), \Re(\tS))) + \iu\mathcal{H}(\mathbf{H}^{(1)}(\Im(\tR), \Im(\tS))) = \tF^{(1)}_{\Re} + \iu\tF^{(1)}_{\Im}.	
+	\end{multline*}
+	
+\end{proof}
+
+\begin{remark} \label{rm:th_R}
+	$\tF^{(1)}$, $\tF^{(1)}_{\Re}$, $\tF^{(1)}_{\Im}$ в теореме \ref{th:sum} действительно являются первыми порядками ошибок, если $\tR$ удовлетворяет условию \eqref{eq:main_cond}.
+\end{remark}
+
+Заметим, что хотя в утверждении теоремы возмущение $\tR$ может быть любым по форме, однако теорема имеет практическое применение, только если первый порядок ошибки адекватно описывает полную ошибку.
+
+%\begin{notice*}
+%	Требования теоремы означают существование вещественного базиса в пространстве столбцов $\mathbf{H}$$\mathbf{H}^{\mathrm{H}}$.
+%\end{notice*}
+
+%\begin{notice*}
+%	Примером сигнала, для которого в общем случае очевидно не выполняются требования теоремы, %является комплексная экспонента $s_n = e^{\phi(n) + i\psi(n)}$, поскольку $\rk S = 1$, а %$\rk\Re(S) = \rk\Im(S) = 2$.
+%\end{notice*}
+
+
+\subsubsection{Случайное возмущение}
+
+Рассмотрим случайное возмущение $\tR$ с нулевым математическим ожиданием.
+%\begin{remark} \label{rm:probl_rand}
+%	 А значит и теорема \ref{th:sum} не всегда будет применима, даже для требуемого сигнала. Однако мы будем считать, что возмущение $\tR$ имеет достаточно малую дисперсию, при которой вероятность подобного исхода пренебрежимо мала.
+%\end{remark}
+
+Для дальнейших рассуждений приведём известный результат.
+\begin{lemma} \label{std:disp}
+	Пусть $\zeta = \xi + \iu\eta$. Тогда $\mathbb{D}\zeta = \mathbb{D}\xi + \mathbb{D}\eta$.
+\end{lemma}
+%\begin{proof}
+%\begin{multline*}
+%	\mathbb{D}\zeta = \mathbb{E}(|\zeta - \mathbb{E}\zeta|^2) = \mathbb{E}(|(\xi - \mathbb{E}\xi) + \iu((\eta - \mathbb{E}\eta))|^2) = \\
+%	= \mathbb{E}((\xi - \mathbb{E}\xi)^2 + (\eta - \mathbb{E}\eta)^2)= \mathbb{E}(\xi - \mathbb{E}\xi)^2 + \mathbb{E}(\eta - \mathbb{E}\eta)^2 = \mathbb{D}\xi + \mathbb{D}\eta.
+%\end{multline*}
+%\end{proof}
+
+Рассмотрим первые порядки ошибок восстановления сигнала:
+
+$\tF^{(1)} = (f^{(1)}_1, \ldots, f^{(1)}_N)$, $\tF^{(1)}_{\Re} = (f^{(1)}_{\Re,1}, \ldots, f^{(1)}_{\Re, N})$, $\tF^{(1)}_{\Im} = (f^{(1)}_{\Im,1}, \ldots, f^{(1)}_{\Im, N})$.
+
+
+\begin{corollary}[из теоремы {\ref{th:sum}}] \label{st:dispsum}
+	Пусть выполнены условия теоремы \ref{th:sum}.
+	Тогда для любого $l$, $1\le l \le N$,
+	\begin{equation} \label{eq:dispsum}
+		\mathbb{D}f^{(1)}_l = \mathbb{D}f^{(1)}_{\Re, l} + \mathbb{D}f^{(1)}_{\Im, l}.	
+	\end{equation}
+\end{corollary}
+
+Утверждение получается автоматически из теоремы \ref{th:sum} и леммы \ref{std:disp}.
+
+\begin{remark}
+	Пусть возмущение является стационарным случайным процессом. В силу своей случайности, такое возмущение не всегда будет удовлетворять \eqref{eq:main_cond}. Однако, если рассмотреть достаточно маленькую дисперсию, при которой выполняется $P(\|\mathbf{E}(\delta)\| < \mu_{\min} / 2) \approx 1$, то с вероятностью, близкой к 1, $f^{(1)}_l$, $f^{(1)}_{\Re, l}$, $f^{(1)}_{\Im, l}$ в следствии \ref{st:dispsum} будут являться первыми порядками ошибок восстановления, согласно замечанию \ref{rm:th_R}.
+\end{remark}
+
+\subsubsection{Возмущение в виде выброса} \label{ss:RMSEinv}
+
+Рассмотрим возмущение выбросом $a_1 + \iu a_2$ на позиции $k$, т.е. ряд $\tR$ состоит из нулей кроме значения $a_1 + \iu a_2$ на $k$-м месте.
+Возмущение выбросом $a_1 + \iu a_2$ можно записать как  $\tR = (a_1 + \iu a_2)\tG$, где $\tG$~--- ряд, состоящий из нулей, кроме $1$ на $k$-м месте.
+
+\begin{statement}\label{st:RMSEinv}
+	$|f_l^{(1)}|$ для ряда с сигналом $\tS$ и выбросом $a_1 + \iu a_2$ на позиции $k$, и  ряда с сигналом $\tS$ и выбросом $b_1 + \iu b_2$ на позиции $k$, таким что $|b_1 + \iu b_2| = |a_1 + \iu a_2|$, совпадают для любого $l$, $1\le l \le N$.
+\end{statement}
+\begin{proof}
+	Используем представление $\tR = (a_1 + \iu a_2)\tG$.
+	По формуле \eqref{eq:main}
+	$$f^{(1)}_l = (a_1 + \iu a_2)\mathcal{H}(\tG, \tS)_l = (a_1 + \iu a_2)c_l.$$
+	Для ряда с сигналом $S$ и выбросом $a_1 + \iu a_2$ на позиции $k$ имеем
+	$$|f^{(1)}_l| = |(a_1 + \iu a_2)c_l| = |a_1 + \iu a_2|\cdot|c_l|. $$
+	Рассмотрим выброс $b_1 + \iu b_2$, такой что $|b_1 + \iu b_2| = |a_1 + \iu a_2|$.
+	Для ряда с сигналом $\tS$ и выбросом $b_1 + \iu b_2$ на позиции $k$ получаем
+	$$|f^{(1)}_l| = |(b_1 + \iu b_2)c_l| = |b_1 + \iu b_2|\cdot|c_l| = |a_1 + \iu a_2|\cdot|c_l|. $$
+\end{proof}
+\begin{remark} \label{rm:outl_R}
+	При достаточно небольшом выбросе ряд $\tR$ удовлетворяет \eqref{eq:main_cond} и $|f_l^{(1)}|$ является первым порядком ошибки восстановления, согласно замечанию \ref{rm:th_R}.
+\end{remark}
+
+Данное утверждение объясняет, почему в численных экспериментах раздела \ref{sec:comp} сохраняется ошибка CSSA при изменении выброса.
+
+\subsection{Достаточно малое возмущение}
+
+Рассмотрим подробнее выполнение условия \eqref{eq:main_cond} для конкретных сигналов и видов возмущения.
+
+Будем рассматривать сигналы вида
+\begin{equation} \label{eq:signal_harm}
+	s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2),
+\end{equation}
+где $0 \leq \omega < 0.5$ и $0\le\phi_i < 2\pi$.
+
+\subsubsection{Возмущение в виде выброса}
+
+\begin{statement} \label{st:cond_compl_outlier}
+	Для сигналов вида \eqref{eq:signal_harm} и возмущением в виде выброса $a = a_1 + \iu a_2$ на позиции $k$ $\exists N_0 : \forall N > N_0$ выполнено \eqref{eq:main_cond}.
+\end{statement}
+\begin{proof}
+	Не умаляя общности будем считать, что $k \leq L \leq K$.
+Из вида траекторной матрицы выброса и из соотношения норм сразу следует, что
+	$$\|\mathbf{E}(\delta)\| \leq \|\mathbf{E}(\delta)\|_\mathrm{F} = |\delta|\cdot|a|\sqrt{k}.$$
+	По утверждению~\ref{st:singular_values}, $\mu_{\min} / 2 = c\cdot LK$, где $c = const$.
+Так как	
+	$$\lim_{N \rightarrow \infty} \frac{|\delta|\cdot|a| \sqrt{k}}{c\cdot LK} = 0,$$
+то найдётся такое $N_0$, что $\forall N > N_0$ выполнено \eqref{eq:main_cond}.
+\end{proof}
+
+Из доказательства видно, что при конкретных $L$ и $K$, и конкретном сигнале, можно подобрать максимальное значение выброса $a$ для выполнения \eqref{eq:main_cond}, что проясняет, какие ограничения накладываются на выброс в замечании \ref{rm:outl_R}.
+
+\subsubsection{Случайное возмущение}
+
+\begin{statement} \label{st:cond_compl_noise}
+	Для сигналов вида \eqref{eq:signal_harm} и возмущения в виде случайного стационарного процесса $\xi_l$, т.ч. $\mathbb{E}(\xi_l) = 0$ и $\mathbb{D}(\xi_l) < \infty$, выполняется
+	$$P(\|\mathbf{E}(\delta)\| < \mu_{\min} / 2) \xrightarrow[N \rightarrow \infty]{} 1,$$
+	при $L = \alpha N$ $(0 < \alpha < 1)$ или $L = L_0 = const$.
+\end{statement}
+\begin{proof}
+	Из утверждения \ref{st:singular_values} известно, что $\mu_{\min} / 2 = c\cdot LK$, где $c = const$. Таким образом,
+	$$\mu_{\min} / 2 =
+	\begin{cases}
+		\mathcal{O}(N^{2}), & \text{$L = \alpha N$ $(0 < \alpha < 1)$}\\
+		\mathcal{O}(N), & \text{$L = L_0 = const$}\\
+	\end{cases}.
+	$$
+	По лемме 3.2 из \cite{Nekrutkin}
+	$$\lambda_{\max} =
+	\begin{cases}
+		\mathcal{O}(N \log N), & \text{$L \xrightarrow[N \rightarrow \infty]{} \infty$}\\
+		\mathcal{O}(N), & \text{$L = L_0 = const$}\\
+	\end{cases} \text{п.н.},
+	$$
+	где $\sqrt{\lambda_{\max}}$~--- максимальное сингулярное число матрицы $\mathbf{E}$.
+	Соответственно,
+	$$\|\mathbf{E}(\delta)\| = |\delta|\sqrt{\lambda_{\max}} =
+	\begin{cases}
+		\mathcal{O}(\sqrt{N \log N}), & \text{$L \xrightarrow[N \rightarrow \infty]{} \infty$}\\
+		\mathcal{O}(N^{1/2}), & \text{$L = L_0 = const$}\\
+	\end{cases} \text{п.н.}.
+	$$
+	Таким образом,
+	$$\lim_{N \rightarrow \infty} \frac{\|\mathbf{E}(\delta)\|}{\mu_{\min} / 2} = 0.$$
+\end{proof}
+
+Можно отметить, что для рядов с $A \approx B$ или $|\phi_1 - \phi_2| \approx \pi / 2\,(\mmod \pi)$ будет $\lambda_{\min} \approx 0$, в связи с чем выполнение условия \eqref{eq:main_cond} может оказаться проблематичным.
+Этот же плохой случай соответствует тому, что часть сигнала может смешаться с шумом.
+То есть, если сигнал близок к комплексной экспоненте, но не равен ей, лучше использовать SSA отдельно для вещественной и мнимой частей, чем CSSA.
+
+
+%Как отмечалось в замечании \ref{rm:probl_rand}, для случая шума точное выполнение \eqref{eq:main_cond} невозможно, однако, рассматривая конкретный сдвиг, можно подобрать такую $\mathbb{D}(\xi)$, что $P(\|\mathbf{E}(\delta)\| < \mu_{\min} / 2) \approx 1$.
+
+%\subsection{Частный случай}
+%Рассматриваем ряд с $s_n = c_1 + ic_2$ и матрицу шума $\mathbf{E}$ с дисперсиями вещественной и мнимой частей $\sigma_1$ и $\sigma_2$.\\
+%Сингулярные векторы такого ряда являются нормированными векторами с одинаковыми компонентами, они также сингулярные для вещественной и мнимой части. Тогда выполняются условия теоремы \ref{th:sum} и
+%
+%$$f^{(1)} = f^{(1)*}_{\Re(S)} + if^{(1)*}_{\Im(S)}.$$
+%
+%В данном случае $\Re(S)$ и $\Im(S)$ являются вещественными константами.
+%
+%В работе \cite{Vlas2008} была получена аналитическая формула для дисперсии каждого элемента вещественных констант, в нашем случае $f^{(1)*}_{\Re}$ и $f^{(1)*}_{\Im}$.
+%
+%Обозначим $L = \alpha N$, $\alpha \leq \frac{1}{2}$, $\lambda = \lim_{N\to\infty} 2 l / N$, воспользовавшись утверждением \ref{st:dispsum}, получаем
+%
+%$$
+%\mathbb{D} f^{(1)}_l = \mathbb{D} f^{(1)*}_{\Re, l} + \mathbb{D} f^{(1)*}_{\Im, l} \sim \frac{\sigma^2_1 + \sigma^2_2}{N}
+%\begin{cases}
+%	D_1(\alpha, \lambda), &\text{$0 \leq \lambda \leq 2 (1 - 2\alpha)$}\\
+%	D_2(\alpha, \lambda), &\text{$2 (1 - 2\alpha) < \lambda < 2\alpha$}\\
+%	D_3(\alpha, \lambda), &\text{$2\alpha \leq \lambda \leq 1$}
+%\end{cases},
+%$$
+%где
+%\begin{gather*}
+%	D_1(\alpha, \lambda) = \frac{1}{12 \alpha^2(1 - \alpha)^2} (\lambda^2(\alpha + 1) - 2\lambda\alpha(1 + \alpha)^2 + 4 \alpha(-3\alpha + 3 + 2\alpha^2))\\
+%	D_3(\alpha, \lambda) = \frac{1}{6 \alpha^2\lambda^2 (\alpha - 1)} (\lambda^4 + 2\lambda^3(3\alpha -2 -3\alpha^2) + \\
+%	+ 2\lambda^2(3 - 9\alpha + 12\alpha^2 - 4\alpha^3) + 4\lambda(4 \alpha^4 - 4\alpha^3 - 3\alpha^2 + 4\alpha - 1) +\\
+%	+ 8\alpha - 56 \alpha^2 + 144\alpha^3 - 160\alpha^4 + 64\alpha^5\\
+%	D_3(\alpha, \lambda) = \frac{2}{3\alpha}.\\
+%\end{gather*}
+%
+%Формулы выписаны только до середины ряда из симметричности дисперсии первого порядка ошибки относительно середины ряда.
+
+\subsection{Случай двух зашумленных синусоид}
+Пусть сигнал $\tS = (s_1, \ldots, s_N)$ имеет вид
+\begin{equation}
+	\label{eq:general_ts}
+	s_l = A\cos(2 \pi\omega l + \phi_1) + \iu B\cos(2 \pi\omega l + \phi_2),
+\end{equation}
+где $0<\omega < 0.5$ и $0\le\phi_i < 2\pi$.
+Заметим, что случай $|\phi_1-\phi_2| = \pi/2\,(\mmod \pi)$ и $A=B$ соответствует комплексной экспоненте.
+
+Пусть возмущение $\tR$~--- случайный стационарный процесс с нулевым математическим ожиданием и достаточно малой дисперсией.
+
+\begin{corollary}[из теоремы {\ref{th:sum}}] \label{cor:harm}
+	Для комплексного ряда вида \eqref{eq:general_ts}, кроме случая $|\phi_1-\phi_2| = \pi/2\,(\mmod \pi)$ и $A=B$,  выполняется равенство \eqref{eq:dispsum}.
+\end{corollary}
+Выполнение условий теоремы {\ref{th:sum}} (совпадение столбцовых и строковых траекторных пространств сигналов) уже было показано (см. утверждение \ref{st:L-rk}).
+
+\begin{remark}
+	Численные эксперименты, проведённые в \cite{Golyandina.etal2013}, показывают, что для сигнала вида \eqref{eq:general_ts}, не являющегося комплексной экспонентой, суммарная MSE CSSA-оценки сигнала равна сумме суммарных MSE SSA-оценок сигнала его вещественной и мнимой частей. Следствие \ref{cor:harm} является теоретическим объяснением данного результата.
+\end{remark}
+
+Наиболее распространённым видом сигналов в случае комплексных временных рядов, встречающихся на практике, является комплексная экспонента. Однако, по утверждению \ref{st:L-rk} условия теоремы \ref{th:sum} для такого сигнала не выполняются. А, соответственно, и формула \eqref{eq:dispsum} не применима.
+
+\begin{prop*}
+	Для случая комплексной экспоненты, с возмущением $\tR$ выполняется
+	\begin{equation} \label{eq:expdisp}
+		\mathbb{D}(f^{(1)}_l) \stackrel{?}{=} \frac{1}{2}[\mathbb{D}(f^{(1)}_{\Re, l}) + \mathbb{D}(f^{(1)}_{\Im, l})].
+	\end{equation}
+\end{prop*}
+
+Формула \eqref{eq:expdisp} была проверена числено. Приведём пример подобной проверки, рассмотрим сигнал
+$$s_l = e^{\iu 2 \pi l / 10},$$
+параметры $\sigma^2 = 0.01$, $N = 5$, $L = 3$.
+
+Результаты представлены в таблице~\ref{tab:pi_div_2}.
+
+\begin{table}[H]
+	\begin{center}
+		\caption{Оценки дисперсий при $10^3$ повторах.}
+		\label{tab:pi_div_2}
+		\begin{tabular}{|c|c|c|c|c|c|}
+			\hline
+			$l$	& 1 & 2 & 3 & 4 & 5\\
+			\hline
+			$\hat{\mathbb{D}}(f^{(1)}_l)$ & 0.013  & 0.008  & 0.005 & 0.008 & 0.014\\
+			\hline
+			$\hat{\mathbb{D}}(f^{(1)}_{\Re, l})$ & 0.010 & 0.008 & 0.006 & 0.008 & 0.010\\
+			\hline
+			$\hat{\mathbb{D}}(f^{(1)}_{\Im, l})$ & 0.010  & 0.007  & 0.006 & 0.008 & 0.010\\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+Из таблицы можно заметить приближённое численное выполнение \eqref{eq:expdisp}, за исключением крайних точек. Это объясняется малой длиной ряда, ввиду медленной сходимости по длине ряда на краях.
+
+\subsection{Случай константных сигналов с выбросом}
+Рассматриваем сигнал $\tS = (c_1 + \iu c_2, \ldots, c_1 + \iu c_2)$, возмущённый выбросом $a_1 + \iu a_2$ на позиции $k$, т.е. ряд $\tR$ состоит из нулей кроме значения $a_1 + \iu a_2$ на $k$-м месте. Исходя из теоремы \ref{th:sum}, достаточно уметь вычислять первый порядок ошибки восстановления сигнала $\tS = (c, \ldots, c)$, возмущённого выбросом $a$ на позиции $k$.
+
+В работе \cite{Nekr2008} был получен частный случай формулы \eqref{eq:main} для вещественных сигналов единичного ранга:
+\begin{equation} \label{eq:real_rk1}
+\mathbf{H}^{(1)}(\tR, \tS) = -U^{\mathrm{T}} \mathbf{E} V U V^{\mathrm{T}} + U U^{\mathrm{T}} \mathbf{E} + \mathbf{E} V V^{\mathrm{T}} = -\mathbf{I}_1 + \mathbf{I}_2 + \mathbf{I}_3,
+\end{equation}
+где $U$, $V$~--- сингулярные векторы матрицы $\mathbf{H}$.
+
+Матрица возмущения для выброса $a$ имеет вид
+$$\mathbf{E}^{\mathrm{T}} = \begin{pmatrix}
+	0 & 0 & 0 & \ldots &  a  & \ldots & 0\\
+	 \vdots &\vdots & \vdots & &  \vdots & & \vdots\\
+	0 & 0 & a & \ldots & 0 & \ldots & 0\\
+	0 & a & 0 & \ldots & 0 & \ldots & 0\\
+	a & 0 & 0 & \ldots & 0 & \ldots & 0\\
+	\vdots &\vdots & \vdots & & \vdots & & \vdots\\
+	0 & 0 & 0 & \ldots & 0 & \ldots & 0\\
+\end{pmatrix} \in \mathbb{R}^{K \times L}.$$
+
+Для сигнала $\tS = (c, \ldots, c)$ сингулярные вектора имеют вид
+$U = \{1/\sqrt{L}\}^{L}_{i = 1},\, V = \{1/\sqrt{K}\}^{K}_{i = 1}$, $K = N - L + 1$,
+Не умаляя общности, будем считать, что $L \leq K$.
+
+\subsubsection{Случай $1 \leq k < L$}
+
+Рассмотрим члены суммы из формулы \eqref{eq:real_rk1} покомпонентно.
+
+Найдём $\mathbf{I}_1$:
+$$U^{\mathrm{T}} \mathbf{E} = \begin{pmatrix}
+	 a/\sqrt{L} & \ldots & a/\sqrt{L} & 0 & \ldots & 0\\
+\end{pmatrix},$$
+
+$$U^{\mathrm{T}} \mathbf{E} V = k a / \sqrt{LK},$$
+
+$$U V^{\mathrm{T}} = \begin{pmatrix}
+	1/\sqrt{LK} & \ldots & 1/\sqrt{LK}\\
+	\vdots & & \vdots\\
+	1/\sqrt{LK} &   \ldots &  1/\sqrt{LK}
+\end{pmatrix}\in \mathbb{R}^{L \times K}
+,$$
+
+$$\mathbf{I}_1 = U^{\mathrm{T}} \mathbf{E} V U V^{\mathrm{T}} = \begin{pmatrix}
+	k a/ LK & \ldots &  k a/ LK\\
+	\vdots & & \vdots\\
+	k a/ LK &   \ldots &  k a/ LK
+\end{pmatrix}.$$
+
+Найдём $\mathbf{I}_2$:
+$$U U^{\mathrm{T}} = \begin{pmatrix}
+	1/L & \ldots & 1/L\\
+	
+	\vdots & & \vdots\\
+	1/L &   \ldots &  1/L
+\end{pmatrix}\in \mathbb{R}^{L \times L},$$
+
+$$\mathbf{I}_2 = U U^{\mathrm{T}} \mathbf{E} = \begin{pmatrix}
+	a/L & \ldots & a/L & \ldots & 0\\
+	\vdots & & \vdots & & \vdots\\
+	a/L & \ldots & a/L & \ldots & 0
+\end{pmatrix}.$$
+
+Найдём $\mathbf{I}_3$:
+$$V V^{\mathrm{T}} = \begin{pmatrix}
+	1/K & \ldots & 1/K\\
+	\vdots & & \vdots\\
+	1/K &   \ldots &  1/K
+\end{pmatrix}\in \mathbb{R}^{K \times K},$$
+
+$$\mathbf{I}_3 = \mathbf{E} V V^{\mathrm{T}} = \begin{pmatrix}
+	a/K &  \ldots & a/K\\
+	\vdots & & \vdots\\
+	a/K &  \ldots & a/K\\
+	\vdots & & \vdots\\
+	0 & \ldots & 0
+\end{pmatrix}.$$
+
+Используя
+$$\mathbf{H}^{(1)}(\tR, \tS) = -\mathbf{I}_1 + \mathbf{I}_2 + \mathbf{I}_3,$$
+получаем
+$$\mathbf{H}^{(1)}(\tR, \tS) = \frac{a}{LK}\begin{pmatrix}
+	(L + K - k) & \ldots & (L + K - k) & \ldots & (L - k)\\
+	\vdots & & \vdots & & \vdots \\
+	(L + K - k) & \ldots & (L + K - k) & \ldots & (L - k) & \\
+	\vdots & & \vdots & & \vdots \\
+	(K - k) & \ldots & (K - k) & \ldots & -k \\
+\end{pmatrix}.$$
+
+Теперь приведём выражение первого порядка ошибки через $\mathbf{H}^{(1)}(\tR, \tS)$
+$$\tF^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)}(\tR, \tS)).$$
+Получаем формулы для поэлементного выражения первого порядка ошибки восстановления:
+\begin{itemize}
+\item
+$k \leq L/2$
+
+$k \leq K - L$
+
+$$f^{(1)}_l = \frac{a}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l \leq L$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L < l < L + k$}\\
+	0, &\text{$L + k \leq l \leq K$}\\
+	\frac{1}{N - l + 1}(K - l)(L - k), &\text{$K < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N $}
+\end{cases}.
+$$
+
+\item
+$k \leq L/2$
+
+$k > K - L$
+
+$$f^{(1)}_l = \frac{a}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l \leq L$}\\
+	\frac{1}{L}K(L + k- l), &\text{$L < l < K$}\\
+	\frac{1}{N - l + 1}(2KL - l(L + K - k)), &\text{$K \leq l \leq L + k$}\\
+	\frac{1}{N - l + 1}( K - l)(L - k), &\text{$L + k < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N$}
+\end{cases}.
+$$
+
+\item
+$k > L/2$
+
+$k \leq K - L$
+
+$$f^{(1)}_l = \frac{a}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l < L$}\\
+	%\frac{1}{L}((K + l - 2k)(L - k) + (2k - l)(L + K - k)), & \text{$L\leq l \leq 2k$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L \leq l < L + k$}\\
+	0, &\text{$L + k \leq l \leq K$}\\
+	\frac{1}{N - l + 1}(L - K)(L - k), &\text{$K < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N$}
+\end{cases}.
+$$
+
+\item
+$k > \max(L / 2, K - L)$
+
+$k \leq K/2$
+
+$$f^{(1)}_l = \frac{a}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l < L$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L \leq l < K$}\\
+	\frac{1}{N - l + 1}(2KL - l(L + K - k)), &\text{$K \leq l \leq L + k$}\\
+	\frac{1}{N - l + 1}(L - K)(L - k), &\text{$L + k < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N$}
+\end{cases}.
+$$
+
+\item
+$k > K/2$
+
+
+$$f^{(1)}_l = \frac{1}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l < L$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L \leq l < K$}\\
+	\frac{1}{N - l + 1}(2KL - l(L + K - k)), &\text{$K \leq l \leq L + k$}\\
+	\frac{1}{N - l + 1}(K - l)(L - k), &\text{$L + k < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N $}
+\end{cases}.
+$$
+\end{itemize}
+
+\subsubsection{Случай $L \leq k \leq K$}
+Аналогично рассмотрим члены суммы из формулы \eqref{eq:real_rk1} покомпонентно:
+$$\mathbf{I}_1 = U^{\mathrm{T}} \mathbf{E} V U V^{\mathrm{T}} = \begin{pmatrix}
+	a/ K & \ldots &   a/ K\\
+	\vdots & & \vdots\\
+	a/ K &   \ldots &   a/ K
+\end{pmatrix},$$
+
+$$\mathbf{I}_2 = U U^{\mathrm{T}} \mathbf{E} = \begin{pmatrix}
+	0 & \ldots & a/L & \ldots & a/L & \ldots & 0\\
+	\vdots & & \vdots & & \vdots & & \vdots\\
+	0 & \ldots & a/L & \ldots & a/L & \ldots & 0
+\end{pmatrix},$$
+
+$$\mathbf{I}_3 = \mathbf{E} V V^{\mathrm{T}} = \begin{pmatrix}
+	a/K &  \ldots & a/K\\
+	\vdots & & \vdots\\
+	a/K &  \ldots & a/K\\
+\end{pmatrix}.$$
+Получаем
+$$\mathbf{H}^{(1)}(\tR, \tS) = \frac{a}{L}\begin{pmatrix}
+	0 & \ldots & 1 & \ldots & 1 & \ldots & 0\\
+	\vdots & & \vdots & & \vdots & & \vdots\\
+	0 & \ldots & 1 & \ldots & 1 & \ldots & 0
+\end{pmatrix}$$
+и
+$$f^{(1)}_l = \frac{a}{{L}}
+\begin{cases}
+	\frac{1}{\min(L, l)}(l - k + L), & \text{$k - L \leq l \leq k$}\\
+	\frac{1}{\min(L, N - l + 1)}(L + k - l), & \text{$k < l < L + k$}\\
+	0, & \text{иначе}
+\end{cases}.$$
+
+
+\subsubsection{Случай $K < k \leq N$}
+Данный случай полностью аналогичен инвертированному первому случаю, то есть строим ряд для $N - k + 1$ и разворачиваем его.
+
+\vspace{1em}
+Полученные формулы были численно проверены для общего примера с $c_1 = 2$, $c_2 = 1$, $a_1 = 8$, $a_2 = 9$, $L = 20$, $N = 50$, для всех $l$ и $k$.
+
+\begin{remark}
+	Из полученных формул видно, что при фиксированном $L$ первый порядок ошибки не стремится к $0$ с ростом $N$, тогда как численные эксперименты показывают, что полная ошибка восстановления стремится к $0$ с ростом $N$. Как показано в разделе \ref{sec:results}, это следствие того, что полная ошибка не описывается ее первым порядком. Если же $L$ и $K$ пропорциональны $N$, то первый порядок ошибки стремится к нулю.
+\end{remark}
+
+\section{Сравнение трудоёмкостей реализаций SSA и CSSA}
+При анализе рядов большой длины остро стоит вопрос времени работы метода. Исходя из этого, осмысленно сравнить трудоёмкость методов между собой. Мы будем сравнивать трудоёмкости конкретных реализаций SSA и CSSA, представленных в пакете \cite{Korobeynikov.etal2014}.
+
+Мы будем сравнивать CSSA, применённый к комплексному ряду, с SSA, применённым к вещественному ряду. Трудоёмкость SSA, применённого к комплексному ряду, то есть отдельно к вещественной и мнимой частям, отличается в два раза, поэтому асимптотика остаётся той же.
+
+В качестве одного из параметров реализаций выступает выбор метода для вычисления SVD. Оптимальный метод для SSA, представленный в пакете, носит название <<propack>>. В \cite{Golyandina.etal2018} было показано, что трудоёмкость такого подхода составляет $\mathcal{O}(k N \log(N) + k^2 N)$, где $N$~--- длина ряда, $k$~--- число вычисляемых компонент на этапе SVD, обоснование такой трудоёмкости приведено в \cite{Korobeynikov2010}.
+
+Для CSSA оптимальная реализация использует метод <<primme>>. Одним из ключевых решений, позволяющим уменьшить трудоёмкость работы метода, является быстрое умножение вектора на ганкелеву матрицу. Произведение вычисляется при помощи DTF (дискретного преобразования Фурье), которое, в свою очередь, вычисляется через FFT (быстрое преобразование Фурье), подробнее данная идея описана в \cite{Korobeynikov2010}. Отличие реализации CSSA через <<primme>> от реализации SSA через <<propack>> заключается в способе реализации умножения через FFT, но в обоих случаях асимптотика трудоемкости быстрого умножения равна $\mathcal{O}(N \log N)$. Исходя из этого, трудоёмкость CSSA также равна $\mathcal{O}(k N \log(N) + k^2 N)$.
+
+\section{Численное сравнение первого порядка ошибки и полной ошибки оценивания сигнала}
+\label{sec:results}
+
+Все численные результаты были получены при помощи пакета~\cite{Korobeynikov.etal2014}.
+
+\subsection{Случай зашумленных гармоник}
+Рассмотрим сигнал
+$$s_l = \cos(2 \pi l / 10) + \iu\cos(2 \pi l / 10 + \phi),$$
+и параметры $\sigma^2 = 0.01$, $N = 9$, $L = 5$.
+
+Результаты для одной из реализаций шума представлены на рис.~\ref{fig:harm_noise_pi_4} и~\ref{fig:harm_noise_pi_2}.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.6\linewidth]{img/first_vs_full_re.pdf}
+		\caption{Зашумлённая гармоника. Вещественные части первого порядка и полной ошибок для $\phi = \pi / 4$.}
+		\label{fig:harm_noise_pi_4}
+	\end{center}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.6\linewidth]{img/first_vs_full_re_2.pdf}
+		\caption{Зашумлённая гармоника. Вещественные части первого порядка и полной ошибок для $\phi = \pi / 2$.}
+		\label{fig:harm_noise_pi_2}
+	\end{center}
+\end{figure}
+
+
+Из графиков видно, что ошибки практически совпадают даже при маленьких $L$ и $N$.
+
+Заметим, что в данном случае дисперсии вещественной и мнимой частей возмущения совпадают, а значит и дисперсии вещественной и мнимой частей первого порядка ошибки должны совпадать, ввиду линейности вхождения $\mathbf{E}$ в \eqref{eq:main}.
+
+Показанное совпадение и теорема \ref{th:sum} объясняют, почему в разделе \ref{sec:comp} MSE CSSA было равно сумме MSE SSA для сдвига $\phi = \pi/4$ и равно полусумме MSE SSA для сдвига $\phi = \pi/2$.
+
+Посмотрим на различие первого порядка и полной ошибки в зависимости от $N$ при $L = N / 2$ для $l = 1$ и $l = L / 2$. Результаты приведены в таблице \ref{tab:harm_conv_comp}.
+
+\begin{table}[H]
+	\begin{center}
+		\caption{Зашумлённая гармоника. Различие первого порядка и полной ошибок $\phi = \pi/4$.}
+		\label{tab:harm_conv_comp}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			$N$	& 50 & 100 & 400 & 1600 \\
+			\hline
+			$l = 1$ & 0.002  & 0.001  & 0.0005 & 0.0002 \\
+			\hline
+			$l = L / 2$ & 1e-5  & 2e-4  & 1.5e-4 & 3e-5 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+Из таблицы видно, что различие между ошибками стремится к нулю, однако ошибки сильнее различаются на краях.
+
+\subsection{Случай константных сигналов с выбросом}
+
+Был рассмотрен пример с сигналом $s_l = 1 + \iu 1$ и возмущением в виде выброса $a_1 + \iu a_2 = 10 + \iu 10$ на позиции $k$.
+
+Результаты представлены в таблицах~\ref{tab:const_outl_1}--\ref{tab:const_outl_ratio}.
+
+\begin{table}[H]
+	\begin{center}
+		\caption{Константа с выбросом. Максимальное различие первого порядка и полной ошибок при $k = L - 1$.}
+		\label{tab:const_outl_1}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			$N$	& 50 & 100 & 400 & 1600 \\
+			\hline
+			$L = N / 2$ & 0.1313  & 0.0419  & 0.0033 & 0.0002 \\
+			\hline
+			$L = 20$ & 0.3074  & 0.1965  & 0.5655 & 0.6720 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\caption{Константа с выбросом. Максимальное различие первого порядка и полной ошибок при $k = N / 2$.}
+		\label{tab:const_outl_2}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			$N$	& 50 & 100 & 400 & 1600 \\
+			\hline
+			$L = N / 2$ & 7.5e-15  & 5.5e-15  & 3.9e-14 & 4.9e-14 \\
+			\hline
+			$L = 20$ & 0.5657  & 0.2828  & 0.6364 & 0.6894 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\caption{Константа с выбросом. Отношение ошибок в точке максимального различия, $L = N/2$.}
+		\label{tab:const_outl_ratio}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			$N$	& 50 & 100 & 400 & 1600 \\
+			\hline
+			$k = 1$ & 0.5  & 0.72  & 0.93 & 0.98 \\
+			\hline
+			$k = N/4$ & 0.83  & 0.92  & 0.98 & 0.99 \\
+			\hline
+			$k = N/2 - 1$ & 1.34  & 1.18  & 1.05 & 1.01 \\
+			\hline
+			$k = N/2$ & 1  & 1  & 1 & 1 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+Численные результаты показывают, что для случая зашумленных гармоник первый порядок адекватно оценивает полную ошибку восстановления сигнала в каждой точке при любых рассматриваемых параметрах сигналов, хотя оценка на краях хуже.
+Однако для случая возмущения в виде выброса это верно, только когда $L$ и $K$ пропорциональны $N$.
+
+%\section{Численное сравнение трудоёмкости}
+%
+%По теореме \ref{th:sum} нам известно, что для определённого класса рядов, с точки зрения первого порядка ошибки (а из раздела \ref{sec:results} и с точки зрения всей ошибки), SSA эквивалентно CSSA. Поэтому, в данном случае возникает вопрос, какой из методов стоит выбирать? Исходя из этого, в данном разделе мы сравним трудоёмкости методов.
+%
+%Трудоёмкость методов CSSA и SSA равна трудоёмкости сингулярного разложения (SVD). Мы проведём сравнение трудоёмкостей для пакета \cite{Korobeynikov.etal2014}.
+%
+%В данном пакете для вещественных рядов SVD вычисляется при помощи метода <<propack>>, для комплексных при помощи пакета <<primme>>. Трудоёмкость метода <<propack>> известна (\cite{Golyandina.etal2018}) и составляет $\mathcal{O}(k N \log(N) + k^2 N)$, где $k$~--- число элементарных компонент, $N$~--- длина ряда. Нас будет интересовать зависимость от $N$ при фикс. $k$, то есть $\mathcal{O}(N \log(N))$.
+%
+%Отличие метода из <<primme>> заключается в том, что сингулярные числа ищутся для четырёх вещественных матриц, $\Re(\mathbf{X})\Re(\mathbf{X})^\mathrm{T}$, $\Re(\mathbf{X})\Im(\mathbf{X})^\mathrm{T}$, $\Im(\mathbf{X})\Re(\mathbf{X})^\mathrm{T}$, $\Im(\mathbf{X})\Im(\mathbf{X})^\mathrm{T}$, вместо двух $\Re(\mathbf{X})\Re(\mathbf{X})^\mathrm{T}$ и $\Im(\mathbf{X})\Im(\mathbf{X})^\mathrm{T}$ для <<propack>>. Исходя из этого, CSSA в среднем должен работать вдвое медленнее SSA.
+%
+%Проверим это утверждение на примере. Зашумлённая гармоника
+%$$s_l = \cos(2 \pi l / 10) + \iu\cos(2 \pi l / 10 + \phi),$$
+%параметры $\sigma^2 = 0.01$, $L = N/2$.
+%
+%Результаты представлены в таблице \ref{tab:time_comp}
+%\begin{table}[H]
+%	\begin{center}
+%		\caption{Время работы при $k = 2$ и $100$ повторах.}
+%		\label{tab:time_comp}
+%		\begin{tabular}{|c|c|c|c|}
+%			\hline
+%			$N$	& 1e3 & 1e4 & 1e5\\
+%			\hline
+%			CSSA & 2.63 & 6.72 & 71.68\\
+%			\hline
+%			SSA & 1.10 & 3.98 & 38.92\\
+%			\hline
+%			CSSA / SSA & 2.39  & 1.69  & 1.84\\
+%			\hline
+%		\end{tabular}
+%	\end{center}
+%\end{table}
+%
+%Из таблицы видно, что время работы отличается приблизительно вдвое. Соответственно, пример подтверждает, что асимптотика по $N$ используемых реализаций CSSA и SSA совпадает, тогда как коэффициенты отличаются вдвое в пользу SSA. Соответственно, с точки зрения времени работы использование SSA предпочтительно, но разница не существенна.
+
+%\chapter{Ошибки восстановления для комплексной экспоненты}
+%
+%Наиболее распространенным примером сигнала временных рядов для анализа, является сумма комплексных экспонент. Однако, как замечалось ранее, комплексная экспонента, в общем случае, не удовлетворяет условию теоремы $1$, а потому полученные результаты для такого ряда неприменимы.
+%
+%В связи с этим, в данном разделе рассматриваются примеры комплексной экспоненты и на них проверяется применимость полученных результатов.
+%
+%%\section{Пример}
+%%При построении комплексных робастных методов возникает вопрос: Что считать выбросом? В данной работе выброс считается как элемент с аномально большим модулем. В связи с этим возникает другой вопрос: Не могут ли возникнуть проблемы в случае несимметричности распределения модуля выброса по вещественной и мнимой части? То есть не может ли получиться такой ситуации, что алгоритм посчитает выбросом точку, имеющую очень большое отклонение по вещественной оси, но на мнимой оси эта точка выбросом не является, что приведёт к ухудшению выделения тренда по мнимой оси.
+%%
+%%Для рассмотрения примера на тему возьмём прошлый ряд, но выбросы сосредоточим только на вещественной оси, их вещественную часть оставив прежней. Так же в данном примере будет осмыслено посчитать помимо совместных ошибок ещё и отдельно ошибки вещественной и мнимой частей.
+%%
+%%Графики выделения тренда представлены на Рис. \ref{analys_Re_3}, \ref{analys_Im_3}. Результаты RMSE для примера представлены в таблице \ref{tab5}. Так же посчитаем RMSE отдельно для вещественной и мнимой части для прошлого примера, для которого выбросы по модулю сделаем равными текущим, результат в таблице \ref{tab6}.
+%%%Значения p-value представлены в таблице \ref{tab: pval5}.
+%%
+%%\begin{figure}[H]
+%%	\begin{center}
+%%		\includegraphics[width=0.67\linewidth]{analys_3_Re.png}
+%%		\caption{Вещественная часть выделения тренда несколькими способами.}
+%%		\label{analys_Re_3}
+%%	\end{center}
+%%\end{figure}
+%%
+%%\begin{figure}[H]
+%%	\begin{center}
+%%		\includegraphics[width=0.67\linewidth]{analys_3_Im.png}
+%%		\caption{Мнимая часть выделения тренда несколькими способами.}
+%%		\label{analys_Im_3}
+%%	\end{center}
+%%\end{figure}
+%%
+%%\begin{table}[H]
+%%	\begin{center}
+%%		\caption{Оценки RMSE различных методов для $M = 30$ реализаций ряда с вещественными выбросами.}
+%%		\label{tab5}
+%%		\begin{tabular}{|c|c|c|c|c|c|c|}
+%%			\hline
+%%			Method 	& CSSA & L1 & weighted L2 & loess L2 & median L2 & lowess L2 \\
+%%			\hline
+%%			RMSE (совм.) & 3.53  & 1.55  & 1.72 & $\mathbf{1.45}$ & 1.48 & 1.46\\
+%%			\hline
+%%			RMSE (Re) & 2.63  & 1.06  & 1.23 & $\mathbf{1.05}$ & 1.07 & 1.06\\
+%%			\hline
+%%			RMSE (Im) & 2.33  & 1.14  & 1.2 & $\mathbf{0.98}$ & 1.02 & 1\\
+%%			\hline
+%%		\end{tabular}
+%%	\end{center}
+%%\end{table}
+%%
+%%\begin{table}[H]
+%%	\begin{center}
+%%		\caption{Оценки RMSE различных методов для $M = 30$ реализаций прошлого примера.}
+%%		\label{tab6}
+%%		\begin{tabular}{|c|c|c|c|c|c|c|}
+%%			\hline
+%%			Method 	& CSSA & L1 & weighted L2 & loess L2 & median L2 & lowess L2 \\
+%%			\hline
+%%			RMSE (совм.) & 3.53  & 1.29  & 1.34 & $\mathbf{0.97}$ & 1 & 0.98\\
+%%			\hline
+%%			RMSE (Re) & 2.5  & 0.85  & 0.95 & $\mathbf{0.7}$ & 0.71 & $\mathbf{0.7}$\\
+%%			\hline
+%%			RMSE (Im) & 2.5  & 0.97  & 0.95 & $\mathbf{0.69}$ & 0.71 & $\mathbf{0.7}$\\
+%%			\hline
+%%		\end{tabular}
+%%	\end{center}
+%%\end{table}
+%%
+%%%\begin{table}[H]
+%%%	\caption{p-value для сравнения различных методов с наилучшим с выбросами.}
+%%%	\label{tab: pval5}
+%%%	\begin{center}
+%%%		\begin{tabular}{|c|c|c|c|c|c|}
+%%%			\hline
+%%%			Method & CSSA	& L1 & weighted L2 & median L2 & lowess L2  \\
+%%%			\hline
+%%%			loess L2 (совм.) & 1.1e-08  & \textbf{0.166} &  0.028  & \textbf{0.46} & \textbf{0.756}  \\
+%%%			\hline
+%%%			loess L2 (Re) & 1.4e-08  & \textbf{0.69} &  \textbf{0.073}  & \textbf{0.54} & \textbf{0.8}  \\
+%%%			\hline
+%%%			loess L2 (Im) & 3e-08  & 0.0014 &  0.001  & \textbf{0.19} & \textbf{0.26}  \\
+%%%			\hline
+%%%		\end{tabular} \\
+%%%	\end{center}
+%%%\end{table}
+%%
+%%Получаем, что общая ошибка в случае, когда выбросы равномерно распределены по вещественной и по мнимой оси ниже, но распределение ошибок по вещественной и мнимой осям сохраняется. Что свидетельствует в пользу нашего предположения и кажется разумным для данных методов, как для методов, приближающих весь комплексный ряд, а не вещественную и мнимую части по отдельности.
+%
+%
+%\section{Вещественные выбросы}
+%
+%Рассмотрим случай вещественных выбросов для комплексной экспоненты. Попробуем проверить результат теоремы \ref{th:sum} для этого случая на примере.
+%
+%Будем рассматривать экспоненту без шума, длины $N = 240$
+%$$x_n = e^{4n/N} e^{2n\pi/30i}.$$
+%с $5\%$ выбросов вида $5 \Re(x_i)$.
+%
+%Графики ряда представлены на Рис. \ref{ser_Re_5}, \ref{ser_Im_5}.
+%
+%\begin{figure}[H]
+%	\begin{center}
+%		\includegraphics[width=0.67\linewidth]{Re_outl_Re.png}
+%		\caption{График вещественной части ряда.}
+%		\label{ser_Re_5}
+%	\end{center}
+%\end{figure}
+%
+%\begin{figure}[H]
+%	\begin{center}
+%		\includegraphics[width=0.67\linewidth]{Re_outl_Im.png}
+%		\caption{График мнимой части ряда.}
+%		\label{ser_Im_5}
+%	\end{center}
+%\end{figure}
+%
+%
+%%\subsection{Модификация функции весов}
+%%
+%%У этого ряда все выбросы находятся в вещественной части. Разумно воспользоваться этой информацией и при идентификации выбросов смотреть лишь на вещественную часть, чтобы уменьшить ошибку.
+%%
+%%В выбранной нами в данной работе функции весов выброс идентифицируется по модулю числа. Первое, что приходит на ум~--- модифицировать функцию весов, чтобы она реагировала исключительно на вещественную часть. Тогда получаем
+%%$$w(x) =
+%%\begin{cases}
+%%	(1 - (\frac{|\Re(x)|}{\alpha})^2)^2 &|\Re(x)| \leq \alpha\\
+%%	0 &|\Re(x)| > \alpha\\
+%%\end{cases}.$$
+%%
+%%Проведём сравнение ошибок двух алгоритмов, с $|x|$ и $|\Re(x)|$ для предложенного примера. Результаты в таблице \ref{tab7}, ошибки приведены отдельно для всего ряда, вещественной и мнимой частей.
+%%
+%%\begin{table}[H]
+%%	\begin{center}
+%%		\caption{сравнения RMSE}
+%%		\label{tab7}
+%%		\begin{tabular}{|c|c|c|c|}
+%%			\hline
+%%			Ряд & w-L2 abs & w-L2 Re & p-value \\
+%%			\hline
+%%			complex & 0.053  & 0.053 & 0.62 \\
+%%			\hline
+%%			Re & 0.037  & 0.037 & 0.56 \\
+%%			\hline
+%%			Im & 0.38  & 0.038 & 0.69 \\
+%%			\hline
+%%		\end{tabular}
+%%	\end{center}
+%%\end{table}
+%%
+%%Получили, что модификация не дала прироста в ошибке даже по вещественной оси.
+%
+%Для данного ряда рассмотрим $\Re(f^{(1)})$ и $\Im(f^{(1)})$, проверим, ведут ли они себя так же, как $f^{(1)*}_{\Re}$ и $f^{(1)*}_{\Im}$.
+%
+%Графики $\Re(f^{(1)})$ и $\Im(f^{(1)})$ приведены на Рис. \ref{f1}.
+%
+%\begin{figure}[H]
+%	\begin{center}
+%		\includegraphics[width=0.67\linewidth]{f1.png}
+%		\caption{Графики $\Re(f^{(1)})$ и $\Im(f^{(1)})$.}
+%		\label{f1}
+%	\end{center}
+%\end{figure}
+%
+%По представленным графикам видно, что вещественная и мнимая части ошибки восстановления ведут себя одинаково, тогда как $f^{(1)*}_{\Im} = 0$, а $f^{(1)*}_{\Re} \neq 0$ из-за того, что все выбросы в вещественной части. Получаем, что результат теоремы \ref{th:sum} не выполняется для общего случая комплексной экспоненты.
+%
+%
+%%\section{Инвариантное по RMSE преобразование}
+%%
+%%В разделе \ref{ss:RMSEinv} был найден инвариант по RMSE для рядов, удовлетворяющих теореме \ref{th:sum}.
+%%
+%%Проверим, является ли преобразование, сохраняющее модули, инвариантом по RMSE для случая комплексной экспоненты
+%%
+%%Рассмотрим ряд с растущей амплитудой и шумом непостоянной дисперсии.
+%%Длину ряда возьмем $N = 240$
+%%$$x_n = e^{4n/N} e^{2n\pi/30i} + \frac{1}{2}e^{4n/N} \varepsilon_n, ~ \varepsilon_n \sim CN(0,1).$$
+%%и $5\%$ выбросов с величиной выброса $4x_i$.
+%%
+%%Графики ряда представлены на Рис. \ref{ser_Re_3}, \ref{ser_Im_3}.
+%%
+%%\begin{figure}[H]
+%%	\begin{center}
+%%		\includegraphics[width=0.67\linewidth]{ser_3_Re.png}
+%%		\caption{График вещественной части ряда.}
+%%		\label{ser_Re_3}
+%%	\end{center}
+%%\end{figure}
+%%
+%%\begin{figure}[H]
+%%	\begin{center}
+%%		\includegraphics[width=0.67\linewidth]{ser_3_Im.png}
+%%		\caption{График мнимой части ряда.}
+%%		\label{ser_Im_3}
+%%	\end{center}
+%%\end{figure}
+%%
+%%Теперь поймем, какое преобразование сохраняет модуль, найдем вещественное $c_i$ такое, что\\
+%%$|x_i + c_i| = |x_i + 4 x_i|$.
+%%
+%%Пусть $\Re(x_i) = a_i$, $\Im(x_i) = b_i$, тогда
+%%$$\sqrt{(c_i + a_i)^2 + b_i^2} = \sqrt{25 a_i^2 + 25 b_i^2}$$
+%%$$(c_i + a_i)^2 = 25 a_i^2 + 24 b_i^2$$
+%%$$|c_i| = \sqrt{25 a_i^2 + 24 b_i^2} - a_i$$
+%%
+%%Не умаляя общности, можно рассмотреть знак $c_i$, совпадающим с $x_i$.
+%%Тогда рассмотрим тот же ряд с $5\%$ выбросов, но с величиной выброса $\sign(x_i)(\sqrt{25 \Re(x_i)^2 + 24 \Im(x_i)^2} - \Re(x_i))$.
+%%
+%%Графики ряда представлены на Рис. \ref{ser_Re_4}, \ref{ser_Im_4}.
+%%
+%%\begin{figure}[H]
+%%	\begin{center}
+%%		\includegraphics[width=0.67\linewidth]{ser_4_Re.png}
+%%		\caption{График вещественной части ряда.}
+%%		\label{ser_Re_4}
+%%	\end{center}
+%%\end{figure}
+%%
+%%\begin{figure}[H]
+%%	\begin{center}
+%%		\includegraphics[width=0.67\linewidth]{ser_4_Im.png}
+%%		\caption{График мнимой части ряда.}
+%%		\label{ser_Im_4}
+%%	\end{center}
+%%\end{figure}
+%%
+%%
+%%Результаты сравнений RMSE на двух рядах приведены в таблице \ref{pvaltab}.
+%%
+%%\begin{table}[H]
+%%	\begin{center}
+%%		\caption{p-value сравнения RMSE}
+%%		\label{pvaltab}
+%%		\begin{tabular}{|c|c|c|c|c|}
+%%			\hline
+%%			Ряд  & CSSA & L1 & w-L2 & mod. w-L2 \\
+%%			\hline
+%%			complex & 0.0045 & 0.51  & 0.65 & 0.56 \\
+%%			\hline
+%%			Re & 0.06 & 0.43 & 0.64 & 0.46 \\
+%%			\hline
+%%			Im & 0.0002 &0.57  & 0.66 & 0.72 \\
+%%			\hline
+%%		\end{tabular}
+%%	\end{center}
+%%\end{table}
+%%
+%%Как мы видим, гипотеза о различии RMSE на двух рядах значима для CSSA, особенно для мнимой части, то есть данное преобразование не является инвариантом для CSSA в случае комплексной экспоненты.
+%%
+%%Для остальных методов гипотеза незначима. То есть преобразование, сохраняющее модули, является инвариантом. Можно предположить, что это связано с тем, что в каждом из них выброс идентифицируется по своему модулю.
+
+
+\conclusion
+
+В работе удалось получить теоретические результаты о сравнении первого порядка ошибки CSSA и SSA, применимые, в основном, к рядам с совпадающими траекторным пространствами. Основной из полученных результатов, сформулированный в виде теоремы, гласит, что для таких рядов первый порядок ошибки восстановления для CSSA выражается как сумма первых порядков для SSA, применённого отдельно к вещественной и мнимой частям ряда.
+
+Был рассмотрен случай двух зашумленных гармоник с одинаковой частотой. Для случая, когда составленный из них комплексный ряд не является комплексной экспонентой, удалось подвести теоретическую базу под имеющиеся ранее численные результаты (\cite{Golyandina.etal2013}) по сравнению CSSA и SSA. Для случая комплексной экспоненты был получен более общий, нежели имеющиеся ранее, численный результат.
+Результаты показывают, что только в случае комплексной экспоненты применение CSSA имеет смысл с точки зрения уменьшения ошибки восстановления сигнала.
+
+Для константного ряда с выбросами был получен явный вид первого порядка ошибок оценки сигнала в каждой точке.
+
+Для обоих случаев было численно исследовано соотношение между первым порядком ошибки и полной ошибкой.
+В случае случайного возмущения оказалось, что первый порядок ошибки практически совпадает с полной ошибкой. Однако в случае неслучайного возмущения выбросом это не так и требуются дополнительные условия на пропорциональность длины окна $L$ длине ряда $N$.
+
+Одним из дополнительных результатов работы на основе теоретических и численных результатов является выработка рекомендации для случая синусоидальных вещественной и мнимой частей. А именно, метод CSSA имеет смысл использовать только для случая, когда ряд является комплексной экспонентой. Рекомендация основана на том, что, как показано, порядки (по длине ряда) трудоёмкостей эффективных реализаций алгоритмов CSSA и SSA совпадают, точность CSSA для комплексной гармоники в два раза меньше точности двукратного применения SSA. Для случая не комплексной экспоненты, хотя ошибки и совпадают, в CSSA возникает проблема смешивания сигнала с шумом, чего нет при применении SSA отдельно к вещественной и мнимой частям.
+
+В дальнейшем планируется теоретически подтвердить численный результат для случая комплексной экспоненты, подробнее изучить условие на соотношение сигнала и возмущения, обобщить полученные результаты для полной ошибки восстановления.
+
+%\nocite{*}
+\bibliographystyle{ugost2008}
+\bibliography{literature}
+
+\end{document}
