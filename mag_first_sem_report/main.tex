@@ -1,0 +1,777 @@
+\documentclass[specialist,
+               substylefile = spbu.rtx,
+               subf,href,colorlinks=true, 12pt]{disser}
+\usepackage[breakable]{tcolorbox}
+\usepackage[a4paper,
+mag=1000, includefoot,
+left=3cm, right=1.5cm, top=2cm, bottom=2cm, headsep=1cm, footskip=1cm]{geometry}
+\ifpdf\usepackage{epstopdf}\fi
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{graphicx}
+\usepackage[english,russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{float}
+\usepackage{amsthm}
+%\usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{physics}
+\usepackage{appendix}
+\input{letters_series_mathbb}
+\input{newcommands}
+\newtheorem{statement}{Утверждение}
+\newtheorem{theorem}{Теорема}
+\newtheorem*{statement*}{Утверждение}
+\newtheorem*{notice*}{Замечание}
+\newtheorem{remark}{Замечание}
+\newtheorem{lemma}{Лемма}
+\newtheorem{corollary}{Следствие}
+%\newtheorem{def}{Определение}
+\newtheorem*{def*}{Определение}
+\newtheorem*{prop*}{Предположение}
+
+
+\DeclareMathOperator{\rk}{rk}
+\DeclareMathOperator{\med}{med}
+%\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\sign}{sign}
+%\DeclareMathOperator{\tr}{tr}
+%\newcommand{\tX}[1]{\mathsf{#1}}
+%\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator*{\argminB}{argmin}
+
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+
+\DeclareMathOperator*{\argmin}{argmin}
+
+\SetKwInput{KwData}{Исходные параметры}
+\SetKwInput{KwResult}{Результат}
+\SetKwInput{KwIn}{Входные данные}
+\SetKwInput{KwOut}{Выходные данные}
+\SetKwIF{If}{ElseIf}{Else}{если}{тогда}{иначе если}{иначе}{конец условия}
+\SetKwFor{While}{до тех пор, пока}{выполнять}{конец цикла}
+\SetKw{KwTo}{от}
+\SetKw{KwRet}{возвратить}
+\SetKw{Return}{возвратить}
+\SetKwBlock{Begin}{начало блока}{конец блока}
+\SetKwSwitch{Switch}{Case}{Other}{Проверить значение}{и выполнить}{вариант}{в противном случае}{конец варианта}{конец проверки значений}
+\SetKwFor{For}{цикл}{выполнять}{конец цикла}
+\SetKwFor{ForEach}{для каждого}{выполнять}{конец цикла}
+\SetKwRepeat{Repeat}{повторять}{до тех пор, пока}
+\SetAlgorithmName{Алгоритм}{алгоритм}{Список алгоритмов}
+\setcounter{tocdepth}{1}
+
+\begin{document}
+
+
+%
+	% Титульный лист на русском языке
+	%
+	
+	% Название организации
+	\institution{%
+		Санкт-Петербургский государственный университет \\
+		Математическое моделирование, программирование и искусственный интеллект \\
+	}
+	
+	\title{Учебная практика 1 (проектно-технологическая)}
+	
+	% Тема
+	\topic{\normalfont\scshape%
+		Численное сравнение первого порядка и полной ошибок оценивания сигнала метода CSSA}
+	
+	% Автор
+	\author{Сенов Михаил Андреевич}
+	\group{группа 22.М03-мм}
+	
+	% Научный руководитель
+	\sa       {Н.\,Э.~Голяндина}
+	\sastatus {Доцент, кафедра статистического моделирования\,\\
+		к.\,ф.-м.\,н., доцент}
+	
+	
+	% Город и год
+	\city{Санкт-Петербург}
+	\date{\number\year}
+	
+	\maketitle
+
+
+
+
+\intro
+%\section{Введение}
+Временным рядом называется набор некоторых измерений, сделанных, как правило, в равноотстоящие моменты времени.
+
+Предположим, что временной ряд является суммой нескольких временных рядов, к примеру, тренда (медленно меняющейся составляющей), периодической составляющей (например, сезонной) и шума. Для работы с таким рядом полезно выделить эти составляющие, поскольку работать с ними по отдельности может быть проще чем с исходным рядом. Сделать это позволяет метод <<Гусеница>>-SSA (в дальнейшем просто SSA).
+
+В реальности данные со многих приборов снимаются изначально в комплексном виде и, поэтому, задача анализа комплекснозначных временных рядов также важна. В случае комплексного ряда возникает два способа решения задачи, применение комплексных методов ко всему ряду целиком или применение вещественных методов отдельно к вещественной и мнимой части. Исходя из этого, в работе проведено теоретическое сравнение CSSA и SSA, примененного отдельно к вещественной и мнимой части, на основе первого порядка ошибки оценки сигнала, где первый порядок рассматривается по величине возмущения.
+
+В данной работе дан краткий обзор результатов по аналитическому вычислению ошибки восстановления и её дисперсии, представленных в работе \cite{SenBach}.
+
+Было проведено существенно расширенное, по сравнению с \cite{SenBach} численное сравнение первого порядка ошибки с полной ошибкой восстановления, с целью показания осмысленности применения результатов для первого порядка к полной ошибке, а также с целью оценки скорости сходимости первого порядка и полной ошибок к нулю.
+
+\section{Алгоритм SSA и ранг ряда}
+В этом разделе рассмотрим базовый алгоритм SSA, следуя монографии \cite{Golyandina.etal2001}, но с заменой операции транспонирования, обозначаемой $\mathrm{T}$, на операцию эрмитова сопряжения $\mathrm{H}$.
+\subsection{Описание алгоритма SSA (CSSA)}
+Рассмотрим ненулевой вещественный или комплексный ряд $\tX_N = (x_1, \ldots, x_{N})$ длины $N > 2$ (далее $N$ будем опускать и писать $\tX$). Базовый алгоритм SSA выполняет разложение исходного ряда в сумму из нескольких новых рядов и осуществляется в четыре этапа. Приведённое ниже описание также соответствует CSSA, являющегося комплексным обобщением алгоритма SSA.
+\subsubsection{Вложение}
+Первым этапом алгоритма является построение траекторной матрицы.\\
+Пусть $L$~--- некоторое целое число (\textit{длина окна}), $1 < L < N$.
+
+\textit{L-траекторная матрица}~--- это матрица:
+$$\mathbf{X} = \mathcal{T}(\tX) = \begin{pmatrix}
+           x_1 & x_2 & \ldots & x_{K}\\
+           x_2 & x_3 & \ldots & x_{K+1}\\
+           \vdots & \vdots & & \vdots\\
+           x_{L} & x_{L+1} & \ldots & x_{N}
+         \end{pmatrix}, K = N - L + 1.$$
+Часто данную матрицу называют просто траекторной матрицей ряда.
+\subsubsection{Сингулярное разложение}
+Вторым этапом является сингулярное разложение (SVD) траекторной матрицы ряда, оно может быть записано как:
+$$\mathbf{X} = \mathbf{X}_1 + \ldots + \mathbf{X}_d,$$
+где $\mathbf{X}_i = \sqrt{\lambda_i}U_i V_i^\mathrm{H}$, $\lambda_i$~--- $i$-ое по убыванию собственное число матрицы $\mathbf{X} \mathbf{X}^{\mathrm{H}}$, $U_i$~--- собственный вектор матрицы $\mathbf{X} \mathbf{X}^{\mathrm{H}}$, соответствующий $\lambda_i$, $V_i$~--- собственный вектор матрицы $\mathbf{X}^{\mathrm{H}} \mathbf{X}$, соответствующий $\lambda_i$, $d$~--- ранг матрицы $\mathbf{X}$.
+\subsubsection{Группировка}
+Третьим этапом является объединение в группы полученных матриц $\mathbf{X}_i$.
+Матрица, соответствующая группе $I$, определяется как:
+$$\mathbf{X}_I = \mathbf{X}_{i_1} + \ldots + \mathbf{X}_{i_r}.$$
+Результатом группировки $\{1,\ldots,d\} = \bigsqcup_{k=1}^m I_k$ является матричное разложение
+$$\mathbf{X} = \mathbf{X}_{I_1} + \ldots + \mathbf{X}_{I_m}.$$
+\subsubsection{Диагональное усреднение}
+Последним этапом является перевод каждой матрицы $\mathbf{X}_{I_k}$, соответствующей группе $I_k$, в новый ряд $\tX_{I_k}$ длины $N$.
+
+Пусть $\mathbf{Y}$ --- некоторая матрица $L \times K$ с элементами $y_{ij}$. Положим $L^* = \min(L, K)$, $K^* = \max(L, K)$, $N = L + K - 1$. Пусть $y^{*}_{ij} = y_{ij}$, если $L < K$, и $y^{*}_{ij} = y_{ji}$ иначе.
+
+Диагональное усреднение переводит матрицу $\mathbf{Y}$ в ряд $(y_0, \ldots, y_{N - 1})$ по формуле:
+$$y_k =
+ \begin{cases}
+   \displaystyle{1\over{k + 1}}\sum^{k+1}_{i=1} y^{*}_{i,k - i + 2} &\text{для $0 \leq i \leq L^* - 1 $}\\
+   \displaystyle{1\over{L^*}}\sum^{L^*}_{i=1} y^{*}_{i,k - i + 2} &\text{для $L^* - 1 \leq i \leq K^*$}\\
+   \displaystyle{1\over{N - k}}\sum^{N - K^* + 1}_{i=k - K^* + 2} y^{*}_{i,k - i + 2} &\text{для $K^* \leq i \leq N - 1$}
+ \end{cases}.$$
+Таким образом, мы разложили исходный ряд в сумму $m$ новых рядов:
+$$\tX = \sum^{m}_{k = 1} \tX_{I_k}.$$
+
+
+\section{Ошибка оценки сигнала в SSA и CSSA}
+Комплексный временной ряд представляется через свою вещественную и мнимую части, к каждой из которых можно применить вещественный метод и, таким образом, получить оценку комплексного сигнала. Исходя из этого возникает вопрос, насколько полезны комплексные обобщения методов? В данном разделе мы постараемся ответить на данный вопрос с точки зрения ошибок восстановления на примере сравнения базовых вариантов методов CSSA и SSA.
+
+В работе \cite{SenBach}, на основе теории возмущений \cite{Kato}, был получен ряд теоретических результатов, касающихся первого порядка ошибки. В данном разделе мы приведём главные из них, рассмотрим вопрос скорости сходимости первого порядка ошибки на примере двух частных случаев, а также приведём численное исследование сходимости первогои порядка к полной ошибке.
+
+\subsection{Применение теории возмущений к SSA и CSSA}
+% и \cite{Konstantinov}
+
+Рассматриваем временной ряд $\tX=(x_1, \ldots, x_{N})$, $L$ --- длина окна, $r$ --- ранг оцениваемого сигнала (ранг траекторной матрицы сигнала).
+
+Напомним, как будет выглядеть оценка сигнала для SSA/CSSA
+	\begin{equation*}
+		\tilde{\tS} = \mathcal{T}^{-1}_{L} \Pi_{\mathcal{H}} \Pi_{r} \mathcal{T}_L (\tX).
+	\end{equation*}
+
+Рассмотрим $\tX = \tS(\delta)$, где $\tS(\delta) = \tS + \delta \tR$ длины $N$, $\mathbf{H} = \mathcal{T}_L(\tS)$.
+
+Из \cite{Nekr2008} известно следующее представление $\tilde{\tS} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\mathbf{H} + \delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)})$.
+
+Ошибку восстановления обозначим как $\tF = \tilde{\tS} - \tS = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\delta\mathbf{H}^{(1)} + \delta^2\mathbf{H}^{(2)})$.
+
+Рассмотрим $\delta = 1$ и $\tX = \tS + \tR$. Первый порядок ошибки восстановления обозначим как $\tF^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}}(\mathbf{H}^{(1)})$.
+
+Обозначим за:
+
+$\tF^{(1)} = \mathcal{H}(\mathbf{H}^{(1)}(\tR, \tS))$ первый порядок ошибки восстановления $\tS$ с возмущением $\tR$ метода CSSA,
+
+$\tF^{(1)}_{\Re} = \mathcal{H}(\mathbf{H}^{(1)}(\Re(\tR), \Re(\tS)))$ первый порядок ошибки восстановления $\Re(\tS)$ с возмущением $\Re(\tR)$ метода SSA,
+
+$\tF^{(1)}_{\Im} = \mathcal{H}(\mathbf{H}^{(1)}(\Im(\tR), \Im(\tS)))$ первый порядок ошибки восстановления $\Im(\tS)$ с возмущением $\Im(\tR)$ метода SSA.
+
+
+\begin{theorem}\label{th:sum}
+	Пусть пространства столбцов траекторных матриц рядов $\tS$, $\Re(\tS)$ и $\Im(\tS)$ совпадают и то же самое верно для пространств строк.
+	Тогда $$\tF^{(1)} = \tF^{(1)}_{\Re} + \iu\tF^{(1)}_{\Im}.$$
+\end{theorem}
+
+Заметим, что хотя в утверждении теоремы возмущение $\tR$ может быть любым по форме, однако теорема имеет практическое применение, только если первый порядок ошибки адекватно описывает полную ошибку.
+
+\subsubsection{Случайное возмущение}
+
+Рассмотрим случайное возмущение $\tR$ с нулевым математическим ожиданием.
+%\begin{remark} \label{rm:probl_rand}
+%	 А значит и теорема \ref{th:sum} не всегда будет применима, даже для требуемого сигнала. Однако мы будем считать, что возмущение $\tR$ имеет достаточно малую дисперсию, при которой вероятность подобного исхода пренебрежимо мала.
+%\end{remark}
+
+Рассмотрим первые порядки ошибок восстановления сигнала:
+
+$\tF^{(1)} = (f^{(1)}_1, \ldots, f^{(1)}_N)$, $\tF^{(1)}_{\Re} = (f^{(1)}_{\Re,1}, \ldots, f^{(1)}_{\Re, N})$, $\tF^{(1)}_{\Im} = (f^{(1)}_{\Im,1}, \ldots, f^{(1)}_{\Im, N})$.
+
+
+\begin{corollary}[из теоремы {\ref{th:sum}}] \label{st:dispsum}
+	Пусть выполнены условия теоремы \ref{th:sum}.
+	Тогда для любого $l$, $1\le l \le N$,
+	\begin{equation} \label{eq:dispsum}
+		\mathbb{D}f^{(1)}_l = \mathbb{D}f^{(1)}_{\Re, l} + \mathbb{D}f^{(1)}_{\Im, l}.	
+	\end{equation}
+\end{corollary}
+
+
+
+%Как отмечалось в замечании \ref{rm:probl_rand}, для случая шума точное выполнение \eqref{eq:main_cond} невозможно, однако, рассматривая конкретный сдвиг, можно подобрать такую $\mathbb{D}(\xi)$, что $P(\|\mathbf{E}(\delta)\| < \mu_{\min} / 2) \approx 1$.
+
+
+\subsection{Случай константных сигналов с выбросом}
+\label{sub:const_outl}
+Рассматриваем сигнал $\tS = (c_1 + \iu c_2, \ldots, c_1 + \iu c_2)$, возмущённый выбросом $a_1 + \iu a_2$ на позиции $k$, т.е. ряд $\tR$ состоит из нулей кроме значения $a_1 + \iu a_2$ на $k$-м месте. По теореме \ref{th:sum} нам достаточно найти первый порядок для ряда $\tS = (c, \ldots, c)$, возмущённого выбросом $a$ на позиции $k$. В \cite{SenBach} были получены явные формулы первого порядка ошибки для такого ряда: 
+
+\subsubsection{Случай $1 \leq k < L$}
+\begin{itemize}
+\item
+$k \leq L/2$
+
+$k \leq K - L$
+
+$$f^{(1)}_l = \frac{a}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l \leq L$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L < l < L + k$}\\
+	0, &\text{$L + k \leq l \leq K$}\\
+	\frac{1}{N - l + 1}(K - l)(L - k), &\text{$K < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N $}
+\end{cases}.
+$$
+
+\item
+$k \leq L/2$
+
+$k > K - L$
+
+$$f^{(1)}_l = \frac{a}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l \leq L$}\\
+	\frac{1}{L}K(L + k- l), &\text{$L < l < K$}\\
+	\frac{1}{N - l + 1}(2KL - l(L + K - k)), &\text{$K \leq l \leq L + k$}\\
+	\frac{1}{N - l + 1}( K - l)(L - k), &\text{$L + k < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N$}
+\end{cases}.
+$$
+
+\item
+$k > L/2$
+
+$k \leq K - L$
+
+$$f^{(1)}_l = \frac{a}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l < L$}\\
+	%\frac{1}{L}((K + l - 2k)(L - k) + (2k - l)(L + K - k)), & \text{$L\leq l \leq 2k$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L \leq l < L + k$}\\
+	0, &\text{$L + k \leq l \leq K$}\\
+	\frac{1}{N - l + 1}(L - K)(L - k), &\text{$K < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N$}
+\end{cases}.
+$$
+
+\item
+$k > \max(L / 2, K - L)$
+
+$k \leq K/2$
+
+$$f^{(1)}_l = \frac{a}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l < L$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L \leq l < K$}\\
+	\frac{1}{N - l + 1}(2KL - l(L + K - k)), &\text{$K \leq l \leq L + k$}\\
+	\frac{1}{N - l + 1}(L - K)(L - k), &\text{$L + k < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N$}
+\end{cases}.
+$$
+
+\item
+$k > K/2$
+
+
+$$f^{(1)}_l = \frac{1}{{LK}}
+\begin{cases}
+	(L + K - k), & \text{$1 \leq l \leq k$}\\
+	\frac{1}{l}(L + K - l)k, & \text{$k < l < L$}\\
+	\frac{1}{L}K(L + k - l), &\text{$L \leq l < K$}\\
+	\frac{1}{N - l + 1}(2KL - l(L + K - k)), &\text{$K \leq l \leq L + k$}\\
+	\frac{1}{N - l + 1}(K - l)(L - k), &\text{$L + k < l < K + k$}\\
+	-k, &\text{$K + k \leq l \leq N $}
+\end{cases}.
+$$
+\end{itemize}
+
+\subsubsection{Случай $L \leq k \leq K$}
+
+$$f^{(1)}_l = \frac{a}{{L}}
+\begin{cases}
+	\frac{1}{\min(L, l)}(l - k + L), & \text{$k - L \leq l \leq k$}\\
+	\frac{1}{\min(L, N - l + 1)}(L + k - l), & \text{$k < l < L + k$}\\
+	0, & \text{иначе}
+\end{cases}.$$
+
+
+\subsubsection{Случай $K < k \leq N$}
+\label{sub:const_noise}
+Данный случай полностью аналогичен инвертированному первому случаю, то есть строим ряд для $N - k + 1$ и разворачиваем его.
+
+Заметим, что первый порядок ошибки стремится к $0$ только при $L, K ~ N$ и в этом случае он пропорционален $\sqrt{1/LK}$, то есть $1/N$. Отсюда получаем, что скорость сходимости первого порядка ошибки к нулю можно оценить как $\mathcal{O}(1/N)$. 
+
+\subsection{Случай константных сигналов с шумом}
+
+Рассматриваем ряд с $s_n = c_1 + ic_2$ и матрицу шума $\mathbf{E}$ с дисперсиями вещественной и мнимой частей $\sigma_1$ и $\sigma_2$.\\
+Сингулярные векторы такого ряда являются нормированными векторами с одинаковыми компонентами, они также сингулярные для вещественной и мнимой части. Тогда выполняются условия теоремы \ref{th:sum} и
+
+$$\tF^{(1)} = \tF^{(1)}_{\Re} + \iu\tF^{(1)}_{\Im}.$$
+
+В данном случае $\Re(S)$ и $\Im(S)$ являются вещественными константами.
+
+В работе \cite{Vlas2008} была получена аналитическая формула для дисперсии каждого элемента вещественных констант, в нашем случае $\tF^{(1)}_{\Re}$ и $\tF^{(1)}_{\Re}$.
+
+Обозначим $L = \alpha N$, $\alpha \leq \frac{1}{2}$, $\lambda = \lim_{N\to\infty} 2 l / N$, воспользовавшись утверждением \ref{st:dispsum}, получаем
+
+$$
+\mathbb{D} f^{(1)}_l = \mathbb{D} f^{(1)}_{\Re, l} + \mathbb{D} f^{(1)}_{\Im, l} \sim \frac{\sigma^2_1 + \sigma^2_2}{N}
+\begin{cases}
+	D_1(\alpha, \lambda), &\text{$0 \leq \lambda \leq 2 (1 - 2\alpha)$}\\
+	D_2(\alpha, \lambda), &\text{$2 (1 - 2\alpha) < \lambda < 2\alpha$}\\
+	D_3(\alpha, \lambda), &\text{$2\alpha \leq \lambda \leq 1$}
+\end{cases},
+$$
+где
+\begin{gather*}
+	D_1(\alpha, \lambda) = \frac{1}{12 \alpha^2(1 - \alpha)^2} (\lambda^2(\alpha + 1) - 2\lambda\alpha(1 + \alpha)^2 + 4 \alpha(-3\alpha + 3 + 2\alpha^2))\\
+	D_3(\alpha, \lambda) = \frac{1}{6 \alpha^2\lambda^2 (\alpha - 1)} (\lambda^4 + 2\lambda^3(3\alpha -2 -3\alpha^2) + \\
+	+ 2\lambda^2(3 - 9\alpha + 12\alpha^2 - 4\alpha^3) + 4\lambda(4 \alpha^4 - 4\alpha^3 - 3\alpha^2 + 4\alpha - 1) +\\
+	+ 8\alpha - 56 \alpha^2 + 144\alpha^3 - 160\alpha^4 + 64\alpha^5\\
+	D_3(\alpha, \lambda) = \frac{2}{3\alpha}.\\
+\end{gather*}
+
+Формулы выписаны только до середины ряда из симметричности дисперсии первого порядка ошибки относительно середины ряда.
+
+Из представленных формул видно, что дисперсия пропорциональна $1/N$, следовательно, скорость сходимости дисперсии первого порядка к $0$ можно оценить как $\mathcal{O}(1/N)$.
+
+\section{Численное сравнение первого порядка ошибки и полной ошибки оценивания сигнала}
+
+Полученные нами ранее теоретические результаты касаются первого порядка ошибки восстановления, однако ценность представляют в первую очередь результаты, касающиеся полной ошибки восстановления. Исходя из чего актуальным является вопрос точности оценки полной ошибки первым порядком.
+
+Одним из способов ответа на данный вопрос является численное исследование. Исследование точности оценки полной ошибки первым порядком было произведено в работе \cite{SenBach}, однако оно было произведено фрагментарно и не описывало общей картины для всех сочетаний интересных для нас сигналов и возмущений. Поэтому в данной работе было произведено расширенное численное исследование проблемы.
+
+В подразделe \ref{sub:const_outl} была получена оценка сходимости первого порядка ошибки как $\mathcal{O}(1/N)$. Однако данные результаты актуальны лишь для константного сигнала, исходя из чего возникает задача численной проверки скорости сходимости для более широкого спектра сигналов. Данный вопрос особенно интересен, так как если первый порядок является адекватной асимптотической оценкой полной ошибки, то зная скорость сходимости первого порядка, мы также знаем скорость сходимости полной ошибки.
+
+Все численные результаты были получены при помощи пакета~\cite{Korobeynikov.etal2014}.
+
+\subsection{Описание эксперимента}
+Приведём список используемых параметров с обозначениями, соответствующими представленным результатам:
+\begin{enumerate}
+    \item Сигнал:
+   \begin{itemize}
+        \item Комплексная экспонента (compl exp):
+        $$s_n = \cos(2 \pi n / 10) + i\cos(2 \pi n / 10 + \pi/2).$$
+        \item Гармоника (harm):
+        $$s_n = \cos(2 \pi n / 10) + i\cos(2 \pi n / 10 + \pi/2).$$
+        \item Константа (const):
+        $$s_n = 1 + i.$$
+    \end{itemize}
+    \item Возмущение:
+    \begin{itemize}
+        \item Белый шум (noise):
+        $$r_n = 0.1 (\xi + i\zeta),$$
+        где $\xi, \zeta \in \mathcal{N}(0, 1)$.
+        \item Выброс на позиции $k$ (outl):
+        $$r_n = \begin{cases}
+            10(1 + i) & , n = k\\
+            0 &, n \neq k
+        \end{cases}.$$
+        С позицией $k = const$ и $k = N/2$.
+    \end{itemize}
+    
+    \item Меры ошибок: 
+    \begin{itemize}
+        \item Максимальный модуль (abs): 
+        $$\max\limits_{i}|f_i|.$$
+        \item Средний квадрат (mse):
+        $$\frac{1}{N}\sum_{i=0}^{N}|f_i|^2б$$
+        \item Аналогично для дисперсий в случае случайного возмущения.
+    \end{itemize}
+
+\end{enumerate}
+Проверялись:
+    \begin{itemize}
+        \item Сходимость первого порядка к полной ошибке (first to full).
+        \item Сходимость первого порядка ошибки к нулю (first).
+        \item Сходимость полной ошибки к нулю (full).
+        \item Корректность оценки скорости сходимости первого порядка к нулю как $1/N$.
+    \end{itemize}
+При:
+    \begin{itemize}
+    
+        \item Возмущении в виде выброса: 
+        
+        Были рассмотрены сочетания вида: 
+        \begin{itemize}
+            \item сигнал (compl exp, harm, const),
+            \item длина окна ($const$, $N/2$),
+            \item положение выброса ($const$, $N / 2$),
+            \item мера ошибки (abs, mse),
+        \end{itemize}
+        при $N = 50, 100, 400, 1600$.
+        \item Возмущение в виде шума:
+        
+        Были рассмотрены сочетания вида: 
+        \begin{itemize}
+            \item сигнал (compl exp, harm, const),
+            \item длина окна ($const$, $N/2$),
+            \item мера ошибки (abs, mse),
+        \end{itemize}
+        при $N = 50, 100, 200, 400$ и числе повторов для оценки дисперсий $rep = 100$.
+    \end{itemize}
+
+
+\subsection{Результаты эксперимента}
+В таб. \ref{tab:conv_noise}, \ref{tab:conv_speed_noise} рассмотрено возмущение в виде шума и приведены результаты по исследованию наличия сходимости и скорости сходимости, соответственно. 
+
+В таб. \ref{tab:conv_outl}, \ref{tab:conv_speed_outl} рассмотрено возмущение в виде шума и приведены результаты по исследованию наличия сходимости и скорости сходимости, соответственно. 
+
+Наличие сходимости обозначено 1, её отсутствие 0. Жирным шрифтом выделены известные из работы \cite{SenBach} результаты в случае сходимости, из частных формул для первого порядка ошибки для асимптотики.
+
+\begin{table}[H]
+    \centering
+    \caption{Сходимость, возмущение в виде шума.}
+    \label{tab:conv_noise}
+    \begin{tabular}{|l|l|l|}
+    \hline
+        Параметры & L = 20 & L = N/2 \\ \hline
+        compl exp, first to full, abs & 0 & 1 \\ \hline
+        compl exp, first ot full, mse & 0 & 1 \\ \hline
+        compl exp, first, abs & 0 & 1 \\ \hline
+        compl exp, first, mse & 0 & 1 \\ \hline
+        compl exp, full, abs & 0 & 1 \\ \hline
+        compl exp, full, mse & 0 & 1 \\ \hline
+        harm, first to full, abs & 0 & 1 \\ \hline
+        harm, first to full, mse & 0 & 1 \\ \hline
+        harm, first, abs & $\mathbf{0}$ & $\mathbf{1}$ \\ \hline
+        harm, first, mse & $\mathbf{0}$ & $\mathbf{1}$ \\ \hline
+        harm, full, abs & 0 & 1 \\ \hline
+        harm, full, mse & 0 & 1 \\ \hline
+        const, first to full, abs & 0 & 1 \\ \hline
+        const, first to full, mse & 0 & 1 \\ \hline
+        const, first, abs & $\mathbf{0}$ & $\mathbf{1}$ \\ \hline
+        const, first, mse & $\mathbf{0}$ & $\mathbf{1}$ \\ \hline
+        const, full, abs & 0 & 1 \\ \hline
+        const, first, mse & 0 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+\begin{table}[H]
+    \centering
+    \caption{Асимптотика 1/N, возмущение в виде шума.}
+    \label{tab:conv_speed_noise}
+    \begin{tabular}{|l|l|l|}
+    \hline
+        Параметры & L = 20 & L = N/2 \\ \hline
+        compl exp, first, abs & 0 & 1 \\ \hline
+        compl exp, first, mse & 0 & 1 \\ \hline
+        harm, first, abs & 0 & 1 \\ \hline
+        harm, first, mse & 0 & 1 \\ \hline
+        const, first, abs & $\mathbf{0}$ & $\mathbf{1}$ \\ \hline
+        const, first, mse & 0 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Сходимость, возмущение в виде выброса.}
+    \label{tab:conv_outl}
+    \begin{tabular}{|l|l|l|l|l|}
+    \hline
+        Параметры & L = 20, & L = 20, & L = N/2, & L = N/2, \\
+        & k = 3 & k = N/2 & k = 3 & k = N/2 \\
+        \hline
+        compl exp, first to full, abs & 1 & 1 & 1 & 1 \\ \hline
+        compl exp, first ot full, mse & 1 & 1 & 1 & 1 \\ \hline
+        compl exp, first, abs & 0 & 0 & 1 & 1 \\ \hline
+        compl exp, first, mse & 1 & 1 & 1 & 1 \\ \hline
+        compl exp, full, abs & 0 & 0 & 1 & 1 \\ \hline
+        compl exp, full, mse & 1 & 1 & 1 & 1 \\ \hline
+        harm, first to full, abs & 1 & 1 & 1 & 1 \\ \hline
+        harm, first to full, mse & 1 & 1 & 1 & 1 \\ \hline
+        harm, first, abs & 0 & 0 & 1 & 1 \\ \hline
+        harm, first, mse & 1 & 1 & 1 & 1 \\ \hline
+        harm, full, abs & 0 & 0 & 1 & 1 \\ \hline
+        harm, full, mse & 1 & 1 & 1 & 1 \\ \hline
+        const, first to full, abs & 1 & 1 & 1 & 1 \\ \hline
+        const, first to full, mse & 1 & 1 & 1 & 1 \\ \hline
+        const, first, abs & $\mathbf{0}$ & $\mathbf{0}$ & $\mathbf{1}$ & $\mathbf{1}$ \\ \hline
+        const, first, mse & 1 & 1 & 1 & 1 \\ \hline
+        const, full, abs & 0 & 0 & 1 & 1 \\ \hline
+        const, first, mse & 1 & 1 & 1 & 1 \\ \hline
+    \end{tabular}
+\end{table}
+\begin{table}[H]
+    \centering
+    \caption{Асимптотика 1/N, возмущение в виде выброса.}
+    \label{tab:conv_speed_outl}
+    \begin{tabular}{|l|l|l|l|l|}
+    \hline
+        Параметры 1/N & L = 20, & L = 20, & L = N/2, & L = N/2, \\
+        & k = 3 & k = N/2 & k = 3 & k = N/2 \\ \hline
+        compl exp, first, abs & 0 & 0 & 1 & 1 \\ \hline
+        compl exp, first, mse & 0 & 0 & 1 & 1 \\ \hline
+        harm, first, abs & 0 & 0 & 1 & 1 \\ \hline
+        harm, first, mse & 0 & 0 & 1 & 1 \\ \hline
+        const, first, abs & $\mathbf{0}$ & $\mathbf{0}$ & $\mathbf{1}$ & $\mathbf{1}$ \\ \hline
+        const, first, mse & 0 & 0 & $\mathbf{1}$ & $\mathbf{1}$ \\ \hline
+    \end{tabular}
+\end{table}
+
+Из представленных результатов можно сделать набор выводов:
+\begin{itemize}
+        \item При $L = N/2$ показана сходимость ошибок к нулю при всех параметрах и показано, что скорость сходимости первого порядка к нулю имеет порядок $1/N$.
+        \item При $L = const$ с шумом показано отсутствие сходимости ошибок к нулю.
+        \item При $L = const$ с выбросом показано отсутствие сходимости максимального модуля и наличия сходимости среднего квадрата ошибок к нулю.
+        \item Во всех случаях, кроме $L = const$ с шумом показана сходимость первого порядка к полной ошибке.
+        \item Показано, что имеющиеся теоретические результаты для константного сигнала с выбросом, а так же константного и гармонического сигнала с шумом численно показано обобщаются на остальные сигналы.
+    \end{itemize}
+
+\section{Обзор литературы}
+
+Приведённые в данной работе рассуждения рассматривают ошибку метода CSSA и нацелены на упрощение её вычисления. В данном разделе мы приведём работы, использующие данный метод, для показания области применимости.
+
+\subsection{F-x Cadzow filtering}
+
+Работа \cite{Cadzow88} является основополагающей для ряда исследований об очищении от шума сейсмических данных. В данной работе был представлен метод f-x Cadzow filtering для фильтрации шума, который по своей сути является частным случаем CSSA. Рассмотрим данный метод подробнее.
+
+Пусть в качестве данных мы имеем набор из $n$ временных рядов (сейсмических следов) с равноотстоящими промежутками времени:
+$$\tX_1 = (x^1_1, \ldots, x^1_{N}),$$
+$$\ldots,$$
+$$\tX_n = (x^n_1, \ldots, x^n_N).$$
+
+Анализу подвергаются срезы следов с постоянной частотой. Иными словами, пусть мы имеем частоту $\omega$. Тогда, используя дискретное преобразование Фурье (DTF), мы можем получить набор $\tC = c_1, \ldots, c_n$, где
+$$c_l = \sum_{k = 0}^{N-1} x^{l}_{k+1} e^{-i 2 \pi \omega k / N}.$$
+
+Следующим шагом мы получаем траекторную матрицу ряда $\tC$:
+$$\mathbf{C} = \mathcal{T}(\tC).$$
+
+И, применяя SVD, выбираем первые $r$ элементарных компонент:
+$$F_r(\mathbf{C}) = \mathbf{C}_1 + \ldots + \mathbf{C}_r.$$
+
+Далее применяем диагональное усреднение к матрице $F_r(\mathbf{C})$ и получаем набор отфильтрованных значений DFT $\widetilde{\tC} = (\widetilde{c_1}, \ldots, \widetilde{c_n})$ для частоты $\omega$.
+
+Представленный набор процедур производится для каждой частоты из множества частот исходного сигнала, что позволяет нам произвести обратное преобразование Фурье и получить отфильтрованные исходные следы.
+
+В данном алгоритме $r$ является параметром и его наилучшим значением является $L$-ранг сигнала ряда $\tC$. Также стоить заметить, что данный алгоритм аналогичен методу CSSA, в случае, если группировка заключается в выделении первых $r$ элементарных компонент.
+
+\subsection{F-xy Cadzow filtering}
+
+В работе \cite{Trickett2008} был предложен метод F-xy Cadzow filtering, являющийся расширением F-x Cadzow filtering на трёхмерный случай.
+
+Здесь мы уже имеем трёхмерный набор сейсмических следов, и, соответственно, получаем матрицу $\tC$ из значений DTF:
+$$\tC = 
+\begin{pmatrix}
+           \tC_1 \\
+           \tC_2\\
+           \vdots\\
+           \tC_p
+         \end{pmatrix}
+= \begin{pmatrix}
+           c_{1,1} & c_{1,2} & \ldots & c_{1,q}\\
+           c_{2,1} & c_{2.2} & \ldots & c_{2,q}\\
+           \vdots & \vdots & & \vdots\\
+           c_{p,1} & c_{p,2} & \ldots & c_{p,q}
+         \end{pmatrix}.$$
+
+Далее мы получаем ряд из траекторных матриц $\mathbf{C} = (\mathbf{C}_1, \ldots, \mathbf{C}_p)$, где $\mathbf{C}_i = \mathcal{T}(\tC_i)$ и берём его траекторную матрицу:
+$$\mathbf{A} = \mathcal{T}(\mathbf{C}).$$
+
+И находим матричную апроксимацию ранга $r$:
+$$F_r(\mathbf{A}) = \mathbf{A}_1 + \ldots + \mathbf{A}_r.$$
+
+В качестве финального шага мы производим диагональное усреднение по каждой из исходных траекторных матриц и получаем:
+$$\widetilde{\tC} = 
+\begin{pmatrix}
+           \widetilde{\tC_1} \\
+           \widetilde{\tC_2}\\
+           \vdots\\
+           \widetilde{\tC_p}
+         \end{pmatrix}
+= \begin{pmatrix}
+           \widetilde{c_{1,1}} & \widetilde{c_{1,2}} & \ldots & \widetilde{c_{1,q}}\\
+           \widetilde{c_{2,1}} & \widetilde{c_{2.2}} & \ldots & \widetilde{c_{2,q}}\\
+           \vdots & \vdots & & \vdots\\
+           \widetilde{c_{p,1}} & \widetilde{c_{p,2}} & \ldots & \widetilde{c_{p,q}}
+         \end{pmatrix}.$$
+Что соответствует DTF отфильтрованных данных. Соответственно, проведя операцию по спектру частот, мы можем получить отфильтрованную исходную сетку по обратному преобразованию Фурье.
+
+\subsection{Robust f-x Cadzow filtering}
+
+F-x Cadzow filtering (CSSA) находит наилучшую аппроксимацию траекторной матрицы матрицей пониженного ранга, с точки зрения нормы Фробениуса. Норма Фробениуса или норма в $\mathbb{L}_2$ не является робастной нормой, на её значения существенно влияют выбросы. Для решения данной проблемы были предложены модификации проекционной части f-x Cadzow filtering на пространство пониженного ранга, приводящие алгоритм к иттеративному и изменяющие норму для проецирования.
+
+\subsubsection{Проекция по взвешенной норме в $\mathbb{L}_2$ с итеративным обновлением весов}
+
+В \cite{Chen} был предложен алгоритм проекции по взвешенной норме в $\mathbb{L}_2$, в котором итеративно вычисляется матрица весов, присваивая выбросам маленькие веса и, таким образом, нейтрализуя их влияние. 
+
+Пусть $\mathbf{Y} \in \mathbb{C}^{L\times K}$ --- траекторная матрица ряда.
+Необходимо решить задачу
+\begin{equation*}
+		\|\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H}})\|^2_\mathrm{F} \longrightarrow \min_{\mathbf{U},\mathbf{V}}, \, \mathbf{U} \in \mathbb{C}^{L\times r}, \mathbf{V} \in \mathbb{C}^{K\times r}.
+\end{equation*}
+
+Рассмотрим алгоритм с итеративным обновлением весов (алг. \ref{alg2}), а также вспомогательный алгоритм с постоянной матрицей весов (алг. \ref{alg1}).
+
+\begin{algorithm}[H]\label{alg1}
+	\SetAlgoLined
+	\KwIn{$\mathbf{Y} \in \mathbb{C}^{L\times K}$ --- траекторная матрица ряда, $r$ --- ранг сигнала,  $\mathbf{W} \in \mathbb{R}^{L\times K}$ --- матрица весов; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ параметры критерия остановки:  $\varepsilon$, ~~~~~~~~~~~~~ максимальное число итераций $N_\alpha$}
+	\KwOut{$\widehat{\mathbf{Y}} = \mathbf{U}\mathbf{V}^{\mathrm{H}}$ --- решение задачи взвешенной аппроксимации при фиксированной матрице весов $\mathbf{W}$}
+	
+	1. $t:=0$\;
+	2. \While{ $\|\mathbf{W}^{1/2}\odot(\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H})}\|^2_\mathrm{F} > \varepsilon\text{~и~} \text{t}< N_\alpha$}{
+		a. Вычисление матрицы $\mathbf{U}\in \mathbb{C}^{L\times r}$ с помощью решения задачи
+		\begin{equation}\label{taskA}
+			(\mathbf{y}_i^\mathrm{H}-\mathbf{V}\mathbf{u}_i^\mathrm{H})^\mathrm{H} \mathbf{W}_i (\mathbf{y}_i^\mathrm{H}-\mathbf{V}\mathbf{u}_i^\mathrm{H}) \to \min_{\mathbf{u}_i},~~ i=1,\ldots L,
+		\end{equation}
+		где $\mathbf{W}_i=\diag(\mathbf{w}_i)\in \mathbb{R}^{K\times K}$ --- матрица, составленная из $i$-ой строки $\mathbf{W}$\;
+		b. Вычисление матрицы $\mathbf{V}\in \mathbb{C}^{K\times r}$ с помощью решения задачи
+		\begin{equation}\label{taskB}
+			(\mathbf{y}_j-\mathbf{U}\mathbf{v}_j^\mathrm{H})^\mathrm{H} \mathbf{W}^j (\mathbf{y}_j-\mathbf{U}\mathbf{v}_j^\mathrm{H}) \to \min_{\mathbf{v}_j},,~~ j=1,\ldots K,
+		\end{equation}
+		где $\mathbf{W}^j=\diag(\mathbf{w}^j)\in \mathbb{R}^{L\times L}$ --- матрица, составленная из $j$-го столбца $\mathbf{W}$\;
+		c. $t:=t+1$.	
+	}
+	\caption{Алгоритм решения задачи взвешенной аппроксимации для фиксированной матрицы весов $\mathbf{W}$}
+\end{algorithm}
+
+
+Задачи~(\ref{taskA}) и (\ref{taskB}) решаются при помощи QR-разложения матриц $\mathbf{V}^\mathrm{H}\mathbf{W}_i\mathbf{V}$ и $\mathbf{U}^\mathrm{H}\mathbf{W}^j\mathbf{U}$ соответственно, алгоритм решения представлен в \cite{IRLS}.
+
+
+\begin{algorithm}[H]\label{alg2}
+\SetAlgoLined
+\KwIn{$\mathbf{Y} \in \mathbb{C}^{L\times K}$~--- траекторная матрица ряда, $r$~--- ранг сигнала; параметр весовой функции $\alpha$; алгоритм обновления матрицы $\mathbf{\Sigma}$; параметры критерия остановки: $\varepsilon$, максимальное число итераций $N_{iter}$}
+\KwOut{$\mathbf{\hat{Y}} = \mathbf{U}\mathbf{V}^\mathrm{H}$~--- проекция траекторной матрицы на множество матриц ранга, не превосходящего $r$}
+ Инициализация $\mathbf{U} \in \mathbb{C}^{L\times r}$ и $\mathbf{V} \in \mathbb{C}^{K\times r}$ (например, с помощью сингулярного разложения матрицы $\mathbf{Y}$)\;
+ $t := 0$\;
+ \While{$\|\mathbf{W}^\frac{1}{2} \odot (\mathbf{Y} - \mathbf{U}\mathbf{V}^\mathrm{H})\|^2_\mathrm{F} > \varepsilon$ и {$t < N_{iter}$}}{
+  Вычисление матрицы остатков $\mathbf{R} = \{r_{ij}\}_{i,j=1}^{L,K} = \mathbf{Y} - \mathbf{U}\mathbf{V}^\mathrm{H}$\;
+  Обновление матрицы $\mathbf{\Sigma} = \{\sigma_{ij}\}^{L,K}_{i,j=1}$\;
+  Вычисление матрицы весов $\mathbf{W} = \{w_{ij}\}^{L,K}_{i,j=1} = \{w(\frac{r_{ij}}{\sigma_{ij}})\}^{L,K}_{i,j=1}$, используя
+  $$w(x) =
+ \begin{cases}
+   (1 - (\frac{|x|}{\alpha})^2)^2 &|x| \leq \alpha\\
+   0 &|x| > \alpha\\
+ \end{cases};$$
+ Решение задачи взвешенной аппроксимации
+ $$\|\mathbf{W}^\frac{1}{2} \odot (\mathbf{Y} - \mathbf{U}\mathbf{V}^\mathrm{H})\|^2_\mathrm{F} \longrightarrow \min_{\mathbf{U}, \mathbf{V}},$$
+ при помощи алгоритма \ref{alg1}\;
+ Обновление матриц $\mathbf{U}$, $\mathbf{V}$\;
+ $t:=t+1$\;
+  }
+ \caption{Метод с итеративным обновлением весов для нахождения проекции на множество матриц ранга, не превосходящего $r$ (weighted L2)}
+\end{algorithm}
+
+Авторы предложили взять $\alpha = 4.685$, $N_{\alpha} = 5$ и $N_{iter} = 10$, ссылаясь на численные эксперименты.
+
+Матрицу $\mathbf{\Sigma}$ предлагается взять состоящей из одинаковых элементов $\sigma_{ij} = \sigma = 1.4826 \med {\big|\tR-\med {|\tR|}\big|}$, где $\tR$~--- это вектор, составленный из всех элементов матрицы остатков $\mathbf{R} = \{r_{ij}\}_{i,j=1}^{L,K}$, то есть
+\begin{equation*}
+	\tR~=~(r_{11},\ldots,r_{1K}; r_{21},\ldots r_{2K};\ldots;r_{L1},\ldots,r_{LK}).
+\end{equation*}
+Данная оценка предлагается авторами ввиду её робастности.
+
+В работе \cite{Tretyakova20} приведена вещественная модификация алг. \ref{alg2} с итеративным вычислением матрицы $\mathbf{\Sigma}$, более подходящая рядам с гетероскедастичным шумом, в работе \cite{SenBach} было рассмотрено её обобщение.
+
+\subsubsection{Проекция по норме в $\mathbb{L}_1$}
+
+В \cite{Galbraith.etal15} была предложена модификация алгоритма, производящая проекцию по норме в $\mathbb{L}_1$, ввиду её большей робастности.
+
+Пусть $\mathbf{Y} \in \mathbb{C}^{L\times K}$ --- траекторная матрица ряда.
+Необходимо решить задачу
+\begin{equation*}
+	\norm{\mathbf{Y}-\mathbf{U}\mathbf{V}^{\mathrm{H}}}_1 \longrightarrow \min_{\mathbf{U},\mathbf{V}}, \, \mathbf{U} \in \mathbb{C}^{L\times r}, \mathbf{V} \in \mathbb{C}^{K\times r}.
+\end{equation*}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{$\mathbf{Y} \in \mathbb{C}^{L\times K}$~--- траекторная матрица ряда, $r$~--- ранг сигнала; параметры критерия остановки: $\varepsilon$, максимальное число итераций $N_{iter}$}
+\KwOut{$\mathbf{\hat{Y}} = \mathbf{U}\mathbf{V}^\mathrm{H}$~--- проекция траекторной матрицы на множество матриц ранга, не превосходящего $r$}
+ Инициализация $\mathbf{V}(0) \in \mathbb{C}^{K\times r}$, нормировка столбцов $\mathbf{V}(0)$\;
+ $t := 0$\;
+ \While{$\max\limits_{\substack{i=1,\ldots,L \\ j=1,\ldots,r}} |u_{ij} (t) - u_{ij} (t - 1)| > \varepsilon$ и $t < N_{iter}$}{
+  $t := t + 1$\;
+  $\mathbf{U(t)} = \argmin\limits_{\mathbf{U}\in \mathbb{C}^{L\times r}} ||\mathbf{Y} - \mathbf{U}\mathbf{V}^\mathrm{H}(t - 1)||_1$\;
+  $\mathbf{V(t)} = \argmin\limits_{\mathbf{V}\in \mathbb{C}^{K\times r}} ||\mathbf{Y} - \mathbf{U}(t)\mathbf{V}^\mathrm{H}||_1$\;
+  Нормировка столбцов $\mathbf{V}(t)$\;
+  }
+  $\mathbf{U} := \mathbf{U}(t); \mathbf{V} := \mathbf{V}(t)$\;
+ \caption{Последовательный метод построения $\mathbb{L}_1$-проектора на множество матриц ранга, не превосходящего $r$.}
+\end{algorithm}
+
+В приведённой реализации $\mathbf{V}(0)$ инициализируется при помощи сингулярного разложения, но, согласно~\cite{KeKanade}, инициализация может быть произведена при помощи любой матрицы требуемого размера с сохранением сходимости. Авторы~\cite{Galbraith.etal15} ссылаются на проведённые численные эксперименты.
+
+
+
+\subsection{Сравнение подходов}
+Сейсмические данные представляют набор из $n$ временных рядов. Данный набор рядов можно очистить и предсказать при помощи MSSA напрямую, такой подход называется фильтрацией в (вещественном) пространстве t-x, но также, как показано в методе Кадцова, можно перейти в пространство частот и для каждой частоты применить CSSA, данный подход называется фидьтрацией в (комплексном) пространстве f-x.
+
+Сравнению данных подходов посвящена работа \cite{YuanWang11}. В ней авторы приводят сравнение f-x и t-x подходов на синтетических и реальных примерах сейсмических данных, показывая преимущество f-x с точки зрения меньшего SNR (Signal-to-noise ratio), что приводит к лучшему отделению сигнала от шума, лучшее разделение "сложных"(смешанных) линейных сигналов, но также и несостоятельность базового f-x Cadzow метода при работе с пропущенными значениям.
+
+Помимо этого, в \cite{Chu.etal14} приведено сравнение выделения функции комлпексного переменного методом CSSA с методами глобальной оптимизацию. В результате которого, авторы демонстрируют высокий уровень точности CSSA, не смотря на его простоту.
+
+\subsection{SSD и CSSD}
+
+В \cite{Pang.etal19} предложена модификация SSA под названием Singular Spectrum Decomposition (SSD) и её комплексное обобщение CSSD. Ключевое отличие алгоритма заключается в этапе группировки, он выполняется автоматически, на основе периодограммы.
+
+Рассмотрим этап группировки SSD подробнее:
+
+\begin{algorithm}[H]\label{alg4}
+	\SetAlgoLined
+	\KwIn{\{$\mathbf{X}_i\}^{d}_{i=1} \in \mathbb{R}^{L\times K}$ --- элементарные компоненты, ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ параметры критерия остановки:  $\varepsilon$}
+	\KwOut{$\mathbf{\tS}$ --- сгруппированная матрица, соответствующая сигналу}
+	
+	1. $\mathbf{\tS} = \mathbf{X}_1$\;
+        2. $\tR_1 = \tX - \tS, \text{где~} \tS = \mathcal{T}^{-1}_{L} \Pi_{\mathcal{H}}(\mathbf{\tS})$\;
+        3. $t = 1$\;
+	4. \While{ $\sum_{k=1}^{N} ((\tR_t)_k)^2 / \sum_{k=1}^{N} ((\tS_t)_k)^2 > \varepsilon$}{
+		a. Вычисление периодограммы $\tR_t$\;
+		b. Нахождение множества индексов $K_t$~--- индексы всех компонент, соответствующих главному пику периодограммы\;
+            c. $\mathbf{\tS} = \mathbf{\tS} + \sum_{i=1}^{|K_t|} \mathbf{X}_{(K_t)_i}$\;
+            d. $\tR_t = \tX - \tS, \text{где~} \tS = \mathcal{T}^{-1}_{L} \Pi_{\mathcal{H}}(\mathbf{\tS})$\;
+		c. $t:=t+1$.	
+	}
+	\caption{Этап группировки алгоритма SSD}
+\end{algorithm}
+
+\subsection{Анализ реальных данных}
+В данном подразделе мы приведём список работ, в которых работа представленных выше алгоритмов представлена на реальных данных.
+
+В \cite{RajeshTiwari} приведён пример обработки сейсмических данных методом f-x Cadzow с дополнительной обработкой и заполнениям промежутков.
+
+В \cite{Trickett2008} приведён пример обработки сейсмических данных методом f-xy Cadzow.
+
+В \cite{Chen} приведён пример обработки сейсмических данных методом итерационного обновления матрицы весов.
+
+В \cite{Galbraith.etal15} приведён пример обработки сейсмических данных методом $\mathbb{L}_1$.
+
+В \cite{YuanWang11} приведён пример обработки сейсмических данных методом f-x Cadzow и сравнение f-x и t-x подходов на примере реальных данных.
+
+В \cite{Li18} приведён пример обработки положения оси Земли с 1960 по 2009 годы методом CSSA. Комплексный ряд получен искусственно, путём объединения вертикальной и горизонтальной составляющих, в рамках ряда норм показано преимущество в точности, по сравнению с SSA и MSSA.
+
+В \cite{Pang.etal19} приведён пример обработки снятых с ротора данных методом CSSD. Авторы построили экспериментальную установку, с ротором, целью которой было выявить излишнее стриание ротера (излишнюю силу трения) при контролируемой извне силе  трения. Сигнал снимают вертикальный и горизонтальный сенсоры, данные с которых объединяются в искуственно сформированный комплексный сигнал, после чего происходит обработка сигнала CSSD и, после отделения шума, применяется алгоритм поиска паттерна возможной механической ошикби.
+
+
+
+\conclusion
+%\section{Заключение}
+В работе было произведено расширение результатов, полученных в \cite{SenBach}. Была получена формула поэлементного выражения дисперсии первого порядка ошибки для комплексной константы с возмущением в виде шума, на основе вещественной формулы из \cite{Vlas2008}. Были получены оценки скорости сходимости первого порядка ошибки к нулю для комплексной константы с возмущением в виде шума и возмущением в виде выброса.
+
+В работе было произведено численное исследование сходимости полной, первого порядка ошибок к нулю и первого порядка к полной ошибке для трёх видов сигналов, двух мер ошибок и возмущений в виде выброса и шума. По результатам исследования было показано наличие всех сходимостей при длине окна, равной половине длины ряда и показано, что скорость сходимости первого порядка и полной ошибок в этом случае имеет асимптотику $\mathcal{O}(1/N)$. 
+
+Был проведён обзор области основного применения метода CSSA, анализа сейсмических данных, его модификаций и приминений.
+
+%\nocite{*}
+\bibliographystyle{ugost2008}
+\bibliography{literature}
+\end{document}
