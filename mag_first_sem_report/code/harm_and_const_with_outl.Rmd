@@ -1,0 +1,441 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r}
+library(Rssa)
+library(PRIMME)
+library(QZ, quiet = TRUE)
+
+H.1.1 <- function(E, U, V, lenU) {
+  Pcol <- U %*% H(U) 
+  Prow <- V %*% H(V)
+  Pcol.orth <- diag(rep(1,lenU)) - Pcol
+  
+  Pcol %*% E + Pcol.orth %*% E %*% Prow
+}
+```
+
+Ганкелизация
+```{r}
+hankL2 <- function(A) {
+  N <- nrow(A) + ncol(A) - 1
+  F <- rep(0, N)
+  L.1<-min(nrow(A), ncol(A))
+  K.1<-max(nrow(A), ncol(A))
+  for(k in 1:N) {
+    v <- A[c(row(A) + col(A) - k == 1)]
+    F[k] <- mean(v)
+  }
+  return (F)
+}
+```
+
+Вычисление первого порядка и полной ошибок
+```{r}
+err.calc <- function(sig.n, pret.n, N, L, ...) {
+  sig <- sig.n(N)$sig
+  freq <- sig.n(N)$freq
+  r <- sig.n(N)$r
+  pret <- pret.n(N, ...)$pret
+  ser <-  sig + pret
+    
+  s <- ssa(sig, L = L, kind = "cssa", svd.method = "svd")
+  rec <- reconstruct(s, groups = list(1:r))[[1]]
+    
+  U <- s$U[,1] + 1i * 0
+  V <- s$V[,1] + 1i * 0
+  len_u <- length(U)
+    
+  if (r > 1) {
+    for (i in 2:r) {
+      U <- cbind(U, s$U[,i] + 1i * 0)
+      V <- cbind(V, s$V[,i] + 1i * 0)
+    }
+  }
+    
+  err.1 <- hankL2(H.1.1(Rssa::hankel(pret, L), U, V, len_u))
+    
+  s <- ssa(ser, L = L, kind = "cssa", svd.method = "svd")
+  rec <- reconstruct(s, groups = list(1:r))[[1]]
+    
+  err <- rec - sig
+  
+  fr <- abs(parestimate(s, groups = list(1:r), method = "esprit")$frequencies[1:r])
+  
+  err.f <- fr - freq
+  
+  return(list("err" = err, "err.1" = err.1, "err.f" = err.f))
+}
+```
+
+Вычисление дисперсий первого порядка и полной ошибок
+```{r}
+disper <- function(M, repeats, N) {
+  M <- matrix(M, nrow = repeats, ncol = N, byrow = TRUE)
+  sapply(1:N, function(i) mean(abs(M[,i] - mean(M[,i]))^2))
+}
+
+disp.calc <- function(sig.n, pret.n, N, L, repeats, ...) {
+  sig <- sig.n(N)$sig
+  freq <- sig.n(N)$freq
+  r <- sig.n(N)$r
+    
+  s <- ssa(sig, L = L, kind = "cssa", svd.method = "svd")
+  rec <- reconstruct(s, groups = list(1:r))[[1]]
+    
+  U <- s$U[,1] + 1i * 0
+  V <- s$V[,1] + 1i * 0
+  len_u <- length(U)
+    
+  if (r > 1) {
+    for (i in 2:r) {
+      U <- cbind(U, s$U[,i] + 1i * 0)
+      V <- cbind(V, s$V[,i] + 1i * 0)
+    }
+  }
+    
+  disp.1 <- disper(sapply(1:repeats, function(x) hankL2(H.1.1(Rssa::hankel(pret.n(N, ...)$pret, L), U, V, len_u))), repeats, N)
+  
+  disp <- vector()
+  disp.f <- vector()
+  for (i in 1:repeats) {
+    pret = pret.n(N, ...)$pret
+    ser = sig + pret
+    
+    s <- ssa(ser, L = L, kind = "cssa", svd.method = "svd")
+    rec <- reconstruct(s, groups = list(1:r))[[1]]
+    
+    disp <- c(disp, rec - sig)
+    
+    fr <- abs(parestimate(s, groups = list(1:r), method = "esprit")$frequencies[1:r])
+    
+    disp.f <- c(disp.f, freq - fr)
+  }
+  disp <- disper(disp, repeats, N)
+  disp.f <- disper(disp.f, repeats, r)
+  
+  return(list("disp" = disp, "disp.1" = disp.1, "disp.f" = disp.f))
+}
+```
+
+Подсчёт сходимости
+```{r}
+conv.err.calc <- function(sig.n, pret.n, L.alpha, seed=6, ...) {
+  diff.max <- vector()
+  err.1.max <- vector()
+  err.max <- vector()
+  ratio.max <- vector()
+  
+  diff.min <- vector()
+  err.1.min <- vector()
+  err.min <- vector()
+  ratio.min <- vector()
+  
+  diff.mean <- vector()
+  err.1.mean <- vector()
+  err.mean <- vector()
+  ratio.mean <- vector()
+  
+  err.f.abs <- vector()
+  
+  set.seed(seed)
+  for(N in c(50, 100, 400, 1600)) {
+    if(L.alpha > 1) {
+      L <- L.alpha
+    }
+    else {
+      L <- floor(N * L.alpha)
+    }
+    
+    errors <- err.calc(sig.n, pret.n, N, L, ...)
+    err <- errors$err
+    err.1 <- errors$err.1
+    err.f <- errors$err.f
+    diff <- abs(err.1 - err)
+    
+    diff.max <- c(diff.max, max(abs(diff)))
+    err.1.max <- c(err.1.max, max(abs(err.1)))
+    err.max <- c(err.max, max(abs(err)))
+    if (length(ratio.max) > 0) {
+      ratio.max <- c(ratio.max, err.1.max[length(ratio.max)] / max(abs(err.1))) 
+    }
+    else
+      ratio.max <- c(ratio.max, 1)
+    
+    diff.min <- c(diff.min, min(abs(diff)))
+    err.1.min <- c(err.1.min, min(abs(err.1)))
+    err.min <- c(err.min, min(abs(err)))
+    if (length(ratio.min) > 0) {
+      ratio.min <- c(ratio.min, err.1.min[length(ratio.min)] / min(abs(err.1))) 
+    }
+    else
+      ratio.min <- c(ratio.min, 1)
+    
+    diff.mean <- c(diff.mean, mean(abs(diff)^2))
+    err.1.mean <- c(err.1.mean, mean(abs(err.1)^2))
+    err.mean <- c(err.mean, mean(abs(err)^2))
+    if (length(ratio.mean) > 0) {
+      ratio.mean <- c(ratio.mean, sqrt(err.1.mean[length(ratio.mean)]) / sqrt(mean(abs(err.1)^2)))
+    }
+    else
+      ratio.mean <- c(ratio.mean, 1)
+    
+    err.f.abs <- c(err.f.abs, mean(abs(err.f)))
+  }
+  
+  sig.name <- sig.n(N)$name
+  pret.name <- pret.n(N, ...)$name
+  print("######################################################################")
+  print(paste("Type:",sig.name, "with", pret.name, ", L.alpha =", L.alpha))
+  
+  print("Max abs of diff betwen first order err and full err: ")
+  print(diff.max)
+  print("Max abs of first order err: ")
+  print(err.1.max)
+  print("Max abs of full err: ")
+  print(err.max)
+  print("Ratio of max abs of first order err:")
+  print(ratio.max)
+  
+  print("Min abs of diff betwen first order err and full err: ")
+  print(diff.min)
+  print("Min abs of first order err: ")
+  print(err.1.min)
+  print("Min abs of full err: ")
+  print(err.min)
+  print("Ratio of min abs of first order err:")
+  print(ratio.min)
+  
+  print("Mean of diff betwen first order err and full err: ")
+  print(sqrt(diff.mean))
+  print("Mean of first order err: ")
+  print(sqrt(err.1.mean))
+  print("Mean of full err: ")
+  print(sqrt(err.mean))
+  print("Ratio of mean of first order err:")
+  print(ratio.mean)
+  
+  print("ESPRIT error mean abs: ")
+  print(err.f.abs)
+  print("######################################################################")
+}
+```
+
+Подсчёт сходимости дисперсий
+```{r}
+conv.disp.calc <- function(sig.n, pret.n, L.alpha, repeats, seed=6, ...) {
+  diff.max <- vector()
+  disp.1.max <- vector()
+  disp.max <- vector()
+  ratio.max <- vector()
+  
+  diff.min <- vector()
+  disp.1.min <- vector()
+  disp.min <- vector()
+  ratio.min <- vector()
+  
+  diff.mean <- vector()
+  disp.1.mean <- vector()
+  disp.mean <- vector()
+  ratio.mean <- vector()
+  
+  disp.f.mean <- vector()
+  
+  set.seed(seed)
+  for(N in c(50, 100, 200, 400)) {
+    if(L.alpha > 1) {
+      L <- L.alpha
+    }
+    else {
+      L <- floor(N * L.alpha)
+    }
+    
+    disps <- disp.calc(sig.n, pret.n, N, L, repeats, ...)
+    disp <- disps$disp
+    disp.1 <- disps$disp.1
+    disp.f <- disps$disp.f
+    diff <- disp.1 - disp
+    
+    diff.max <- c(diff.max, max(abs(diff)))
+    disp.1.max <- c(disp.1.max, max(disp.1))
+    disp.max <- c(disp.max, max(disp))
+    if (length(ratio.max) > 0) {
+      ratio.max <- c(ratio.max, disp.1.max[length(ratio.max)] / max(disp.1)) 
+    }
+    else
+      ratio.max <- c(ratio.max, 1)
+    
+    diff.min <- c(diff.min, min(abs(diff)))
+    disp.1.min <- c(disp.1.min, min(disp.1))
+    disp.min <- c(disp.min, min(disp))
+    if (length(ratio.min) > 0) {
+      ratio.min <- c(ratio.min, disp.1.min[length(ratio.min)] / min(disp.1)) 
+    }
+    else
+      ratio.min <- c(ratio.min, 1)
+    
+    diff.mean <- c(diff.mean, mean(abs(diff)))
+    disp.1.mean <- c(disp.1.mean, mean(disp.1))
+    disp.mean <- c(disp.mean, mean(disp))
+    if (length(ratio.mean) > 0) {
+      ratio.mean <- c(ratio.mean, disp.1.mean[length(ratio.mean)] / mean(disp.1)) 
+    }
+    else
+      ratio.mean <- c(ratio.mean, 1)
+    
+    disp.f.mean <- c(disp.f.mean, mean(disp.f))
+  }
+  
+  sig.name <- sig.n(N)$name
+  pret.name <- pret.n(N, ...)$name
+  print("######################################################################")
+  print(paste("Type:",sig.name, "with", pret.name, ", L.alpha =", L.alpha))
+  
+  print("Max disp of diff betwen first order err and full err: ")
+  print(diff.max)
+  print("Max disp of first order err: ")
+  print(disp.1.max)
+  print("Max disp of full err: ")
+  print(disp.max)
+  print("Ratio of max disp of first order err:")
+  print(ratio.max)
+  
+  print("Min disp of diff betwen first order err and full err: ")
+  print(diff.min)
+  print("Min disp of first order err: ")
+  print(disp.1.min)
+  print("Min disp of full err: ")
+  print(disp.min)
+  print("Ratio of min disp of first order err:")
+  print(ratio.min)
+  
+  print("Mean of diff betwen disp of first order err and full err: ")
+  print(diff.mean)
+  print("Mean of disp of first order err: ")
+  print(disp.1.mean)
+  print("Mean of disp offull err: ")
+  print(disp.mean)
+  print("Ratio of mean of disp of first order err:")
+  print(ratio.mean)
+  
+  print("ESPRIT disp mean: ")
+  print(disp.f.mean)
+  print("######################################################################")
+}
+```
+
+График первого порядка и полной ошибок
+```{r}
+plot.err <- function(sig.n, pret.n, N, L, err.type = "err.1", seed = 6, ...) {
+  set.seed(seed)
+  
+  errors <- err.calc(sig.n, pret.n, N, L, ...)
+  err <- errors$err
+  err.1 <- errors$err.1
+  
+  sig.name <- sig.n(N)$name
+  pret.name <- pret.n(N, ...)$name
+  
+  switch(
+    err.type,
+    "err.1" = plot(Re(err.1), main = paste(sig.name, "with", pret.name), type = "l"),
+    "err" = plot(Re(err), main = paste(sig.name, "with", pret.name), type = "l")
+  )
+}
+```
+
+Сигналы
+```{r}
+sig.exp.n <- function(N) {
+  list("sig" = cos(2 * pi * (1:N) / 10) +  1i * cos(2 * pi * (1:N) / 10 + pi/2), "r" = 1, "freq" = 1 / 10, "name" = "exp")
+}
+
+sig.harm.n <- function(N) {
+  list("sig" = cos(2 * pi * (1:N) / 10) +  1i * cos(2 * pi * (1:N) / 10 + pi/4), "r" = 2, "freq" = c(1 / 10, 1 / 10), "name" = "harm")
+}
+
+sig.const.n <- function(N) {
+  list("sig" = rep(1 + 1i, N), "r" = 1, "freq" = 0, "name" = "const")
+}
+```
+
+Возмущения
+```{r}
+pret.noise.n <- function(N) {
+  list("pret" = 0.1 * (rnorm(N, sd = 1) + 1i * rnorm(N, sd = 1)), "name" = "noise")
+}
+
+pret.outl.n <- function(N, k.alpha = 1) {
+  outl <- rep(0, N)
+  if (k.alpha >= 1) {
+    k <- k.alpha 
+  }
+  else {
+    k <- floor(k.alpha * N)
+  }
+  a <- 10 + 10i
+  outl[k] <- a
+  return(list("pret" = outl, "name" = paste("outl, k.alpha =", k.alpha)))
+}
+```
+
+"Плато"
+```{r}
+N <- 50
+L <- 20
+
+for (k in c(3, 0.5)) {
+  plot.err(sig.exp.n, pret.outl.n, N, L, k.alpha = k)
+  plot.err(sig.harm.n, pret.outl.n, N, L, k.alpha = k)
+  plot.err(sig.const.n, pret.outl.n, N, L, k.alpha = k)
+}
+```
+
+Сходимость
+```{r}
+repeats <- 100
+
+for (L in c(20, 0.5)) {
+  conv.disp.calc(sig.exp.n, pret.noise.n, L, repeats)
+  conv.disp.calc(sig.harm.n, pret.noise.n, L, repeats)
+  conv.disp.calc(sig.const.n, pret.noise.n, L, repeats)
+  for (k in c(3, 0.5)) {
+    conv.err.calc(sig.exp.n, pret.outl.n, L, k.alpha = k)
+    conv.err.calc(sig.harm.n, pret.outl.n, L, k.alpha = k)
+    conv.err.calc(sig.const.n, pret.outl.n, L, k.alpha = k)
+  }
+}
+```
+
+```{r}
+pers <- vector()
+
+sig.exp.sum.n <- function(N, periods = pers) {
+  sig <- rep(0, N)
+  for (i in 1:length(periods))
+    sig <- sig + cos(2 * pi * (1:N) / periods[i]) +  1i * cos(2 * pi * (1:N) / periods[i] + pi/2)
+  list("sig" = sig, "r" = length(periods), "name" = "sum of exps")
+}
+
+
+mse.exp <- vector()
+mse.ratio <- 1
+rk <- 0
+
+for (i in c(2, 3, 5, 7, 11, 13, 17, 19)) {
+  rk <- rk + 1
+  pers <- c(pers, i)
+  mse.exp <- c(mse.exp, mean(disp.calc(sig.exp.sum.n, pret.noise.n, 100, 50, 100)$disp.1))
+  if (rk > 1) {
+    mse.ratio <- c(mse.ratio, mse.exp[length(mse.exp)] / mse.exp[length(mse.ratio)] * (rk - 1) / rk)
+  }
+}
+
+mse.exp
+mse.ratio
+```
+
