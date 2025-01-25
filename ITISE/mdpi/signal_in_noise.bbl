@@ -1,0 +1,95 @@
+\begin{thebibliography}{999}
+
+\bibitem[Pang et~al.(2019)Pang, Tang, and Tian]{Pang.etal19}
+Pang, B.; Tang, G.; Tian, T.
+\newblock Complex Singular Spectrum Decomposition and its Application to
+  Rotating Machinery Fault Diagnosis.
+\newblock {\em IEEE Access ( Volume: 7)} {\bf 2019}, pp. 143921 -- 143934.
+\newblock {\url{https://doi.org/10.1109/ACCESS.2019.2945369}}.
+
+\bibitem[Journé et~al.(2023)Journé, Bihan, Chatelain, and
+  Flamant]{Journe.etal2023}
+Journé, S.; Bihan, N.L.; Chatelain, F.; Flamant, J.
+\newblock Polarized Signal Singular Spectrum Analysis with Complex SSA.
+\newblock In Proceedings of the ICASSP 2023 - 2023 IEEE International
+  Conference on Acoustics, Speech and Signal Processing (ICASSP),  2023, pp.
+  1--5.
+\newblock {\url{https://doi.org/10.1109/ICASSP49357.2023.10095954}}.
+
+\bibitem[Trickett(2008)]{Trickett2008}
+Trickett, S.
+\newblock F‐xy Cadzow noise suppression.
+\newblock {\em SEG Technical Program Expanded Abstracts} {\bf 2008}, pp.
+  2586--2590.
+
+\bibitem[Yuan and Wang(2011)]{YuanWang11}
+Yuan, S.; Wang, S.
+\newblock A local f-x Cadzow method for noise reduction of seismic data
+  obtained in complex formations.
+\newblock {\em Pet. Sci. 8} {\bf 2011}, p. 269–277.
+\newblock {\url{https://doi.org/10.1007/s12182-011-0144-y}}.
+
+\bibitem[Golyandina et~al.(2018)Golyandina, Korobeynikov, and
+  Zhigljavsky]{Golyandina.etal2018}
+Golyandina, N.; Korobeynikov, A.; Zhigljavsky, A.
+\newblock {\em Singular spectrum analysis with {R}}; Springer-Verlag Berlin
+  Heidelberg,  2018.
+
+\bibitem[Kumaresan and Tufts(1982)]{Kumaresan.Tufts1982}
+Kumaresan, R.; Tufts, D.
+\newblock Estimating the parameters of exponentially damped sinusoids and
+  pole-zero modeling in noise.
+\newblock {\em IEEE Trans Acoust} {\bf 1982}, {\em 30},~833--840.
+
+\bibitem[Keppenne and Lall(1996)]{Keppenne.Lall1996}
+Keppenne, C.; Lall, U.
+\newblock Complex singular spectrum analysis and multivariate adaptive
+  regression splines applied to forecasting the southern oscillation.
+\newblock In Proceedings of the Exp. Long-Lead Forcst. Bull,  1996.
+
+\bibitem[Kato(1966)]{Kato}
+Kato, T.
+\newblock {\em Perturbation theory for linear operators}; Springer-Verlag,
+  Berlin-Heidelberg-New York,  1966.
+
+\bibitem[Nekrutkin(2010)]{Nekrutkin}
+Nekrutkin, V.
+\newblock Perturbation expansions of signal subspaces for long signals.
+\newblock {\em Statistics and Its Interface} {\bf 2010}, {\em 3},~297--319.
+
+\bibitem[Golyandina()]{Golyandina2010}
+Golyandina, N.
+\newblock On the choice of parameters in Singular Spectrum Analysis and related
+  subspace-based methods.
+\newblock {\em 3},~259--279.
+
+\bibitem[Golyandina and Zvonarev(2024)]{Golyandina.Zvonarev2024}
+Golyandina, N.; Zvonarev, N.
+\newblock Information Criteria for Signal Extraction Using Singular Spectrum
+  Analysis: White and Red Noise.
+\newblock {\em Algorithms} {\bf 2024}, {\em 17}.
+\newblock {\url{https://doi.org/10.3390/a17090395}}.
+
+\bibitem[Golyandina et~al.(2015)Golyandina, Korobeynikov, Shlemov, and
+  Usevich]{Golyandina.etal2013}
+Golyandina, N.; Korobeynikov, A.; Shlemov, A.; Usevich, K.
+\newblock Multivariate and {2D} extensions of singular spectrum analysis with
+  the {R}ssa package.
+\newblock {\em Journal of Statistical Software} {\bf 2015}, {\em 67(2)},~1--78.
+
+\bibitem[Nekrutkin(2024)]{Nekrutkin2024}
+Nekrutkin, V.V.
+\newblock On the Robustness of Singular Spectrum Analysis for Long Time Series.
+\newblock {\em Vestnik St. Petersburg University, Mathematics} {\bf 2024}, {\em
+  57},~335--344.
+\newblock {\url{https://doi.org/10.1134/S1063454124700183}}.
+
+\bibitem[Golyandina and Vlassieva(2009)]{Golyandina.Vlassieva2009}
+Golyandina, N.; Vlassieva, E.
+\newblock First-order {SSA}-errors for long time series: model examples of
+  simple noisy signals.
+\newblock In Proceedings of the Proceedings of the 6th St.Petersburg Workshop
+  on Simulation Vol.1, June 28-July 4, 2009, St. Petersburg. St.-Petersburg
+  State University,  2009, pp. 314--319.
+
+\end{thebibliography}
