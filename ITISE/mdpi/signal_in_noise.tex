@@ -69,11 +69,13 @@
 
 \input{letters_series_mathbb}
 %\input{newcommands}
-\def\spaceR{\mathsf{R}}
-\def\spaceC{\mathsf{C}}
+\def\spaceR{\mathbf{R}}
+\def\spaceC{\mathbf{C}}
 
 \DeclareMathOperator\rank{rank}
-\newcommand{\iu}{\mathrm{i}\mkern1mu}
+\newcommand{\iu}{\mathrm{i}\mkern2mu}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
 
 %\def\mmod{\mathop{\mathrm{mod}}}
 %\def\sspan{\mathop{\mathrm{span}}}
@@ -92,10 +94,10 @@
 %=================================================================
 % Full title of the paper (Capitalized)
 %\Title{Identification of trend components in the case of overestimated signal rank}
-\Title{On signal estimation errors using complex singular spectrum analysis}
+\Title{On errors of signal estimation using complex singular spectrum analysis}
 
 % MDPI internal command: Title for citation in the left column
-\TitleCitation{On signal estimation errors using complex singular spectrum analysis}
+\TitleCitation{On errors of signal estimation using complex singular spectrum analysis}
 
 % Author Orchid ID: enter ID or remove command
 %\newcommand{\orcidauthorA}{0000-0003-1901-806X} % Add \orcidA{} behind the author's name
@@ -136,7 +138,7 @@ $^{1}$ \quad Faculty of Mathematics and Mechanics, St.Petersburg State Universit
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\)
-\abstract{Singular spectrum analysis (SSA) is a nonparametric method that can be applied to signal estimation. The extension of SSA to the complex case is called CSSA and is applied to complex-valued time series. The accuracy of signal estimation using CSSA is investigated. An explicit form of the first-order errors is obtained for the case of a constant signal and two forms of perturbations, by an outlier and by independent Gaussian noise.
+\abstract{Singular spectrum analysis (SSA) is a nonparametric method that can be applied to signal estimation. The extension of SSA to the complex-valued case, called CSSA, is considered. The accuracy of signal estimation using CSSA is investigated. An explicit form of the first-order errors is obtained for the case of a constant signal and two forms of perturbations, by an outlier and by independent Gaussian noise.
 It is shown numerically that (1) the first-order errors describe the full errors well, and (2) the formulas for accuracy for estimating a constant signal can be applied to a sum of complex exponentials using multiplication by the number of exponentials.
 }
 
@@ -187,15 +189,15 @@ Let us briefly describe singular spectrum analysis and its features. Algorithm~\
         \label{item:decomposition}
         Construct the singular value decomposition (SVD) of the matrix $\bfX$:
         $\bfX =
-        \sum_{k=1}^{\rank \bfX} \sqrt{\lambda_k} U_k V_k^\mathrm{H} = \sum_{k=1}^{\rank \bfX} \widehat{\bfX}_k$,
-        where $U_k$ and $V_k$ are the left and right singular vectors of the matrix $\bfX$,
+        \sum\limits_{k=1}^{\rank \bfX} \sqrt{\lambda_k} U_k V_k^\mathrm{H} = \sum\limits_{k=1}^{\rank \bfX} \widehat{\bfX}_k$,
+        where $\mathrm{H}$ means the Hermitian conjugate, $U_k$ and $V_k$ are the left and right singular vectors of the matrix $\bfX$,
         $\sqrt{\lambda_k}$ are the singular values in decreasing order.
     \item \textbf{Grouping.} Group the matrix components $\widehat{\bfX}_k$ associated with the signal:
         $\widehat{\bfS} = \sum_{k=1}^r \widehat{\bfX}_k$.
     \item \textbf{Diagonal averaging.}
         \label{item:reconstruction}
         Apply the hankelization (which is the projection into the linear space of Hankel matrices):
-        $\widetilde{\bfS} = \calH \widehat{\bfS}$,
+        $\widetilde{\bfS} = \Pi_{\mathcal{H}} \widehat{\bfS}$,
         and return back to the series form:
         $\widetilde{\tS} = \calT_L^{-1} \widetilde{\bfS}$.
 \end{enumerate}
@@ -214,12 +216,13 @@ It is known from \cite{Golyandina.etal2013} that the rank of a complex signal wh
 
 \section{Application of perturbation theory to CSSA}
 
-Let us observe $\tX = \tS(\delta)$, where $\tS(\delta) = \tS + \delta \tE$, and estimate the signal $\tS$.
+Let us observe $\tX = \tS(\delta)$, where $\tS(\delta) = \tS + \delta \tE$, and $\tilde{\tS}$ be the CSSA estimate of the signal $\tS$.
 It is known from \cite{Nekrutkin} that
-the reconstruction error $\tF = \tilde{\tS} - \tS = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\delta\bfS^{(1)} + \delta^2\bfS^{(2)})$.
+the reconstruction error $\tF$ has the form $\tF = \tilde{\tS} - \tS = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\delta\bfS^{(1)} + \delta^2\bfS^{(2)})$.
 
 For simplicity, let $\delta = 1$. We call the first-order reconstruction error the part of the error that is linear in $\delta$: $\tF^{(1)} = \mathcal{T}_L^{-1} \Pi_{\mathcal{H}} (\delta\bfS^{(1)})$.
-Theorem 2.1 from \cite{Nekrutkin} gives the following formula for $\bfS^{(1)}$ in the case of sufficiently small perturbations:
+Theorem 2.1 from \cite{Nekrutkin} gives the following formula for $\bfS^{(1)}\in \space
+C^{L\times K}$ in the case of sufficiently small perturbations:
 \begin{equation} \label{eq:main}
 	\bfS^{(1)} = \mathbf{P}_0 \mathbf{E} \mathbf{Q}^{\perp}_0 + \mathbf{P}^{\perp}_0 \mathbf{E},
 \end{equation}
@@ -227,16 +230,16 @@ where $\mathbf{P}^{\perp}_0$ is the projector onto the column space of $\bfS$, $
 
 \subsection{Relation between complex and real first-order errors for rank 1}
 
-In \cite{Nekrutkin} formulas were derived for $\bfS^{(1)}$ for real series of ranks $1$ and $2$. Below we give the complex form for the case of rank 1.
+In \cite{Nekrutkin}, formulas were derived for $\bfS^{(1)}$ for real series of ranks $1$ and $2$. Below we give the complex form for the case of rank 1.
 For $\rank \tS = 1$ and the leading left and right singular vectors $U$ and $V$ of the trajectory matrix of the series $\tS$,
 \begin{equation} \label{eq:main1}
-	\bfS^{(1)}(\mathbf{E}, \tS) = -U^{\mathrm{H}} \mathbf{E} V U V^{\mathrm{H}} + U U^{\mathrm{H}} \mathbf{E} + \mathbf{E} V V^{\mathrm{H}}.
+	\bfS^{(1)}=\bfS^{(1)}(\mathbf{E}, \tS) = -U^{\mathrm{H}} \mathbf{E} V U V^{\mathrm{H}} + U U^{\mathrm{H}} \mathbf{E} + \mathbf{E} V V^{\mathrm{H}}.
 \end{equation}
 
 
 \begin{Proposition}\label{th:sum}
-	Let $\rank \tS = \rank \Re(\tS) = \rank \Im(\tS) = 1$. Then $$\tF^{(1)} = \tF^{(1)*}_{\Re(S)} + \iu \tF^{(1)*}_{\Im(S)},$$
-where $\tF^{(1)}$ is the first-order error of the CSSA estimate of $\tS$, $\tF^{(1)}_{\Re(S)}$ is the first-order error of the SSA estimate of $\Re(\tS)$, $\tF^{(1)}_{\Im(S)}$ is the first-order error of the SSA estimate of $\Im(\tS)$.
+	Let $\rank \tS = \rank \Re(\tS) = \rank \Im(\tS) = 1$. Then $$\tF^{(1)} = \tF^{(1)}_{\Re} + \iu \tF^{(1)}_{\Im},$$
+where $\tF^{(1)}$ is the first-order error of the CSSA estimate of $\tS$, $\tF^{(1)}_{\Re}$ is the first-order error of the SSA estimate of $\Re(\tS)$, $\tF^{(1)}_{\Im}$ is the first-order error of the SSA estimate of $\Im(\tS)$.
 \end{Proposition}
 \begin{proof}
 By the linearity of \eqref{eq:main1} in $\bfE$,
@@ -246,27 +249,28 @@ By the linearity of \eqref{eq:main1} in $\bfE$,
 
 Since the rank is equal to 1, the singular vectors of the trajectory matrices of $\Re(\tS)$, $\Im(\tS)$ and $\tS$ coincide.
 From \eqref{eq_reim}, the linearity of the diagonal averaging operation and the equality of the singular vectors, we get
-\begin{equation} \label{eq_reim}
+\begin{equation*} 
 		\bfS^{(1)}(\mathbf{E}, \tS) = \bfS^{(1)}(\Re(\mathbf{E}), \Re(\tS)) + \iu\bfS^{(1)}(\Im(\mathbf{E}), \Im(\tS)).
-\end{equation}
+\end{equation*}
 \end{proof}
 
 Note that although the perturbation $\tE$ can take any form in the statement of the proposition, the proposition has practical application only if the first-order error adequately describes the full error.
 
-An example where the conditions of Proposition~\ref{th:sum} are fulfilled is the constant signal. In Section~\ref{sec:outlier}, we consider the perturbation in the form of an outlier; in Section~\ref{sec:outlier}, the perturbation is white noise. 
+An example where the conditions of Proposition~\ref{th:sum} are fulfilled is the constant signal. In Section~\ref{sec:outlier}, we consider the perturbation in the form of an outlier; in Section~\ref{sec:noise}, the perturbation is white noise.
 
 \begin{Corollary}
+\label{cor:var}
 Let $\Re(\tE)$ and $\Im(\tE)$ be independent. Then in the conditions of Proposition~\ref{th:sum}
-$$\mathbb{D} \tF^{(1)} = \mathbb{D}\tF^{(1)*}_{\Re(S)} + \iu \mathbb{D}\tF^{(1)*}_{\Im(S)}.$$
+$$\mathbb{D} \tF^{(1)} = \mathbb{D}\tF^{(1)}_{\Re} + \iu \mathbb{D}\tF^{(1)}_{\Im}.$$
 \end{Corollary}
 
 \subsection{Case of constant signals with outliers}
 \label{sec:outlier}
-In this section we consider the signal $\tS = (c_1 + \iu c_2, \ldots, c_1 + \iu c_2)$ perturbed by the outlier $a_1 + \iu a_2$ at position $k$, i.e. the series $\tE$ consists of zeros except for the value $a_1 + \iu a_2$ at the $k$-th position. Based on Proposition~\ref{th:sum}, it is sufficient to compute the first-order reconstruction error for the signal $\tS = (c, \ldots, c)$ perturbed by the outlier $a$ at position $k$.
+In this section we consider the signal $\tS = (c_1 + \iu c_2, \ldots, c_1 + \iu c_2)$ perturbed by the outlier $a_1 + \iu a_2$ at position $k$, i.e. the series $\tE$ consists of zeros except for the value $a_1 + \iu a_2$ at the $k$-th position. Based on Proposition~\ref{th:sum}, it is sufficient to compute the first-order reconstruction error for a real signal $\tS = (c, \ldots, c)$ perturbed by an real outlier $a$ at position $k$.
 
-By substituting $U = \{1/\sqrt{L}\}^{L}_{i = 1},\, V = \{1/\sqrt{K}\}^{K}_{i = 1}$, $K = N - L + 1$ into \eqref{eq:main1} and then diagonal averaging the matrix $\bfS^{(1)}$, an explicit first-order form of the reconstruction error was obtained.
+By substituting $U = \{1/\sqrt{L}\}^{L}_{i = 1}$, $V = \{1/\sqrt{K}\}^{K}_{i = 1}$ and $K = N - L + 1$ into \eqref{eq:main1} and then performing the diagonal averaging of the matrix $\bfS^{(1)}$, an explicit first-order form of the reconstruction error was obtained. It appears that the first-order error does not depend on $c$, and therefore the formulas are valid for the complex $c=c_1 + \iu c_2$. Due to linear dependence on $a$, the obtained formulas are correct for the complex outlier $a=a_1 + \iu a_2$. Below we present the final results depending on the location of the outlier and the relation between $L$  and $K$.
 
-\paragraph{$1 \leq k < L$}
+\paragraph{Case $1 \leq k < L$}
 \begin{itemize}
 \item
 $k \leq L/2$
@@ -349,7 +353,7 @@ $$f^{(1)}_l = \frac{a}{{LK}}
 $$
 \end{itemize}
 
-\paragraph{$L \leq k \leq K$}
+\paragraph{Case $L \leq k \leq K$}
 
 $$f^{(1)}_l = \frac{a}{{L}}
 \begin{cases}
@@ -359,36 +363,35 @@ $$f^{(1)}_l = \frac{a}{{L}}
 \end{cases}.$$
 
 
-\paragraph{$K < k \leq N$}
+\paragraph{Case $K < k \leq N$}
 \label{sub:const_noise}
 This case is completely analogous to the first case if we invert the time series and take the outlier at position $N - k + 1$.
 
 \paragraph{Comments}
-Note that the first-order error tends to $0$ only if $L$ and $K$ are proportional to N. Then the first-order error is proportional to $\sqrt{1/\min(L,K)}$, i.e. $1/N$. Therefore, the rate of convergence of the first-order error to zero can be estimated as $\mathcal{O}(1/N)$.
+One can see that the first-order error tends to $0$ only if $L$ and $K$ are proportional to N. Then the first-order error is proportional to $1/\min(L,K)$, i.e. $1/N$. Therefore, the rate of convergence of the first-order error to zero can be estimated as $\mathcal{O}(1/N)$.
 
 \begin{Remark}
-From the above formulas we can see that for fixed $L$ the first order error does not tend to $0$ as $N$ increases. As will be shown in the next section, the first order still describes the full error quite accurately in this case. Therefore, the full error does not tend to $0$ as $N$ increases. If $L$ and $K$ are proportional to $N$, the first order error tends to zero.
+From the above formulas we can see that for fixed $L$ the first order error does not tend to $0$ as $N$ increases. As will be shown in the next section, the first order still describes the full error quite accurately in this case. Therefore, the full error does not tend to $0$ as $N$ increases. If $L$ and $K$ are proportional to $N$, the first-order and full errors tend to zero.
 The theoretical basis for the real case and the maximum absolute deviation error can be found in \cite{Nekrutkin2024}.
 \end{Remark}
 
-Note that the first-order error does not depend on the signal and is therefore not determined by the signal-to-noise ratio.
+Since the first-order error does not depend on the signal scale, it is not determined by the signal-to-noise ratio.
 
 \subsection{Case of noisy constant signals}
 \label{sec:noise}
 
-Consider the time series $\tS$ with common terms $s_n = c_1 + \iu c_2$ and the noise matrix $\mathbf{E}$ with variances of real and imaginary parts $\sigma_1^2$ and $\sigma_2^2$ respectively.
-Singular vectors of $\bfS$.
-The conditions of Proposition~\ref{th:sum} are obviously satisfied, and therefore the first-order CSSA error is expressed by the first-order errors of the SSA estimates of the real and imaginary parts.
+Consider the time series $\tS$ with common terms $s_n = c_1 + \iu c_2$ and the noise series $\tE$ with variances of real and imaginary parts $\sigma_1^2$ and $\sigma_2^2$ respectively.
+The conditions of Proposition~\ref{th:sum} are obviously satisfied, and therefore, by Corollary~\ref{cor:var}, the variance of the CSSA first-order error is expressed by the variances of the first-order errors of the real and imaginary part of the SSA estimates.
 
-In \cite{Golyandina.Vlassieva2009} the analytic formula was obtained for the variances of a real constant series, i.e. for $F^{(1)*}_{\Re}$ and $F^{(1)*}_{\Im}$ separately.
+In \cite{Golyandina.Vlassieva2009} the analytic formula was obtained for the variances of a real constant series, i.e. for $F^{(1)}_{\Re}$ and $F^{(1)}_{\Im}$ separately.
 
 Let $L = \alpha N$, $\alpha \leq \frac{1}{2}$, $\lambda = \lim_{N\to\infty} 2 l / N$. Following \cite{Golyandina.Vlassieva2009} and correcting a typo, we get
 \begin{equation}
 \label{eq:const_noise}
-\mathbb{D} f^{(1)}_l = \mathbb{D} f^{(1)*}_{\Re, l} + \mathbb{D} f^{(1)*}_{\Re, l} \sim \frac{\sigma^2_1 + \sigma^2_2}{N}
+\mathbb{D} f^{(1)}_l = \mathbb{D} f^{(1)}_{\Re, l} + \mathbb{D} f^{(1)}_{\Re, l} \sim \frac{\sigma^2_1 + \sigma^2_2}{N}
 \begin{cases}
-	D_1(\alpha, \lambda), &\text{$0 \leq \lambda \leq 2 (1 - 2\alpha)$}\\
-	D_2(\alpha, \lambda), &\text{$2 (1 - 2\alpha) < \lambda < 2\alpha$}\\
+	D_1(\alpha, \lambda), &\text{$0 \leq \lambda \leq \min(2 (1 - 2\alpha), 2\alpha)$}\\
+	D_2(\alpha, \lambda), &\text{$\min(2 (1 - 2\alpha), 2\alpha) < \lambda < 2\alpha$}\\
 	D_3(\alpha, \lambda), &\text{$2\alpha \leq \lambda \leq 1$}
 \end{cases},
 \end{equation}
@@ -402,45 +405,51 @@ where
 	D_3(\alpha, \lambda) = \frac{2}{3\alpha}.\\
 \end{gather*}
 
-Formulas are written down for $l\le N/2$. For $l\ge N/2$, the error  at $l$ is equal to the error at $N-l$. 
+Formulas are written down for $l\le N/2$. For $l\ge N/2$, the error  at $l$ is equal to the error at $N-l$.
 
 \section{Numerical investigation}
 \subsection{Numerical comparison of first-order error and full signal estimation error}
 \label{sec:results}
 
-For the case of outlier perturbation, an example with signal $s_l = 1 + \iu 1$, with outlier perturbation $a_1 + \iu a_2 = 10 + \iu 10$ at position $k = L - 1$ was considered. The results are shown in Table~\ref{tab:const_outl}.
+For the case of outlier perturbation, the example with signal $s_l = 1 + \iu 1$ and outlier perturbation $a_1 + \iu a_2 = 10 + \iu 10$ at position $k = L - 1$ was considered. The results are shown in Table~\ref{tab:const_outl}. The columns of Table~\ref{tab:const_outl} correspond to different time series lengths $N$. The rows correspond to different outlier locations $k$ and different window lengths $L$ as a function of $N$. For each pair of $k$ and $L$ we give the maximum full error (`full') and the maximum absolute difference between the full and first-order errors (`diff'). One can see the convergence of this difference to 0 for all cases, while the full error tends to zero only for $L$ proportional to $N$.
 
 \begin{table}[H]
 	\begin{center}
 		\caption{Maximum difference between first-order error and full error for the outlier at $k=L-1$.}
 		\label{tab:const_outl}
-		\begin{tabular}{|c|c|c|c|c|}
-			\hline
-			$N$	& 50 & 100 & 400 & 1600 \\
-			\hline
-			$L = N / 2$ & 0.7490  & 0.1880  & 0.0109 & 0.0007 \\
-			\hline
-			$L = 20$ & 0.781  & 0.304  & 0.063 & 0.015 \\
-			\hline
-		\end{tabular}
-	\end{center}
+\begin{tabular}{ccccc}
+  \hline
+ $N$& 100 & 1000 & 10000 & 100000 \\
+  \hline
+$k=N/2-1$, $L=N/2$, full & $2.88 \times 10^{-1}$ & $2.83 \times 10^{-2}$ & $2.83 \times 10^{-3}$ & $2.83 \times 10^{-4}$ \\
+$k=N/2-1$, $L=N/2$, diff  & $4.19 \times 10^{-2}$ & $5.47 \times 10^{-4}$ & $5.64 \times 10^{-6}$ & $5.66 \times 10^{-8}$ \\
+\hline
+  $k=20$, $L=20$, full  & $7.25 \times 10^{-1}$ & $7.09 \times 10^{-1}$ & $7.07 \times 10^{-1}$ & $7.07 \times 10^{-1}$ \\
+  $k=20$, $L=20$, diff  & $2.80 \times 10^{-2}$ & $6.38 \times 10^{-3}$ & $6.68 \times 10^{-4}$ & $6.71 \times 10^{-5}$ \\
+  \hline
+  $k = 20$, $L=N/2$, full& $5.09 \times 10^{-1}$ & $5.70 \times 10^{-2}$ & $5.66 \times 10^{-3}$ & $5.66 \times 10^{-4}$ \\
+  $k = 20$, $L=N/2$, diff & $5.97 \times 10^{-2}$ & $1.60 \times 10^{-3}$ & $1.69 \times 10^{-5}$ & $1.70 \times 10^{-7}$ \\
+  \hline
+  $k = N/2-1$, $L=20$, full & $7.07 \times 10^{-1}$ & $7.07 \times 10^{-1}$ & $7.07 \times 10^{-1}$ & $7.07 \times 10^{-1}$ \\
+  $k = N/2-1$, $L=20$, diff & $5.77 \times 10^{-15}$ & $1.82 \times 10^{-14}$ & $2.38 \times 10^{-13}$ & $9.68 \times 10^{-13}$ \\
+   \hline
+\end{tabular}
+\end{center}
 \end{table}
 
-Additional numerical experiments allow us to state that when the outlier is in the middle of the series the results are qualitatively the same, for any $L$ the difference tends to $0$.
-However, in the case of a perturbation in the form of an outlier at a fixed point in the series and a fixed $L$, there is no convergence to zero of the maximum error difference.
-
+\medskip
 In the case of noisy constant series, the numerical results show that the first-order error adequately estimates the full error of the signal reconstruction at each point for all signal parameters considered, even if the errors do not tend to zero.
 This is demonstrated in the next section.
 
 The result that the first-order error adequately describes the full error was tested for signals of larger ranks (not shown).
 
 \subsection{Numerical validation of generalisation to larger ranks}
-The theoretical results for constant time series appear to be very limited. In this section, we numerically demonstrate that the shape of the errors for signals of larger ranks is similar to the error for signals of rank 1, and their size differs by a multiplier.
+The theoretical results for constant time series seem to be rather limited. In this section, we numerically demonstrate that the shape of the errors for signals of larger ranks is similar to the error for signals of rank 1, and their size differs by a multiplier.
 
 Figure~\ref{fig:outlier} shows the behaviour of the absolute errors as a function of the series point. Figure~\ref{fig:outlier} (left) corresponds to the case $r=1$ (constant signal) and is given by the theoretical formulas presented in Section~\ref{sec:outlier}. The outlier $10+\iu 10$ is located at the point $k=2000$ for a symmetrical figure.
 Figure~\ref{fig:outlier} (right) corresponds to the signal $s_n = \cos(2\pi n/12) + \iu \cos(2\pi n/15 + \pi/4)$ of rank 4. One can see that the shapes of the errors are similar. The series lengths are equal to 3999. The ratio of the summed squared errors is 4 for each of the considered window lengths 500, 1000 and 2000.
 
-Thus, the theoretical formulas for an elementary case help to understand the error behaviour for a general case. 
+Thus, the theoretical formulas for an elementary case help to understand the error behaviour for a general case.
 
 \begin{figure}[!htb]
     \centering
@@ -459,12 +468,12 @@ The similar relationship of error variances applies to random noise perturbation
     \label{fig:noise}
 \end{figure}
 
-All numerical results were obtained using the Rssa package \url{http://CRAN.R-project.org/package=Rssa}. In the implementation of CSSA, the fast numerical method PRIMME was used to compute the SVDs.
+All numerical results were obtained using the Rssa package \url{http://CRAN.R-project.org/package=Rssa}. In the implementation of CSSA, the fast numerical method PRIMME was used to compute the truncated SVDs.
 
-
+\section{Conclusion}
 An explicit form of the first-order error of signal estimation at each point was obtained for a constant signal and for both outliers and random noise perturbations. For the random noise, the error was measured by the variance.
 It appears that the error does not depend on the signal scale.
-For both examples, the relationship between the first-order error and the full error was investigated numerically.
+For both examples, the proximity between the first-order error and the full error was confirmed numerically.
 
 We have numerically demonstrated how the theoretical results on the accuracy of signal estimation in the simple case of a constant signal help to understand the error behaviour in the general case.
 These numerical results allow the use of the proposed error formulas in a general case and appear promising for obtaining theoretical results for rank larger than one.

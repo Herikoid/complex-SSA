@@ -1,25 +1,54 @@
-This is 8-bit Big BibTeX version 0.99d
-Implementation:  Microsoft(R) C/C++ for Win32
-Release version: 3.71 (04 mar 2019)
-
-The 8-bit codepage and sorting file: 88591lat.csf
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: signal_in_noise.aux
+Reallocating 'name_of_file' (item size: 1) to 17 items.
 The style file: Definitions/mdpi.bst
-Illegal, another \bibstyle command---line 89 of file signal_in_noise.aux
+Illegal, another \bibstyle command---line 93 of file signal_in_noise.aux
  : \bibstyle
  :          {Definitions/mdpi}
 I'm skipping whatever remains of this command
-Reallocated glb_str_ptr (elt_size=4) to 10 items from 0.
-Reallocated global_strs (elt_size=1001) to 10 items from 0.
-Reallocated glb_str_end (elt_size=4) to 10 items from 0.
+Reallocating 'name_of_file' (item size: 1) to 11 items.
 Database file #1: cssa_itise.bib
 Warning--empty journal in Golyandina2010
-
-Here's how much of BibTeX's memory you used:
- Cites:                14 out of 750
- Fields:              399 out of 5000
- Hash table:         4767 out of 5000
- Strings:             661 out of 4000
- Free string pool:   6702 out of 65000
- Wizard functions:   2887 out of 3000
+You've used 14 entries,
+            2887 wiz_defined-function locations,
+            663 strings with 6719 characters,
+and the built_in function-call counts, 5685 in all, are:
+= -- 539
+> -- 221
+< -- 15
++ -- 101
+- -- 58
+* -- 387
+:= -- 812
+add.period$ -- 46
+call.type$ -- 14
+change.case$ -- 14
+chr.to.int$ -- 14
+cite$ -- 15
+duplicate$ -- 318
+empty$ -- 512
+format.name$ -- 91
+if$ -- 1285
+int.to.chr$ -- 1
+int.to.str$ -- 14
+missing$ -- 16
+newline$ -- 76
+num.names$ -- 42
+pop$ -- 138
+preamble$ -- 0
+purify$ -- 14
+quote$ -- 0
+skip$ -- 222
+stack$ -- 0
+substring$ -- 294
+swap$ -- 102
+text.length$ -- 5
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 92
+warning$ -- 1
+while$ -- 46
+width$ -- 0
+write$ -- 180
 (There was 1 error message)

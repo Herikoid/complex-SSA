@@ -3,7 +3,7 @@ library(PRIMME)
 library(QZ, quiet = TRUE)
 
 outl_error.cssa <- function(ser, N, L, sig, r){
-  s <- ssa(ser, L = L, kind = "cssa", svd.method = "primme")
+  s <- ssa(ser, L = L, kind = "cssa", svd.method = "primme", neig = r+1)
   rec <- reconstruct(s, groups = list(1:r))
   res <- rec$F1-sig
 }
@@ -168,14 +168,15 @@ max.diff_n <- vector()
 max.er.theor_n <- vector()
 max.er.real_n <- vector()
 
-for(N in c(50, 100, 400, 1600)){
+for(N in c(100, 1000, 10000,100000)){
+  print(N)
   alpha <- 0.5
   L <- floor(alpha * N)
   K <- N - L + 1
   
   k <- L - 1
 
-  sig <- rep(1 + 10i, N)
+  sig <- rep(1 + 1i, N)
   r <- 1
   outl <- rep(0, N)
   outl[k] <- a
@@ -192,18 +193,20 @@ for(N in c(50, 100, 400, 1600)){
 print(max.diff_n)
 print(max.er.theor_n)
 print(max.er.real_n)
+df <- data.frame(realN2N2 = max.er.real_n, diffN2N2 = max.diff_n)
 
 max.diff_n <- vector()
 max.er.theor_n <- vector()
 max.er.real_n <- vector()
 
-for(N in c(50, 100, 400, 1600)){
+for(N in c(100, 1000, 10000,100000)){
+  print(N)
   L <- 20
   K <- N - L + 1
   
   k <- L - 1
   
-  sig <- rep(1 + 10i, N)
+  sig <- rep(1 + 1i, N)
   r <- 1
   outl <- rep(0, N)
   outl[k] <- a
@@ -221,57 +224,76 @@ print(max.diff_n)
 print(max.er.theor_n)
 print(max.er.real_n)
 
-N <- 3999
-k <- 2000
-a <- 1 + 1i
-outl <- rep(0, N)
-outl[k] <- a
+df$real2020 = max.er.real_n
+df$diff2020 = max.diff_n
 
-sig <- exp(0.00*(1:N))*(rep(1 + 1i, N))
-#sig <- exp(0.01*(1:N))*cos(2*pi*(1:N)/12) + 1i*exp(0.01*(1:N))*cos(2*pi*(1:N)/12 + pi/4)
-r <- 1
-ser <- sig + outl
-LL <- c(500, 1000, 2000)
-er.cssa <- vector()
-for(L in LL) {
+#############
+max.diff_n <- vector()
+max.er.theor_n <- vector()
+max.er.real_n <- vector()
+
+for(N in c(100, 1000, 10000,100000)){
+  print(N)
+  alpha <- 0.5
+  L <- floor(alpha * N)
   K <- N - L + 1
-  er.cssa <- c(er.cssa, outl_error.cssa(ser, N, L, sig, r))
-  #er.cssa <- c(er.cssa, sapply(1:N, function(i) outl_error.theor(i, N, L, a, k)))
-}
- 
-pdf("const_outl_err_1.pdf", paper = "special", width = 6, height = 4)
-plot(x = 1:N, y = abs(er.cssa[1:N]), xlab = "", ylab = "", type = "l")
-lines(x = 1:N, y = abs(er.cssa[(N+1):(2*N)]), type = "l", col = "blue")
-lines(x = 1:N, y = abs(er.cssa[(2*N+1):(3*N)]), type = "l", col = "red")
-legend('topright', c(paste0("L = ", LL[1]), paste0("L = ", LL[2]), paste0("L = ", LL[3])),
-       col=c("black", "blue", "red"), lty=1, cex=0.8, lw=c(2, 2))
-title(paste0("r = ", r))
-dev.off()
-
-print(e1 <- sum(abs(er.cssa[1:N])^2))
-print(e2 <- sum(abs(er.cssa[(N+1):(2*N)])^2))
-print(e3 <- sum(abs(er.cssa[(2*N+1):(3*N)])^2))
-
-sig <- exp(0.00*(1:N))*cos(2*pi*(1:N)/12) + 
-  1i*exp(0.00*(1:N))*cos(2*pi*(1:N)/15 + pi/4)
-r <- 4
-ser <- sig + outl
-er.cssa <- vector()
-for(L in LL) {
-  K <- N - L + 1
-  er.cssa <- c(er.cssa, outl_error.cssa(ser, N, L, sig, r))
+  
+  k <- 20
+  
+  sig <- rep(1 + 1i, N)
+  r <- 1
+  outl <- rep(0, N)
+  outl[k] <- a
+  ser <- sig + outl
+  
+  er.theor <- sapply(1:N, function(i) outl_error.theor(i, N, L, a, k))
+  er.real <- outl_error.cssa(ser, N, L, sig,r)
+  
+  max.diff_n <- c(max.diff_n, max(abs(er.theor - er.real)))
+  max.er.theor_n <- c(max.er.theor_n, max(abs(er.theor)))
+  max.er.real_n <- c(max.er.real_n, max(abs(er.real)))
 }
 
-pdf("const_outl_err_4.pdf", paper = "special", width = 6, height = 4)
-plot(x = 1:N, y = abs(er.cssa[1:N]), xlab = "", ylab = "", type = "l")
-lines(x = 1:N, y = abs(er.cssa[(N+1):(2*N)]), type = "l", col = "blue")
-lines(x = 1:N, y = abs(er.cssa[(2*N+1):(3*N)]), type = "l", col = "red")
-legend('topright', c(paste0("L = ", LL[1]), paste0("L = ", LL[2]), paste0("L = ", LL[3])),
-       col=c("black", "blue", "red"), lty=1, cex=0.8, lw=c(2, 2))
-title(paste0("r = ", r))
-dev.off()
+print(max.diff_n)
+print(max.er.theor_n)
+print(max.er.real_n)
+df$realN220 = max.er.real_n
+df$diffN220 = max.diff_n
 
-print(sum(abs(er.cssa[1:N])^2)/e1)
-print(sum(abs(er.cssa[(N+1):(2*N)])^2)/e2)
-print(sum(abs(er.cssa[(2*N+1):(3*N)])^2)/e3)
+max.diff_n <- vector()
+max.er.theor_n <- vector()
+max.er.real_n <- vector()
 
+for(N in c(100, 1000, 10000,100000)){
+  print(N)
+  L <- 20
+  K <- N - L + 1
+  
+  k <- N/2 - 1
+  
+  sig <- rep(1 + 1i, N)
+  r <- 1
+  outl <- rep(0, N)
+  outl[k] <- a
+  ser <- sig + outl
+  
+  er.theor <- sapply(1:N, function(i) outl_error.theor(i, N, L, a, k))
+  er.real <- outl_error.cssa(ser, N, L, sig,r)
+  
+  max.diff_n <- c(max.diff_n, max(abs(er.theor - er.real)))
+  max.er.theor_n <- c(max.er.theor_n, max(abs(er.theor)))
+  max.er.real_n <- c(max.er.real_n, max(abs(er.real)))
+}
+
+print(max.diff_n)
+print(max.er.theor_n)
+print(max.er.real_n)
+
+df$real20N2 = max.er.real_n
+df$diff20N2 = max.diff_n
+
+print(df)
+library(xtable)
+xtable(df)
+print(xtable(df, display=c("s", rep("e",8))), math.style.exponents = TRUE)
+print(xtable(t(df), display=c("s", rep("e",4))), math.style.exponents = TRUE)

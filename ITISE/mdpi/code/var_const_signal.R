@@ -6,12 +6,6 @@ D1 <- function(alpha, lambda) {
   term3 <- (4 * alpha * (-3 * alpha + 3 + 2 * alpha^2))
   
   return((1 / (12 * alpha^2 * (1 - alpha)^2)) * (term1 + term2 + term3))
-  #return((1 / (2 * lambda * alpha^2 * (1 - alpha)^2)) * (term1 + term2 + term3))
-  #lam <- 2*alpha-lambda
-  #return((1 / (1.5 * (1 - alpha)^2)) * (6*lam - 6*alpha*lam + 4*alpha^2*lam+2*alpha^2+3-3*alpha))
-  lam <- lambda
-#  return(1 / (3*(1 - alpha)^2 * alpha^3)*(alpha*(lam/2)^2 + alpha^2*(lam/2)^2 -     alpha*lam/2 - alpha^3*lam/2 - 2*alpha^2*lam/2 + 3*alpha^2 - 3*alpha^3+2*alpha^4))
-  #return(1 / (12*(1 - alpha)^2 * alpha^2)*((lam)^2*(1+ alpha) - 2*lam*(1+alpha)^2 + 4*alpha*(3 - 3*alpha+2*alpha^2)))
 }
 
 D2 <- function(alpha, lambda) {
@@ -61,7 +55,6 @@ i <- 1
 lam.set <- seq(0,2,0.01)
 Df_result <- numeric(length(lam.set))
 for(lambda in lam.set){
-#  print(c(lambda*N/2, N*alpha, N*(1-alpha) - N*alpha))
   if(lambda <= 1) Df_result[i] <- calculate_Df(alpha, lambda, sigma1, sigma2)
   else Df_result[i] <- calculate_Df(alpha, 2-lambda, sigma1, sigma2)
   i <- i+1
