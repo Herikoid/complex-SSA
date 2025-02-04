@@ -52,10 +52,61 @@ Kato, T.
 \newblock {\em Perturbation theory for linear operators}; Springer-Verlag,
   Berlin-Heidelberg-New York,  1966.
 
+\bibitem[Xu(2002)]{Xu2002}
+Xu, Z.
+\newblock Perturbation analysis for subspace decomposition with applications in
+  subspace-based algorithms.
+\newblock {\em IEEE Transactions on Signal Processing} {\bf 2002}, {\em
+  50},~2820--2830.
+\newblock {\url{https://doi.org/10.1109/TSP.2002.804084}}.
+
 \bibitem[Nekrutkin(2010)]{Nekrutkin}
 Nekrutkin, V.
 \newblock Perturbation expansions of signal subspaces for long signals.
 \newblock {\em Statistics and Its Interface} {\bf 2010}, {\em 3},~297--319.
+
+\bibitem[Hassani et~al.(2011)Hassani, Xu, and Zhigljavsky]{Hassani2011}
+Hassani, H.; Xu, Z.; Zhigljavsky, A.
+\newblock Singular spectrum analysis based on the perturbation theory.
+\newblock {\em Nonlinear Analysis: Real World Applications} {\bf 2011}, {\em
+  12},~2752--2766.
+\newblock {\url{https://doi.org/https://doi.org/10.1016/j.nonrwa.2011.03.020}}.
+
+\bibitem[Trickett et~al.(2012)Trickett, Burroughs, and
+  Milton]{Trickett.etal2012}
+Trickett, S.; Burroughs, L.; Milton, A.
+\newblock Robust rank-reduction filtering for erratic noise.
+\newblock Technical report,  2012,
+  \href{http://arxiv.org/abs/https://library.seg.org/doi/pdf/10.1190/segam2012-0129.1}{{\normalfont
+  [https://library.seg.org/doi/pdf/10.1190/segam2012-0129.1]}}.
+\newblock {\url{https://doi.org/10.1190/segam2012-0129.1}}.
+
+\bibitem[Chen and Sacchi(2015)]{Chen2015}
+Chen, K.; Sacchi, M.
+\newblock Robust reduced-rank filtering for erratic seismic noise attenuation.
+\newblock {\em GEOPHYSICS} {\bf 2015}, {\em 80},~V1--V11.
+\newblock {\url{https://doi.org/10.1190/geo2014-0116.1}}.
+
+\bibitem[Kalantari et~al.(2016)Kalantari, Yarmohammadi, and
+  Hassani]{Kalantari.etal2016}
+Kalantari, M.; Yarmohammadi, M.; Hassani, H.
+\newblock Singular Spectrum Analysis Based on {L1}-Norm.
+\newblock {\em Fluctuation and Noise Letters} {\bf 2016}, {\em 15},~1650009.
+
+\bibitem[Bahia and Sacchi(2019)]{Bahia2019}
+Bahia, B.; Sacchi, M., Robust singular spectrum analysis via the bifactored
+  gradient descent algorithm.
+\newblock In {\em SEG Technical Program Expanded Abstracts 2019};  2019; pp.
+  4640--4644,
+  \href{http://arxiv.org/abs/https://library.seg.org/doi/pdf/10.1190/segam2019-3215465.1}{{\normalfont
+  [https://library.seg.org/doi/pdf/10.1190/segam2019-3215465.1]}}.
+\newblock {\url{https://doi.org/10.1190/segam2019-3215465.1}}.
+
+\bibitem[Kazemi and Rodrigues(2023)]{Kazemi2023}
+Kazemi, M.; Rodrigues, P.C.
+\newblock Robust singular spectrum analysis: comparison between classical and
+  robust approaches for model fit and forecasting.
+\newblock {\em Computational Statistics} {\bf 2023}.
 
 \bibitem[Golyandina()]{Golyandina2010}
 Golyandina, N.

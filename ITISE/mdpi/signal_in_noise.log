@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7) (preloaded format=pdflatex 2021.7.29)  4 FEB 2025 00:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7) (preloaded format=pdflatex 2021.7.29)  4 FEB 2025 21:43
 entering extended mode
 **"C:/Works/Github/Students/Senov Robust complex-SSA/ITISE/mdpi/signal_in_noise
 .tex"
@@ -1514,17 +1514,17 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-12.18796pt}.
 
 [6]
-<img/const_outl_err_1.pdf, id=175, 433.62pt x 289.08pt>
+<img/const_outl_err_1.pdf, id=183, 433.62pt x 289.08pt>
 File: img/const_outl_err_1.pdf Graphic file (type pdf)
 <use img/const_outl_err_1.pdf>
 Package pdftex.def Info: img/const_outl_err_1.pdf  used on input line 456.
 (pdftex.def)             Requested size: 189.28882pt x 126.19429pt.
-<img/const_outl_err_4.pdf, id=176, 433.62pt x 289.08pt>
+<img/const_outl_err_4.pdf, id=184, 433.62pt x 289.08pt>
 File: img/const_outl_err_4.pdf Graphic file (type pdf)
 <use img/const_outl_err_4.pdf>
 Package pdftex.def Info: img/const_outl_err_4.pdf  used on input line 457.
 (pdftex.def)             Requested size: 189.28882pt x 126.19429pt.
-<img/const_noise_err_14.pdf, id=180, 433.62pt x 289.08pt>
+<img/const_noise_err_14.pdf, id=188, 433.62pt x 289.08pt>
 File: img/const_noise_err_14.pdf Graphic file (type pdf)
 <use img/const_noise_err_14.pdf>
 Package pdftex.def Info: img/const_noise_err_14.pdf  used on input line 466.
@@ -1539,7 +1539,16 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-12.18796pt}.
 
 [7 <./img/const_outl_err_1.pdf> <./img/const_outl_err_4.pdf> <./img/const_noise
-_err_14.pdf>] (signal_in_noise.bbl) 
+_err_14.pdf>] (signal_in_noise.bbl
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 24.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{24.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-12.18796pt}.
+
+[8]) 
 AED: lastpage setting LastPage
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1549,18 +1558,18 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-12.18796pt}.
 
-[8] (signal_in_noise.aux)
+[9] (signal_in_noise.aux)
 Package rerunfilecheck Info: File `signal_in_noise.out' has not changed.
 (rerunfilecheck)             Checksum: CF508E1EA016CDB08A80688673619433;2446.
  ) 
 Here is how much of TeX's memory you used:
- 34691 strings out of 478832
- 635984 string characters out of 2855367
- 1028223 words of memory out of 3000000
- 51383 multiletter control sequences out of 15000+600000
- 506281 words of font info for 497 fonts, out of 8000000 for 9000
+ 34745 strings out of 478832
+ 636707 string characters out of 2855367
+ 1031234 words of memory out of 3000000
+ 51404 multiletter control sequences out of 15000+600000
+ 507360 words of font info for 514 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 123i,14n,122p,823b,702s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 123i,14n,122p,844b,599s stack positions out of 5000i,500n,10000p,200000b,80000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-t1.enc}{C:/Pro
 gram Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9/
 fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
@@ -1575,9 +1584,9 @@ MiKTeX 2.9/fonts/type1/public/cm-super/sfss0500.pfb><C:/Program Files/MiKTeX 2.
 ype1/urw/palatino/uplb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palat
 ino/uplbi8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pf
 b><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on signal_in_noise.pdf (8 pages, 390112 bytes).
+Output written on signal_in_noise.pdf (9 pages, 399317 bytes).
 PDF statistics:
- 294 PDF objects out of 1000 (max. 8388607)
- 53 named destinations out of 1000 (max. 500000)
+ 326 PDF objects out of 1000 (max. 8388607)
+ 61 named destinations out of 1000 (max. 500000)
  151166 words of extra memory for PDF output out of 154059 (max. 10000000)
 

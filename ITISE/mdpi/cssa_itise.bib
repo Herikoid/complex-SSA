@@ -1,3 +1,4 @@
+% Encoding: UTF-8
 @conference{KeKanade,
 	author = {K. Qifa and K. Takeo},
 	title = {Robust {L}1 Norm Factorization in the Presence of Outliers and Missing Data by Alternative Convex Programming},
@@ -6,15 +7,15 @@
 	month = {June},
 }
 
-@article{Chen,
-	author = {K. Chen and M. Sacchi},
-	year = {2015},
-	month = {01},
-	pages = {V1-V11},
-	title = {Robust reduced-rank filtering for erratic seismic noise attenuation},
-	volume = {80},
-	journal = {GEOPHYSICS},
-	doi = {10.1190/geo2014-0116.1}
+@Article{Chen2015,
+  author  = {K. Chen and M. Sacchi},
+  title   = {Robust reduced-rank filtering for erratic seismic noise attenuation},
+  journal = {GEOPHYSICS},
+  year    = {2015},
+  volume  = {80},
+  month   = {01},
+  pages   = {V1-V11},
+  doi     = {10.1190/geo2014-0116.1},
 }
 
 @article{IRLS,
@@ -166,27 +167,6 @@ journal = {Journal of Geophysics}
 	journal = {Statistics and Its Interface}
 }
 
-@TechReport{Trickett.etal2012,
-  author    = {St. Trickett and L. Burroughs and A. Milton},
-  title     = {Robust rank-reduction filtering for erratic noise},
-  doi       = {10.1190/segam2012-0129.1},
-  eprint    = {https://library.seg.org/doi/pdf/10.1190/segam2012-0129.1},
-  pages     = {1-5},
-  abstract  = {Rank-reduction filters operating on constant-frequency slices are highly effective at removing Gaussian random noise. Prestack seismic data, however, often contains spatially erratic noise which is far from Gaussian, sometimes causing these filters to give poor results. Here we describe new robust rank-reduction filters which can handle both Gaussian and erratic noise, and we present examples using synthetic and real data.},
-  booktitle = {SEG Technical Program Expanded Abstracts 2012},
-  year      = {2012},
-}
-
-@Article{Kalantari.etal2016,
-  author  = {Kalantari, M. and Yarmohammadi, M. and Hassani, H.},
-  title   = {Singular spectrum analysis aased on {L1}-norm},
-  number  = {01},
-  pages   = {1650009},
-  volume  = {15},
-  journal = {Fluctuation and Noise Letters},
-  year    = {2016},
-}
-
 @Article{BlazquezGarcia2022,
   author       = {A. Bl{\'{a}}zquez-Garc{\'{\i}}a and A. Conde and U. Mori and J. A. Lozano},
   date         = {2022-04},
@@ -320,6 +300,79 @@ journal = {Journal of Geophysics}
   number       = {3},
   pages        = {259--279},
   volume       = {3},
+}
+
+@Article{Kazemi2023,
+  author        = {Kazemi, Mohammad and Rodrigues, Paulo Canas},
+  title         = {Robust singular spectrum analysis: comparison between classical and robust approaches for model fit and forecasting},
+  journal       = {Computational Statistics},
+  year          = {2023},
+  month         = jan,
+  issn          = {1613-9658},
+  url           = {https://doi.org/10.1007/s00180-022-01322-4},
+  __markedentry = {[Nina:6]},
+  abstract      = {Singular spectrum analysis is a powerful and widely used non-parametric method to analyse and forecast time series. Although singular spectrum analysis has proven to outperform traditional parametric methods for model fit and model forecasting, one of the steps of this algorithm is the singular value decomposition of the trajectory matrix, which is very sensitive to the presence of outliers because it uses the $$L_{2}$$norm optimization. Therefore the presence of outlying observations have a significant impact on the singular spectrum analysis reconstruction and forecasts. The main aim of this paper is to introduce four robust alternatives to the singular spectrum analysis, where the singular value decomposition is replaced by the: (i) robust regularized singular value decomposition; (ii) robust principal component analysis algorithm, which combines projection pursuit ideas with robust scatter matrix estimation; (iii) robust principal component analysis based on the grid algorithm and projection pursuit; and (iv) robust principal component analysis based on a robust covariance matrix. The four proposed robust singular spectrum analysis alternatives are compared with the classical singular spectrum analysis and other available robust singular spectrum analysis algorithms, in terms of model fit and model forecasting via Monte Carlo simulations based on synthetic and real data, considering several contamination scenarios.},
+  refid         = {Kazemi2023},
+}
+
+@TechReport{Trickett.etal2012,
+  author    = {Stewart Trickett and Lynn Burroughs and Andrew Milton},
+  title     = {Robust rank-reduction filtering for erratic noise},
+  year      = {2012},
+  pages     = {1-5},
+  doi       = {10.1190/segam2012-0129.1},
+  eprint    = {https://library.seg.org/doi/pdf/10.1190/segam2012-0129.1},
+  abstract  = { Rank-reduction filters operating on constant-frequency slices are highly effective at removing Gaussian random noise. Prestack seismic data, however, often contains spatially erratic noise which is far from Gaussian, sometimes causing these filters to give poor results. Here we describe new robust rank-reduction filters which can handle both Gaussian and erratic noise, and we present examples using synthetic and real data. },
+  booktitle = {SEG Technical Program Expanded Abstracts 2012},
+}
+
+@Article{Kalantari.etal2016,
+  author  = {Kalantari, Mahdi and Yarmohammadi, Masoud and Hassani, Hossein},
+  title   = {Singular Spectrum Analysis Based on {L1}-Norm},
+  journal = {Fluctuation and Noise Letters},
+  year    = {2016},
+  volume  = {15},
+  number  = {01},
+  pages   = {1650009},
+}
+
+@InBook{Bahia2019,
+  author    = {Breno Bahia and Mauricio Sacchi},
+  title     = {Robust singular spectrum analysis via the bifactored gradient descent algorithm},
+  booktitle = {SEG Technical Program Expanded Abstracts 2019},
+  year      = {2019},
+  pages     = {4640-4644},
+  doi       = {10.1190/segam2019-3215465.1},
+  eprint    = {https://library.seg.org/doi/pdf/10.1190/segam2019-3215465.1},
+  url       = {https://library.seg.org/doi/abs/10.1190/segam2019-3215465.1},
+  abstract  = { Several rank-reduction techniques have been proposed to simultaneously denoise and reconstruct seismic datasets. We reformulate the Singular Spectrum Analysis (SSA) filter as a convex optimization problem constraining the associated Hankel matrix to be of low-rank. The Hankel matrix is written as the product of two matrices of lower dimension, which are obtained using a gradient descent algorithm, called the bifactored gradient descent (BFGD). The BFGD is an efficient nonconvex method which can be easily adaptable to include sampling operators within robust measures as cost functions, thus simultaneously handling missing traces and erratic noise. We evaluate the BFGD-based SSA in the simultaneous reconstruction and denoising of a 3D field dataset and compare it with the MSSA interpolation method. The results support that the BFGD does have a competitive performance for seismic data processing applications.Presentation Date: Monday, September 16, 2019Session Start Time: 1:50 PMPresentation Start Time: 3:05 PMLocation: Poster Station 13Presentation Type: Poster },
+}
+
+@Article{Hassani2011,
+  author   = {Hossein Hassani and Zhengyuan Xu and Anatoly Zhigljavsky},
+  title    = {Singular spectrum analysis based on the perturbation theory},
+  journal  = {Nonlinear Analysis: Real World Applications},
+  year     = {2011},
+  volume   = {12},
+  number   = {5},
+  pages    = {2752-2766},
+  issn     = {1468-1218},
+  doi      = {https://doi.org/10.1016/j.nonrwa.2011.03.020},
+  url      = {https://www.sciencedirect.com/science/article/pii/S1468121811000666},
+  abstract = {Singular Spectrum Analysis (SSA) has been exploited in different applications. It is well known that perturbations from various sources can seriously degrade the performance of the methods and techniques. In this paper, we consider the SSA technique based on the perturbation theory and examine its performance in both reconstructing and forecasting noisy series. We also consider the sensitivity of the technique to different window lengths, noise levels and series lengths. To cover a broad application range, various simulated series, from dynamic to chaotic, are used to verify the proposed algorithm. We then evaluate the performance of the technique using two real well-known series, namely, monthly accidental deaths in the USA, and the daily closing prices of several stock market indices. The results are compared with several classical methods namely, Box–Jenkins SARIMA models, the ARAR algorithm, GARCH model and the Holt–Winter algorithm.},
+  keywords = {Singular spectrum analysis, Perturbation theory, Reconstruction, Forecasting},
+}
+
+@Article{Xu2002,
+  author   = {Zhengyuan Xu},
+  title    = {Perturbation analysis for subspace decomposition with applications in subspace-based algorithms},
+  journal  = {IEEE Transactions on Signal Processing},
+  year     = {2002},
+  volume   = {50},
+  number   = {11},
+  pages    = {2820-2830},
+  doi      = {10.1109/TSP.2002.804084},
+  keywords = {Algorithm design and analysis;Matrix decomposition;Covariance matrix;Signal processing algorithms;Noise measurement;Multiaccess communication;Performance analysis;Eigenvalues and eigenfunctions;Performance loss;Channel estimation},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

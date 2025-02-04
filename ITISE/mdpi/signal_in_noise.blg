@@ -3,52 +3,56 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: signal_in_noise.aux
 Reallocating 'name_of_file' (item size: 1) to 17 items.
 The style file: Definitions/mdpi.bst
-Illegal, another \bibstyle command---line 93 of file signal_in_noise.aux
+Illegal, another \bibstyle command---line 94 of file signal_in_noise.aux
  : \bibstyle
  :          {Definitions/mdpi}
 I'm skipping whatever remains of this command
 Reallocating 'name_of_file' (item size: 1) to 11 items.
 Database file #1: cssa_itise.bib
+Warning--string name "jan" is undefined
+--line 310 of file cssa_itise.bib
+Warning--empty institution in Trickett.etal2012
+Warning--empty publisher in Bahia2019
 Warning--empty journal in Golyandina2010
-You've used 14 entries,
+You've used 21 entries,
             2887 wiz_defined-function locations,
-            663 strings with 6719 characters,
-and the built_in function-call counts, 5685 in all, are:
-= -- 539
-> -- 221
-< -- 15
-+ -- 101
-- -- 58
-* -- 387
-:= -- 812
-add.period$ -- 46
-call.type$ -- 14
-change.case$ -- 14
-chr.to.int$ -- 14
-cite$ -- 15
-duplicate$ -- 318
-empty$ -- 512
-format.name$ -- 91
-if$ -- 1285
+            723 strings with 8386 characters,
+and the built_in function-call counts, 8453 in all, are:
+= -- 795
+> -- 345
+< -- 20
++ -- 156
+- -- 90
+* -- 628
+:= -- 1222
+add.period$ -- 71
+call.type$ -- 21
+change.case$ -- 22
+chr.to.int$ -- 21
+cite$ -- 24
+duplicate$ -- 454
+empty$ -- 750
+format.name$ -- 142
+if$ -- 1886
 int.to.chr$ -- 1
-int.to.str$ -- 14
-missing$ -- 16
-newline$ -- 76
-num.names$ -- 42
-pop$ -- 138
+int.to.str$ -- 21
+missing$ -- 23
+newline$ -- 115
+num.names$ -- 63
+pop$ -- 198
 preamble$ -- 0
-purify$ -- 14
+purify$ -- 21
 quote$ -- 0
-skip$ -- 222
+skip$ -- 304
 stack$ -- 0
-substring$ -- 294
-swap$ -- 102
-text.length$ -- 5
+substring$ -- 437
+swap$ -- 135
+text.length$ -- 6
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 92
-warning$ -- 1
-while$ -- 46
+type$ -- 138
+warning$ -- 3
+while$ -- 66
 width$ -- 0
-write$ -- 180
+write$ -- 275
 (There was 1 error message)

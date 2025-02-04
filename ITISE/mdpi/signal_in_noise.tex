@@ -143,7 +143,7 @@ It is shown numerically that (1) the first-order errors describe the full errors
 }
 
 % Keywords
-\keyword{time series; singular spectrum analysis; perturbation analysis; signal estimation.}
+\keyword{time series; outliers; singular spectrum analysis; perturbation analysis; signal estimation.}
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -158,10 +158,10 @@ There is a class of signals, namely time series governed by linear recurrence re
 
 Let the observed complex time series be of the form $\tX =\tS + \tE$. To obtain an estimate $\widetilde\tS$ of the signal $\tS$, we will use the CSSA method.
 
-To analyse the signal estimation error we use the perturbation theory \cite{Kato}, which has been applied to the case of signal extraction by the SSA method in a number of papers, see for example \cite{Nekrutkin}.
+To analyse the signal estimation error we use the perturbation theory \cite{Kato,Xu2002}, which has been applied to the case of signal extraction by the SSA method in a number of papers, see for example \cite{Nekrutkin, Hassani2011}.
 Although Kato's perturbation theory gives a form of the full error, its examination is a difficult task. Therefore, we will only consider the first order error, which is the part that is linear in the perturbation size.
 
-Even for the first order error, obtaining its explicit form is a rather complicated task. Theoretically, we consider only the case of a constant signal. Two types of perturbations are considered, in the form of an outlier and a random noise. The theoretical results obtained allow us to study how CSSA deals with signal extraction.
+Even for the first order error, obtaining its explicit form is a rather complicated task. Theoretically, we consider only the case of a constant signal. Two types of perturbations are considered, in the form of an outlier and a random noise. The theoretical results obtained allow us to study how CSSA deals with signal extraction. The importance of perturbation in the form of noise is quite clear. There are robust variants of the SSA method for analysing time series with possible outliers \cite{Trickett.etal2012,Chen2015,Kalantari.etal2016,Bahia2019,Kazemi2023}, but they are mostly much more time-consuming than the basic version of SSA, so studying the influence of outliers on the basic version of SSA is of considerable interest.
 
 Certainly, constant signals are not a common case in time series analysis. Therefore, special attention is given to a possible generalisation of the theoretical results, which are demonstrated numerically.
 
@@ -249,7 +249,7 @@ By the linearity of \eqref{eq:main1} in $\bfE$,
 
 Since the rank is equal to 1, the singular vectors of the trajectory matrices of $\Re(\tS)$, $\Im(\tS)$ and $\tS$ coincide.
 From \eqref{eq_reim}, the linearity of the diagonal averaging operation and the equality of the singular vectors, we get
-\begin{equation*} 
+\begin{equation*}
 		\bfS^{(1)}(\mathbf{E}, \tS) = \bfS^{(1)}(\Re(\mathbf{E}), \Re(\tS)) + \iu\bfS^{(1)}(\Im(\mathbf{E}), \Im(\tS)).
 \end{equation*}
 \end{proof}
